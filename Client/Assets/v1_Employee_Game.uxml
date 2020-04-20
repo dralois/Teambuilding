@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="background" class="background" style="flex-grow: 1;&#10;width: auto;&#10;justify-content: flex-end;&#10;background-color: rgba(255, 255, 255, 255);&#10;background-image: url(&apos;/Assets/Objects/Assets/background2.png&apos;);&#10;-unity-background-scale-mode: scale-and-crop;&#10;display: flex;&#10;visibility: visible;&#10;">
+        <Style src="v1_Employee_Game.uss" />
+        <ui:VisualElement name="Logo" style="flex-direction: column;&#10;flex-grow: 1;&#10;width: 200px;&#10;align-items: center;&#10;justify-content: center;&#10;background-image: url(&apos;/Assets/Objects/Assets/logo2_zugeschnitten.png&apos;);&#10;-unity-background-scale-mode: scale-to-fit;&#10;-unity-slice-left: 0;&#10;-unity-slice-top: 0;&#10;-unity-slice-right: 0;&#10;-unity-slice-bottom: 0;&#10;top: 6%;&#10;" />
+        <ui:VisualElement style="flex-direction: row;&#10;">
+            <ui:Label text="Game 1" name="game_name" class="text_standart" style="color: rgba(255, 255, 255, 255);&#10;" />
+            <ui:Label text="-" name="space" class="text_standart" style="color: rgba(255, 255, 255, 255);&#10;margin-left: 5px;&#10;margin-right: 5px;&#10;" />
+            <ui:Label text="not ready" name="ready_state" class="text_standart" style="color: rgba(255, 255, 255, 255);&#10;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="boarder_unten" style="width: 300px;&#10;left: auto;&#10;right: auto;&#10;top: auto;&#10;height: 200px;&#10;flex-grow: 0;&#10;flex-basis: auto;&#10;flex-direction: column;&#10;flex-shrink: 1;&#10;background-color: rgba(68, 69, 118, 0);&#10;border-top-left-radius: 50px;&#10;border-bottom-left-radius: 0;&#10;border-top-right-radius: 50px;&#10;border-bottom-right-radius: 0;&#10;display: flex;&#10;visibility: visible;&#10;align-items: center;&#10;justify-content: center;&#10;">
+            <ui:Button text="join session" name="join_session_button" class="button_standart" style="width: 200px;&#10;margin-top: 1px;&#10;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
