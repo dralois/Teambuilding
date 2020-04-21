@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="background" class="background" style="justify-content: flex-end;&#10;align-items: center;&#10;">
+        <Style src="v1.1_LogIN.uss" />
+        <ui:VisualElement name="element_container" style="justify-content: center;&#10;background-image: url(&apos;/Assets/Objects/Assets/Grundelemente/ElementTyp1/Login2_zugeschnitten.png&apos;);&#10;flex-grow: 1;&#10;height: 500px;&#10;width: 396px;&#10;top: 9%;&#10;">
+            <ui:VisualElement name="input_container" style="align-items: center;&#10;justify-content: center;&#10;">
+                <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" text="filler text" style="color: rgba(255, 255, 255, 255);&#10;font-size: 18px;&#10;-unity-font-style: bold;&#10;width: 200px;&#10;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="button_container">
+                <ui:Button text="Button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

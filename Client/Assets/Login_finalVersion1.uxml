@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="background" style="background-color: rgba(255, 255, 255, 255);&#10;flex-grow: 1;&#10;align-items: center;&#10;justify-content: flex-start;&#10;position: relative;&#10;">
+        <Style src="Login_finalVersion1.uss" />
+        <ui:VisualElement name="element_contailer" style="flex-grow: 1;&#10;width: 100%;&#10;height: 100%;&#10;visibility: hidden;&#10;display: none;&#10;" />
+        <ui:VisualElement name="element_container" style="background-image: url(&apos;/Assets/Objects/Assets/Grundelemente/ElementTyp1/Login2_zugeschnitten.png&apos;);&#10;width: 105%;&#10;height: 100%;&#10;flex-grow: 1;&#10;justify-content: space-between;&#10;align-items: center;&#10;top: 7%;&#10;visibility: visible;&#10;display: flex;&#10;">
+            <ui:VisualElement name="icon_container" focusable="true" style="background-image: url(&apos;/Assets/Objects/Assets/Schloß (2)_zugeschnitten.png&apos;);&#10;width: 25%;&#10;height: 20%;&#10;top: 6%;&#10;" />
+            <ui:VisualElement name="input_container" style="width: 50%;&#10;left: auto;&#10;right: auto;&#10;top: auto;&#10;height: 50%;&#10;flex-grow: 0;&#10;flex-basis: auto;&#10;flex-direction: column;&#10;flex-shrink: 1;&#10;background-color: rgba(68, 69, 118, 0);&#10;border-top-left-radius: 50px;&#10;border-bottom-left-radius: 0;&#10;border-top-right-radius: 50px;&#10;border-bottom-right-radius: 0;&#10;display: flex;&#10;visibility: visible;&#10;align-items: center;&#10;bottom: 10%;&#10;">
+                <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" text="session key" name="session_code_input" class="input_style" style="width: 100%;&#10;font-size: 150%;&#10;" />
+                <ui:TextField picking-mode="Ignore" label="Text Field" value="filler text" text="name" name="name_input" class="input_style" style="left: auto;&#10;color: rgb(162, 176, 184);&#10;border-left-color: rgb(255, 255, 255);&#10;border-right-color: rgb(255, 255, 255);&#10;border-top-color: rgb(255, 255, 255);&#10;border-bottom-color: rgb(255, 255, 255);&#10;border-bottom-width: 4px;&#10;justify-content: center;&#10;width: 100%;&#10;margin-top: 10px;&#10;margin-bottom: 10px;&#10;" />
+                <ui:Button text="join session" name="join_button" class="button_standart" style="margin-top: 40%;&#10;width: 100%;&#10;height: 13%;&#10;font-size: 150%;&#10;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
