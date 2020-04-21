@@ -2,7 +2,7 @@
     flex-grow: 1;
     align-items: center;
     justify-content: center;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(162, 175, 184);
 }
 
 .unity-text-field__label {
@@ -65,11 +65,4 @@
     border-right-color: rgb(255, 255, 255);
     border-top-color: rgb(255, 255, 255);
     border-bottom-color: rgb(255, 255, 255);
-}
-
-.text_standart {
-    color: rgb(255, 255, 255);
-    margin-right: 0;
-    font-size: 18px;
-    -unity-font-style: bold;
 }
