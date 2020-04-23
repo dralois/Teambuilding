@@ -2,7 +2,7 @@
     <ui:VisualElement name="background" style="background-color: rgb(255, 255, 255);&#10;flex-grow: 1;&#10;align-items: center;&#10;justify-content: flex-start;&#10;">
         <Style src="Manager_login_v1.uss" />
         <ui:VisualElement name="element_container" style="background-image: url(&apos;/Assets/Objects/Assets/Grundelemente/ElementTyp1/Login2_zugeschnitten.png&apos;);&#10;width: 396px;&#10;height: 1605px;&#10;flex-grow: 1;&#10;justify-content: space-between;&#10;align-items: center;&#10;top: 7%;&#10;">
-            <ui:VisualElement name="icon_container" focusable="true" style="background-image: url(&apos;/Assets/Objects/Assets/Schloß (2)_zugeschnitten.png&apos;);&#10;width: 90px;&#10;height: 130px;&#10;top: 3%;&#10;" />
+            <ui:VisualElement name="icon_container" focusable="true" style="background-image: url(&apos;/Assets/Objects/Assets/Objects/Schloß (2)_zugeschnitten.png&apos;);&#10;width: 90px;&#10;height: 130px;&#10;top: 3%;&#10;" />
             <ui:VisualElement name="input_container" style="width: 300px;&#10;left: auto;&#10;right: auto;&#10;top: auto;&#10;height: 390px;&#10;flex-grow: 0;&#10;flex-basis: auto;&#10;flex-direction: column;&#10;flex-shrink: 1;&#10;background-color: rgba(68, 69, 118, 0);&#10;border-top-left-radius: 50px;&#10;border-bottom-left-radius: 0;&#10;border-top-right-radius: 50px;&#10;border-bottom-right-radius: 0;&#10;display: flex;&#10;visibility: visible;&#10;align-items: center;&#10;bottom: 0;&#10;">
                 <ui:VisualElement style="width: 110%;&#10;height: 80%;&#10;align-items: center;&#10;justify-content: center;&#10;">
                     <ui:ListView focusable="True" name="game_choice_manager" style="width: 70%;&#10;height: 90%;&#10;" />
