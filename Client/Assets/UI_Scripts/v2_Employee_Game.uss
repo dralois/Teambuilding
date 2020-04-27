@@ -1,0 +1,88 @@
+.background {
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(162, 175, 184);
+}
+
+.unity-text-field__label {
+    visibility: visible;
+    overflow: hidden;
+    display: none;
+}
+
+.unity-text-field__input {
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgba(255, 255, 255, 0);
+    border-right-color: rgba(255, 255, 255, 0);
+    border-top-color: rgba(255, 255, 255, 0);
+    border-bottom-color: rgba(255, 255, 255, 0);
+    font-size: 18px;
+    color: rgba(255, 255, 255, 255);
+    -unity-font-style: normal;
+}
+
+.button_standart {
+    width: 200px;
+    margin-top: 20px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+    background-color: rgba(162, 175, 184, 255);
+    color: rgba(255, 255, 255, 255);
+    -unity-font-style: bold;
+    font-size: 18px;
+    border-left-color: rgba(162, 175, 184, 255);
+    border-right-color: rgba(162, 175, 184, 255);
+    border-top-color: rgba(162, 175, 184, 255);
+    border-bottom-color: rgba(162, 175, 184, 255);
+}
+
+.button_standart:active {
+    background-color: rgba(68, 69, 118, 255);
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+    border-left-color: rgb(32, 32, 56);
+    border-right-color: rgb(32, 32, 56);
+    border-top-color: rgb(32, 32, 56);
+    border-bottom-color: rgb(32, 32, 56);
+    color: rgba(255, 255, 255, 255);
+}
+
+.button_standart:hover {
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+    border-left-color: rgba(255, 255, 255, 255);
+    border-right-color: rgba(255, 255, 255, 255);
+    border-top-color: rgba(255, 255, 255, 255);
+    border-bottom-color: rgba(255, 255, 255, 255);
+}
+
+.text_standart {
+    color: rgba(255, 255, 255, 255);
+    margin-right: 0;
+    font-size: 18px;
+    -unity-font-style: bold;
+}
+
+.unity-toggle__label {
+    visibility: visible;
+    display: none;
+}
+
+.unity-toggle__checkmark {
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: rgba(255, 255, 255, 255);
+}

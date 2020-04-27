@@ -1,0 +1,61 @@
+.unity-text-field__label {
+    visibility: hidden;
+    display: none;
+}
+
+.unity-text-field__input {
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 4px;
+    font-size: 150%;
+    -unity-font-style: bold;
+    -unity-text-align: upper-left;
+    color: rgb(255, 255, 255);
+}
+
+.standart_button_login {
+    margin-top: 25px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+    border-left-color: rgb(128, 128, 128);
+    border-right-color: rgb(128, 128, 128);
+    border-top-color: rgb(128, 128, 128);
+    border-bottom-color: rgb(128, 128, 128);
+    background-color: rgb(128, 128, 128);
+    font-size: 150%;
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    width: 70%;
+}
+
+.standart_button_login:hover {
+    border-left-color: rgb(184, 254, 1);
+    border-right-color: rgb(184, 254, 1);
+    border-top-color: rgb(184, 254, 1);
+    border-bottom-color: rgb(184, 254, 1);
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-top-width: 4px;
+    border-bottom-width: 4px;
+}
+
+.standart_button_login:active {
+    background-color: rgb(184, 254, 1);
+    color: rgb(0, 0, 0);
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+}
