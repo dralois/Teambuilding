@@ -14,13 +14,9 @@ public class UIManager : MonoBehaviour
     // Note: normally you can just use one Panel Rendere and just hide or swap in/out
     // (using ve.style.display) elements at runtime. It's a lot more efficient
     // to use a single PanelRenderer.
-    public PanelRenderer me_LogInScreen;
-    public PanelRenderer m_CreateGameScreen;
-    public PanelRenderer me_MainMenu_GameScreen;
-    public PanelRenderer e_MainMenu_settingsScreen;         //employee settings
-    public PanelRenderer m_MainMenu_settingsScreen;         //manager settings
-    public PanelRenderer e_MainMenu_statScreen;             //employee statistic
-    public PanelRenderer m_MainMenu_statScreen;             //manager statistic
+    public PanelRenderer Screen_Menu;
+    public PanelRenderer Screen_CreateGame;
+   
 
 
 
@@ -73,13 +69,9 @@ public class UIManager : MonoBehaviour
     // to click events.
     private void OnEnable()
     {
-        me_LogInScreen.postUxmlReload = BindLogInScreen;
-        m_CreateGameScreen.postUxmlReload = BindCreateGameScreenScreen;
-        me_MainMenu_GameScreen.postUxmlReload = BindGameScreen;
-        e_MainMenu_settingsScreen.postUxmlReload = Bind_e_SettingsScreen;
-        m_MainMenu_settingsScreen.postUxmlReload = Bind_m_SettingsScreen;
-        e_MainMenu_statScreen.postUxmlReload = Bind_e_StatisticScreen;
-        m_MainMenu_statScreen.postUxmlReload = Bind_m_StatisticScreen;
+        Screen_Menu.postUxmlReload = BindLogInScreen;
+        Screen_CreateGame.postUxmlReload = BindCreateGameScreenScreen;
+        
 
         m_TrackedAssetsForLiveUpdates = new List<Object>();
     }
@@ -97,6 +89,7 @@ public class UIManager : MonoBehaviour
         GoToLogIn();
     }
 
+
     // Update is called once per frame
     void Update()
     {
@@ -112,15 +105,17 @@ public class UIManager : MonoBehaviour
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     // Screen Transition Logic
 
+    private void ScreenChange(PanelRenderer from, PanelRenderer to)
+    {
+        SetScreenEnableState(from, false);
+        SetScreenEnableState(to, true);
+        
+    }
+
     private void GoToLogIn()
     {
-        SetScreenEnableState(me_LogInScreen, true);
-        SetScreenEnableState(m_CreateGameScreen, false);
-        SetScreenEnableState(me_MainMenu_GameScreen, false);
-        SetScreenEnableState(e_MainMenu_settingsScreen, false);
-        SetScreenEnableState(m_MainMenu_settingsScreen, false);
-        SetScreenEnableState(e_MainMenu_statScreen, false);
-        SetScreenEnableState(m_MainMenu_statScreen, false);
+        SetScreenEnableState(Screen_Menu, true);
+        SetScreenEnableState(Screen_CreateGame, false);
     }
 
     void SetScreenEnableState(PanelRenderer screen, bool state)
@@ -142,6 +137,7 @@ public class UIManager : MonoBehaviour
     //transition from a screen to another screen
     IEnumerator TransitionScreens(PanelRenderer from, PanelRenderer to)
     {
+
         from.visualTree.style.display = DisplayStyle.None;
         from.gameObject.GetComponent<UIElementsEventSystem>().enabled = false;
 
@@ -178,33 +174,17 @@ public class UIManager : MonoBehaviour
     private IEnumerable<Object> BindLogInScreen()
     {
         //bind root 
-        var root = me_LogInScreen.visualTree;
+        var root = Screen_Menu.visualTree;
 
-        //get input name und session key
-        var inputName = root.Q<TextField>("name_input");
-        //TODO
-        
         //set button function
-        var joinButton = root.Q<Button>("join_session_button");
+        var joinButton = root.Q<Button>("create_session_button");
         if (joinButton != null)
         {
             //button function
             joinButton.clickable.clicked += () =>
             {
-                //check if input is correct and open next screen depending on that.
-                if (CheckLogInData())
-                {
-                    if (manager)
-                    {
-                        //transition to CreateGameScreen
-                        TransitionScreens(me_LogInScreen, m_CreateGameScreen);
-                    }
-                    else
-                    {
-                        //transition to Game Menu
-                        TransitionScreens(me_LogInScreen, me_MainMenu_GameScreen);
-                    }
-                }
+                ScreenChange(Screen_Menu, Screen_CreateGame);
+                TransitionScreens(Screen_Menu, Screen_CreateGame);
             };
         }
         return null;
@@ -213,7 +193,7 @@ public class UIManager : MonoBehaviour
     private IEnumerable<Object> BindCreateGameScreenScreen()
     {
         //bind root 
-        var root = m_CreateGameScreen.visualTree;
+        var root = Screen_CreateGame.visualTree;
 
         //set button function create game
         var createButton = root.Q<Button>("create_game_button");
@@ -222,122 +202,12 @@ public class UIManager : MonoBehaviour
             //button function
             createButton.clickable.clicked += () =>
             {
-                //check if input is given and open next screen depending on that.
-                if (CheckIfGameSelected())
-                {
-                    if (manager)
-                    {
-                        //transition to CreateGameScreen
-                        TransitionScreens(me_LogInScreen, m_CreateGameScreen);
-                    }
-                    else
-                    {
-                        //transition to Game Menu
-                        TransitionScreens(me_LogInScreen, me_MainMenu_GameScreen);
-                    }
-                }
+                
             };
         }
         return null;
     }
 
-    private IEnumerable<Object> BindGameScreen()
-    {
-        //bind root 
-        var root = me_MainMenu_GameScreen.visualTree;
-
-        //set button function create game
-        var joinGameButton = root.Q<Button>("join_game_button");
-        if (joinGameButton != null)
-        {
-            //button function
-            joinGameButton.clickable.clicked += () =>
-            {
-                //TODO
-                //TransitionScreens(me_MainMenu_GameScreen, //InGameDesign//);
-            };
-        }
-
-        //set choosen GameItem into Container
-        //TODO
-
-        return null;
-    }
-
-    private IEnumerable<Object> Bind_e_SettingsScreen()
-    {
-        //bind root 
-        var root = e_MainMenu_settingsScreen.visualTree;
-
-        //set button function create game
-        var changeNameButton = root.Q<Button>("change_name_button");
-        if (changeNameButton != null)
-        {
-            //button function
-            changeNameButton.clickable.clicked += () =>
-            {
-                //TODO
-                //change name
-            };
-        }
-        return null;
-    }
-
-    private IEnumerable<Object> Bind_m_SettingsScreen()
-    {
-        //bind root 
-        var root = e_MainMenu_settingsScreen.visualTree;
-
-        //set button function create game
-        var changeNameButton = root.Q<Button>("change_name_button");
-        if (changeNameButton != null)
-        {
-            //button function
-            changeNameButton.clickable.clicked += () =>
-            {
-                //TODO
-                //change name
-            };
-        }
-
-        //Button for Game change
-        var gameChangeButton = root.Q<Button>("game_change_button");
-        if (gameChangeButton != null)
-        {
-            //button function
-            gameChangeButton.clickable.clicked += () =>
-            {
-                //go to create Game back
-                TransitionScreens(m_MainMenu_settingsScreen, m_CreateGameScreen);
-            };
-        }
-        return null;
-    }
-
-    private IEnumerable<Object> Bind_e_StatisticScreen()
-    {
-        //noch keine statistic für employee
-        return null;
-    }
-
-    private IEnumerable<Object> Bind_m_StatisticScreen()
-    {
-        //bind root 
-        var root = m_MainMenu_settingsScreen.visualTree;
-
-        //list view change (employee / session view)
-        var listviewChange = root.Q<Button>("listview_change_button");
-        if (listviewChange != null)
-        {
-            //button function
-            listviewChange.clickable.clicked += () =>
-            {
-                //change the listview contant
-                //TODO
-            };
-        }
-        return null;
-    }
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
