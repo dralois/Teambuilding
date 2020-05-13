@@ -14,14 +14,25 @@ public class UIManager : MonoBehaviour
     // Note: normally you can just use one Panel Rendere and just hide or swap in/out
     // (using ve.style.display) elements at runtime. It's a lot more efficient
     // to use a single PanelRenderer.
+
+
+    public PanelRenderer Screen_JoinSession;
+
     public PanelRenderer Screen_Menu;
+    
     public PanelRenderer Screen_CreateGame;
-   
+    public PanelRenderer Screen_JoinGame;
+
+    public PanelRenderer Screen_Settings;
+
+    public PanelRenderer Screen_Statistic_manager;
+    public PanelRenderer Screen_Statistic_employee;
+
 
 
 
     // Pre-loaded UI assets (ie. UXML/USS).
-        //List for choosing a game
+    //List for choosing a game
     public VisualTreeAsset m_GameListItem;
     public StyleSheet m_GameListItemStyles;
 
@@ -58,7 +69,7 @@ public class UIManager : MonoBehaviour
 
 
     //variable
-    private Boolean manager;
+    private Boolean manager = false;
 
 
 
@@ -69,9 +80,14 @@ public class UIManager : MonoBehaviour
     // to click events.
     private void OnEnable()
     {
-        Screen_Menu.postUxmlReload = BindLogInScreen;
+        Screen_JoinSession.postUxmlReload = BindJoinSessionScreen;
+        Screen_Menu.postUxmlReload = BindMenuScreen;
         Screen_CreateGame.postUxmlReload = BindCreateGameScreenScreen;
-        
+        Screen_JoinGame.postUxmlReload = BindJoinGameScreen;
+        Screen_Settings.postUxmlReload = BindSettingsScreen;
+        Screen_Statistic_employee.postUxmlReload = BindEmployeeStatisticScreen;
+        Screen_Statistic_manager.postUxmlReload = BindManagerStatisticScreen;
+
 
         m_TrackedAssetsForLiveUpdates = new List<Object>();
     }
@@ -86,7 +102,7 @@ public class UIManager : MonoBehaviour
             Screen.fullScreen = false;
 #endif
         //open LogIn as start menu
-        GoToLogIn();
+        GoToStartScreen();
     }
 
 
@@ -105,17 +121,25 @@ public class UIManager : MonoBehaviour
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     // Screen Transition Logic
 
+    //change Screen 
     private void ScreenChange(PanelRenderer from, PanelRenderer to)
     {
-        SetScreenEnableState(from, false);
-        SetScreenEnableState(to, true);
-        
+        from.visualTree.style.display = DisplayStyle.None;
+        from.gameObject.GetComponent<UIElementsEventSystem>().enabled = false;
+        to.enabled = true;
     }
 
-    private void GoToLogIn()
+    private void GoToStartScreen()
     {
+        SetScreenEnableState(Screen_JoinSession, false); //als erstes key eingeben um session beizutreteten
         SetScreenEnableState(Screen_Menu, true);
         SetScreenEnableState(Screen_CreateGame, false);
+        SetScreenEnableState(Screen_Settings, false);
+        SetScreenEnableState(Screen_JoinGame, false);
+        SetScreenEnableState(Screen_Statistic_employee, false);
+        SetScreenEnableState(Screen_Statistic_manager, false);
+
+
     }
 
     void SetScreenEnableState(PanelRenderer screen, bool state)
@@ -134,57 +158,62 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    //transition from a screen to another screen
-    IEnumerator TransitionScreens(PanelRenderer from, PanelRenderer to)
-    {
-
-        from.visualTree.style.display = DisplayStyle.None;
-        from.gameObject.GetComponent<UIElementsEventSystem>().enabled = false;
-
-        to.enabled = true;
-
-        yield return null;
-        yield return null;
-        yield return null;
-
-        to.visualTree.style.display = DisplayStyle.Flex;
-        to.visualTree.style.visibility = Visibility.Hidden;
-        to.gameObject.GetComponent<UIElementsEventSystem>().enabled = true;
-
-        yield return null;
-        yield return null;
-        yield return null;
-
-        to.visualTree.style.visibility = Visibility.Visible;
-
-        yield return null;
-        yield return null;
-        yield return null;
-        yield return null;
-        yield return null;
-
-        from.enabled = false;
-    }
 
 
     ///////////////////////////////////////////////////////////////////////////////
     ///Bind 
     ///
 
-    private IEnumerable<Object> BindLogInScreen()
+    private IEnumerable<Object> BindMenuScreen()
     {
         //bind root 
         var root = Screen_Menu.visualTree;
 
         //set button function
-        var joinButton = root.Q<Button>("create_session_button");
+        var joinButton = root.Q<Button>("join_game_button");
+        if (joinButton != null)
+        {
+            //button function
+            joinButton.clickable.clicked += () =>
+            {
+                ScreenChange(Screen_Menu, Screen_JoinGame);
+            };
+        }
+        
+        joinButton = root.Q<Button>("create_game_button");
         if (joinButton != null)
         {
             //button function
             joinButton.clickable.clicked += () =>
             {
                 ScreenChange(Screen_Menu, Screen_CreateGame);
-                TransitionScreens(Screen_Menu, Screen_CreateGame);
+            };
+        }
+
+        joinButton = root.Q<Button>("statistics_button");
+        if (joinButton != null)
+        {
+            //button function
+            joinButton.clickable.clicked += () =>
+            {
+                if (manager)
+                {
+                    ScreenChange(Screen_Menu, Screen_Statistic_manager);
+                } else
+                {
+                    ScreenChange(Screen_Menu, Screen_Statistic_employee);
+                }
+                
+            };
+        }
+
+        joinButton = root.Q<Button>("settings_button");
+        if (joinButton != null)
+        {
+            //button function
+            joinButton.clickable.clicked += () =>
+            {
+                ScreenChange(Screen_Menu, Screen_Settings);
             };
         }
         return null;
@@ -195,6 +224,8 @@ public class UIManager : MonoBehaviour
         //bind root 
         var root = Screen_CreateGame.visualTree;
 
+        // TODO list view mit auswählen
+
         //set button function create game
         var createButton = root.Q<Button>("create_game_button");
         if (createButton != null)
@@ -202,26 +233,120 @@ public class UIManager : MonoBehaviour
             //button function
             createButton.clickable.clicked += () =>
             {
-                
+                //TODO je nachdem welches spiel ausgewählt wurde
+            };
+        }
+        return null;
+    }
+
+    private IEnumerable<Object> BindJoinGameScreen()
+    {
+        //bind root 
+        var root = Screen_CreateGame.visualTree;
+
+        //TODO
+        //in list view anzeigen welches spiel vom manager ausgewählt wurde
+
+        //set button function create game
+        var createButton = root.Q<Button>("join_game_button");
+        if (createButton != null)
+        {
+            //button function
+            createButton.clickable.clicked += () =>
+            {
+                //TODO
+                // zum Spiel screen
+            };
+        }
+        return null;
+    }
+
+    private IEnumerable<Object> BindJoinSessionScreen()
+    {
+        //bind root 
+        var root = Screen_CreateGame.visualTree;
+
+        //TODO
+        // input des session key und des namen
+
+        //set button function create game
+
+        var createButton = root.Q<Button>("join_session_button");
+        if (createButton != null)
+        {
+            //button function
+            createButton.clickable.clicked += () =>
+            {
+                //TODO 
+                //beim clicken soll in die richtige session gegangen werden.
+                ScreenChange(Screen_JoinSession, Screen_Menu);
+            };
+        }
+        return null;
+    }
+
+    private IEnumerable<Object> BindSettingsScreen()
+    {
+        //bind root 
+        var root = Screen_CreateGame.visualTree;
+
+        //TODO
+        //Name input 
+
+        //set button function create game
+        var createButton = root.Q<Button>("logout_button");
+        if (createButton != null)
+        {
+            //button function
+            createButton.clickable.clicked += () =>
+            {
+                Debug.Log("drinnen ist er logout");
+                //TODO
+                //alle daten müssen gelöscht werden von der vorherigen Session
+                ScreenChange(Screen_Settings, Screen_JoinSession);
+            };
+        }
+        return null;
+    }
+
+    private IEnumerable<Object> BindEmployeeStatisticScreen()
+    {
+        //bind root 
+        var root = Screen_CreateGame.visualTree;
+
+        //TODO
+        //List view implementieren
+
+
+        //info: button hat keine funktion
+        return null;
+    }
+
+    private IEnumerable<Object> BindManagerStatisticScreen()
+    {
+        //bind root 
+        var root = Screen_CreateGame.visualTree;
+
+        //TODO
+        //list view implementieren mit 
+
+        //set button function create game
+        var createButton = root.Q<Button>("change_statistic_button");
+        if (createButton != null)
+        {
+            //button function
+            createButton.clickable.clicked += () =>
+            {
+                //TODO
+                //List view inhalt wird geändert zwischen employee und session informationen
+                //label des buttons wird geändert 
             };
         }
         return null;
     }
 
 
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///Game Logic
-
-    private bool CheckLogInData()
-    {
-        //TODO
-        return false;
-    }
-
-    private bool CheckIfGameSelected()
-    {
-        //TODO
-        return false;
-    }
+    
 }

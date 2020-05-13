@@ -1,0 +1,19 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="background" focusable="true" style="height: 100%;&#10;width: 100%;&#10;background-color: rgb(224, 224, 224);&#10;justify-content: space-between;&#10;">
+        <Style src="VII_GameLayout_StatisticsManager.uss" />
+        <ui:VisualElement name="leiste_oben" style="height: 25%;&#10;width: 100%;&#10;justify-content: flex-end;&#10;">
+            <ui:VisualElement name="logo" focusable="true" style="overflow: hidden;&#10;height: 70%;&#10;width: 30%;&#10;position: absolute;&#10;left: 35%;&#10;right: auto;&#10;bottom: 15%;&#10;" />
+            <ui:VisualElement name="leiste_bunt" style="height: 60%;&#10;background-color: rgb(156, 156, 231);&#10;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="content_leiste_unten" style="height: 75%;&#10;width: 100%;&#10;padding-left: 7%;&#10;padding-right: 7%;&#10;padding-top: 7%;&#10;padding-bottom: 7%;&#10;justify-content: flex-end;&#10;">
+            <ui:VisualElement style="height: 100%;&#10;width: 100%;&#10;background-color: rgb(209, 209, 209);&#10;border-top-left-radius: 7%;&#10;border-bottom-left-radius: 7%;&#10;border-top-right-radius: 7%;&#10;border-bottom-right-radius: 7%;&#10;">
+                <ui:ListView focusable="True" name="statistic" style="height: 100%;&#10;width: 100%;&#10;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="button" style="align-items: flex-start;&#10;flex-direction: row;&#10;height: 10%;&#10;width: 100%;&#10;padding-left: 0;&#10;padding-right: 20%;&#10;padding-top: 0;&#10;padding-bottom: 0;&#10;margin-left: 0;&#10;margin-top: 7%;&#10;margin-bottom: 7%;&#10;font-size: 100%;&#10;margin-right: 13%;&#10;visibility: visible;&#10;">
+                <ui:Button text="employee" name="change_statistic_button" style="height: 100%;&#10;border-left-width: 0;&#10;border-right-width: 0;&#10;border-top-width: 0;&#10;border-bottom-width: 0;&#10;border-top-left-radius: 100px;&#10;border-bottom-left-radius: 100px;&#10;border-top-right-radius: 100px;&#10;border-bottom-right-radius: 100px;&#10;background-color: rgb(168, 168, 168);&#10;color: rgb(0, 0, 0);&#10;font-size: 1200%;&#10;-unity-font-style: bold;&#10;-unity-text-align: middle-left;&#10;padding-left: 20%;&#10;width: 100%;&#10;visibility: visible;&#10;">
+                    <ui:VisualElement name="logo_button" style="position: absolute;&#10;height: 100%;&#10;width: 10%;&#10;left: 6%;&#10;bottom: 20%;&#10;" />
+                </ui:Button>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
