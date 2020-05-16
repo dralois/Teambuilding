@@ -5,10 +5,10 @@
 
 .unity-text-field__input {
     background-color: rgba(0, 0, 0, 0);
-    border-left-color: rgba(168, 168, 168, 255);
-    border-right-color: rgba(168, 168, 168, 255);
-    border-top-color: rgba(168, 168, 168, 255);
-    border-bottom-color: rgba(168, 168, 168, 255);
+    border-left-color: rgb(168, 168, 168);
+    border-right-color: rgb(168, 168, 168);
+    border-top-color: rgb(168, 168, 168);
+    border-bottom-color: rgb(168, 168, 168);
     border-left-width: 0;
     border-right-width: 0;
     border-top-width: 0;

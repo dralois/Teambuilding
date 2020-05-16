@@ -27,19 +27,7 @@ public class UIManager : MonoBehaviour
 
     public PanelRenderer Screen_Statistic_manager;
     public PanelRenderer Screen_Statistic_employee;
-
-
-
-
-    // Pre-loaded UI assets (ie. UXML/USS).
-    //List for choosing a game
-    public VisualTreeAsset m_GameListItem;
-    public StyleSheet m_GameListItemStyles;
-
-    //List for the statistics (SessionStat and employeestat)
-    public VisualTreeAsset m_statisticListItem;
-    public StyleSheet m_statisticListItemStyles;
-
+    
 
 
     // The Panel Renderer can optionally track assets to enable live
@@ -47,25 +35,7 @@ public class UIManager : MonoBehaviour
     // assets (ie. UXML/USS).
     private List<Object> m_TrackedAssetsForLiveUpdates;
 
-    // We need to update the values of some UI elements so here are
-    // their remembered references after being queried from the cloned
-    // UXML.
-    //Values of the statistic (employee)            //we need a list for that
-    /*private Label stat_e_name;
-    private Label stat_e_note;
-
-    private Label stat_e_value1;
-    private Label stat_e_value2;
-    private Label stat_e_value3;
-
-    //Values of the statistic (session)             //we need a list for that
-    private Label stat_sess_name;
-    private Label stat_sess_date;
-    private Label stat_sess_participants;
-
-    private Label stat_sess_value1;
-    private Label stat_sess_value2;
-    private Label stat_sess_value3;*/
+   
 
 
     //variable
@@ -96,7 +66,6 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
 #if !UNITY_EDITOR
         if (Screen.fullScreen)
             Screen.fullScreen = false;
@@ -122,17 +91,40 @@ public class UIManager : MonoBehaviour
     // Screen Transition Logic
 
     //change Screen 
-    private void ScreenChange(PanelRenderer from, PanelRenderer to)
+    IEnumerator ScreenChange(PanelRenderer from, PanelRenderer to)
     {
         from.visualTree.style.display = DisplayStyle.None;
         from.gameObject.GetComponent<UIElementsEventSystem>().enabled = false;
+
         to.enabled = true;
+
+        yield return null;
+        yield return null;
+        yield return null;
+
+        to.visualTree.style.display = DisplayStyle.Flex;
+        to.visualTree.style.visibility = Visibility.Hidden;
+        to.gameObject.GetComponent<UIElementsEventSystem>().enabled = true;
+
+        yield return null;
+        yield return null;
+        yield return null;
+
+        to.visualTree.style.visibility = Visibility.Visible;
+
+        yield return null;
+        yield return null;
+        yield return null;
+        yield return null;
+        yield return null;
+
+        from.enabled = false;
     }
 
     private void GoToStartScreen()
     {
-        SetScreenEnableState(Screen_JoinSession, false); //als erstes key eingeben um session beizutreteten
-        SetScreenEnableState(Screen_Menu, true);
+        SetScreenEnableState(Screen_JoinSession, true); //als erstes key eingeben um session beizutreteten
+        SetScreenEnableState(Screen_Menu, false);
         SetScreenEnableState(Screen_CreateGame, false);
         SetScreenEnableState(Screen_Settings, false);
         SetScreenEnableState(Screen_JoinGame, false);
@@ -176,7 +168,7 @@ public class UIManager : MonoBehaviour
             //button function
             joinButton.clickable.clicked += () =>
             {
-                ScreenChange(Screen_Menu, Screen_JoinGame);
+                StartCoroutine(ScreenChange(Screen_Menu, Screen_JoinGame));
             };
         }
         
@@ -186,7 +178,7 @@ public class UIManager : MonoBehaviour
             //button function
             joinButton.clickable.clicked += () =>
             {
-                ScreenChange(Screen_Menu, Screen_CreateGame);
+                StartCoroutine(ScreenChange(Screen_Menu, Screen_CreateGame));
             };
         }
 
@@ -198,10 +190,10 @@ public class UIManager : MonoBehaviour
             {
                 if (manager)
                 {
-                    ScreenChange(Screen_Menu, Screen_Statistic_manager);
+                    StartCoroutine(ScreenChange(Screen_Menu, Screen_Statistic_manager));
                 } else
                 {
-                    ScreenChange(Screen_Menu, Screen_Statistic_employee);
+                    StartCoroutine(ScreenChange(Screen_Menu, Screen_Statistic_employee));
                 }
                 
             };
@@ -213,7 +205,7 @@ public class UIManager : MonoBehaviour
             //button function
             joinButton.clickable.clicked += () =>
             {
-                ScreenChange(Screen_Menu, Screen_Settings);
+                StartCoroutine(ScreenChange(Screen_Menu, Screen_Settings));
             };
         }
         return null;
@@ -242,7 +234,7 @@ public class UIManager : MonoBehaviour
     private IEnumerable<Object> BindJoinGameScreen()
     {
         //bind root 
-        var root = Screen_CreateGame.visualTree;
+        var root = Screen_JoinGame.visualTree;
 
         //TODO
         //in list view anzeigen welches spiel vom manager ausgewählt wurde
@@ -264,7 +256,7 @@ public class UIManager : MonoBehaviour
     private IEnumerable<Object> BindJoinSessionScreen()
     {
         //bind root 
-        var root = Screen_CreateGame.visualTree;
+        var root = Screen_JoinSession.visualTree;
 
         //TODO
         // input des session key und des namen
@@ -279,7 +271,7 @@ public class UIManager : MonoBehaviour
             {
                 //TODO 
                 //beim clicken soll in die richtige session gegangen werden.
-                ScreenChange(Screen_JoinSession, Screen_Menu);
+                StartCoroutine(ScreenChange(Screen_JoinSession, Screen_Menu));
             };
         }
         return null;
@@ -288,7 +280,7 @@ public class UIManager : MonoBehaviour
     private IEnumerable<Object> BindSettingsScreen()
     {
         //bind root 
-        var root = Screen_CreateGame.visualTree;
+        var root = Screen_Settings.visualTree;
 
         //TODO
         //Name input 
@@ -300,10 +292,9 @@ public class UIManager : MonoBehaviour
             //button function
             createButton.clickable.clicked += () =>
             {
-                Debug.Log("drinnen ist er logout");
                 //TODO
                 //alle daten müssen gelöscht werden von der vorherigen Session
-                ScreenChange(Screen_Settings, Screen_JoinSession);
+                StartCoroutine(ScreenChange(Screen_Settings, Screen_JoinSession));
             };
         }
         return null;
