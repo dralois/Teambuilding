@@ -542,7 +542,7 @@ PrefabInstance:
         type: 3}
       propertyPath: uxml
       value: 
-      objectReference: {fileID: 9197481963319205126, guid: 97292f20a2cc4cf44b5cf729036a0665,
+      objectReference: {fileID: 9197481963319205126, guid: 70a3b1072b989a84f923059a19842a90,
         type: 3}
     - target: {fileID: 4631087885152535827, guid: 1d6a7ce81bc8c0c4bb0380847da6b211,
         type: 3}
@@ -608,7 +608,7 @@ PrefabInstance:
     - target: {fileID: 4631087885152535838, guid: 1d6a7ce81bc8c0c4bb0380847da6b211,
         type: 3}
       propertyPath: m_Name
-      value: UI JoinSession
+      value: UI Menu
       objectReference: {fileID: 0}
     - target: {fileID: 8149217723065369081, guid: 1d6a7ce81bc8c0c4bb0380847da6b211,
         type: 3}
@@ -798,8 +798,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e25c2857deb1ac46a8dcb5b99be08b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Screen_JoinSession: {fileID: 739280438}
-  Screen_Menu: {fileID: 2059341909}
+  Screen_JoinSession: {fileID: 2059341909}
+  Screen_Menu: {fileID: 739280438}
   Screen_CreateGame: {fileID: 1143202641}
   Screen_JoinGame: {fileID: 1995377638}
   Screen_Settings: {fileID: 931023112}
@@ -1053,7 +1053,7 @@ PrefabInstance:
         type: 3}
       propertyPath: uxml
       value: 
-      objectReference: {fileID: 9197481963319205126, guid: 70a3b1072b989a84f923059a19842a90,
+      objectReference: {fileID: 9197481963319205126, guid: 97292f20a2cc4cf44b5cf729036a0665,
         type: 3}
     - target: {fileID: 4631087885152535827, guid: 1d6a7ce81bc8c0c4bb0380847da6b211,
         type: 3}
@@ -1119,7 +1119,7 @@ PrefabInstance:
     - target: {fileID: 4631087885152535838, guid: 1d6a7ce81bc8c0c4bb0380847da6b211,
         type: 3}
       propertyPath: m_Name
-      value: UI Menu
+      value: UI JoinSession
       objectReference: {fileID: 0}
     - target: {fileID: 8149217723065369081, guid: 1d6a7ce81bc8c0c4bb0380847da6b211,
         type: 3}

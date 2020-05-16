@@ -78,12 +78,7 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /* If any of our UI Labels have not been bound, do nothing.
-            if (m_SpeedLabel == null || m_Tanks.Length == 0 || m_Player1Movement == null || m_Player1Health == null)
-            return;*/
-
-        /* Update UI label text.
-        m_SpeedLabel.text = m_Player1Movement.m_Speed.ToString();*/
+       
     }
 
 
@@ -123,8 +118,8 @@ public class UIManager : MonoBehaviour
 
     private void GoToStartScreen()
     {
-        SetScreenEnableState(Screen_JoinSession, true); //als erstes key eingeben um session beizutreteten
         SetScreenEnableState(Screen_Menu, false);
+        SetScreenEnableState(Screen_JoinSession, true);
         SetScreenEnableState(Screen_CreateGame, false);
         SetScreenEnableState(Screen_Settings, false);
         SetScreenEnableState(Screen_JoinGame, false);
@@ -248,6 +243,7 @@ public class UIManager : MonoBehaviour
             {
                 //TODO
                 // zum Spiel screen
+
             };
         }
         return null;
@@ -261,16 +257,14 @@ public class UIManager : MonoBehaviour
         //TODO
         // input des session key und des namen
 
-        //set button function create game
-
-        var createButton = root.Q<Button>("join_session_button");
-        if (createButton != null)
+        //set button function
+        var joinButton = root.Q<Button>("join_session_button");
+        if (joinButton != null)
         {
             //button function
-            createButton.clickable.clicked += () =>
+            joinButton.clickable.clicked += () =>
             {
-                //TODO 
-                //beim clicken soll in die richtige session gegangen werden.
+                Debug.Log("drinnen");
                 StartCoroutine(ScreenChange(Screen_JoinSession, Screen_Menu));
             };
         }
