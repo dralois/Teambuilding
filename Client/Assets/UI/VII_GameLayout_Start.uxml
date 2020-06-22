@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="background" focusable="true" style="height: 100%;&#10;width: 100%;&#10;background-color: rgb(247, 247, 247);&#10;justify-content: space-between;&#10;">
+        <Style src="VII_GameLayout_Start.uss" />
+        <ui:VisualElement style="height: 100%;&#10;width: 100%;&#10;align-items: center;&#10;justify-content: flex-end;&#10;background-image: url(&apos;/Assets/Art/Sprites/Objects/LogoTeamMaet.jpeg&apos;);&#10;-unity-background-scale-mode: scale-to-fit;&#10;">
+            <ui:Button name="start_button" style="width: 100%;&#10;height: 100%;&#10;background-color: rgba(228, 228, 228, 0);&#10;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

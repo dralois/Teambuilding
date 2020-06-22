@@ -1,0 +1,24 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="puffer" style="height: 9%;&#10;">
+        <Style src="game-item.uss" />
+    </ui:VisualElement>
+    <ui:VisualElement name="item" style="height: 100%;&#10;width: 100%;&#10;background-color: rgba(255, 0, 0, 255);&#10;flex-direction: row;&#10;border-top-left-radius: 100px;&#10;border-bottom-left-radius: 100px;&#10;border-top-right-radius: 100px;&#10;border-bottom-right-radius: 100px;&#10;">
+        <Style src="game-item.uss" />
+        <ui:VisualElement name="game-logo" style="width: 30%;&#10;height: 100%;&#10;align-items: center;&#10;justify-content: center;&#10;">
+            <ui:VisualElement name="background-logo" style="width: 80%;&#10;height: 80%;&#10;align-items: center;&#10;justify-content: center;&#10;background-color: rgba(209, 209, 209, 255);&#10;border-top-left-radius: 20%;&#10;border-bottom-left-radius: 20%;&#10;border-top-right-radius: 20%;&#10;border-bottom-right-radius: 20%;&#10;margin-left: 5%;&#10;margin-right: 5%;&#10;margin-top: 5%;&#10;margin-bottom: 5%;&#10;left: 5%;&#10;">
+                <ui:VisualElement name="icon" style="height: 90%;&#10;width: 80%;&#10;background-color: rgba(183, 97, 97, 0);&#10;background-image: url(&apos;/Assets/Art/Sprites/Objects/Game1.png&apos;);&#10;-unity-background-scale-mode: scale-to-fit;&#10;padding-left: 5%;&#10;padding-right: 5%;&#10;padding-top: 5%;&#10;padding-bottom: 5%;&#10;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="text" style="margin-left: 0;&#10;margin-right: 0;&#10;margin-top: 0;&#10;margin-bottom: 0;&#10;left: 5%;&#10;top: 5%;&#10;bottom: 5%;&#10;">
+            <ui:VisualElement name="oben">
+                <ui:Label text="Game1" name="game-name" style="font-size: 1500%;&#10;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="unten">
+                <ui:Label text="Date 10/10/10" name="game-date" style="font-size: 800%;&#10;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="puffer" style="height: 9%;&#10;">
+        <Style src="game-item.uss" />
+    </ui:VisualElement>
+</ui:UXML>
