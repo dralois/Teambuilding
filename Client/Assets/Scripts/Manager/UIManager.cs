@@ -17,18 +17,15 @@ public class UIManager : MonoBehaviour
 
 
     public PanelRenderer Screen_Start;
-
     public PanelRenderer Screen_JoinSession;
-
     public PanelRenderer Screen_Menu;
-    
     public PanelRenderer Screen_CreateGame;
     public PanelRenderer Screen_JoinGame;
-
     public PanelRenderer Screen_Settings;
-
     public PanelRenderer Screen_Statistic_manager;
     public PanelRenderer Screen_Statistic_employee;
+
+    public PanelRenderer Screen_GamePuzzle;
 
     //list view JOINGAME_screen
     public VisualTreeAsset games_item;
@@ -38,14 +35,19 @@ public class UIManager : MonoBehaviour
     public VisualTreeAsset statistic_employee_item;
     public StyleSheet statistic_employee_item_style;
 
-    //list view statistic_employee_screen
+    //list view statistic_manager_screen
     public VisualTreeAsset statistic_manager_item;
     public StyleSheet statistic_manager_item_style;
+
+    //list view inGame overview
+    public VisualTreeAsset overview_item;
+    public StyleSheet overview_item_style;
 
     //Listen für die ListViews
     private List<Game> games = new List<Game>();
     private List<StatisticEmployee> statisticsEmployee = new List<StatisticEmployee>();
     private List<StatisticEmployee> statisticsManager = new List<StatisticEmployee>();
+    private List<OverViewListData> overviewGamePuzzle = new List<OverViewListData>();                         //ist dort schon ein PuzzleTeil gesetzt?
 
     //Logic
     private Boolean manager = false;
@@ -58,6 +60,7 @@ public class UIManager : MonoBehaviour
     // to click events.
     private void OnEnable()
     {
+        //Bind Screens
         Screen_Start.postUxmlReload = BindStartScreen;
         Screen_JoinSession.postUxmlReload = BindJoinSessionScreen;
         Screen_Menu.postUxmlReload = BindMenuScreen;
@@ -66,6 +69,7 @@ public class UIManager : MonoBehaviour
         Screen_Settings.postUxmlReload = BindSettingsScreen;
         Screen_Statistic_employee.postUxmlReload = BindEmployeeStatisticScreen;
         Screen_Statistic_manager.postUxmlReload = BindManagerStatisticScreen;
+        Screen_GamePuzzle.postUxmlReload = BindGamePuzzleScreen;
     }
 
 
@@ -125,6 +129,9 @@ public class UIManager : MonoBehaviour
 
     private void GoToStartScreen()
     {
+
+        SetScreenEnableState(Screen_GamePuzzle, false);
+
         SetScreenEnableState(Screen_Start, true);
         SetScreenEnableState(Screen_Menu, false);
         SetScreenEnableState(Screen_JoinSession, false);
@@ -263,8 +270,7 @@ public class UIManager : MonoBehaviour
             //button function
             createButton.clickable.clicked += () =>
             {
-                //TODO
-                // zum Spiel screen
+                StartCoroutine(ScreenChange(Screen_JoinGame, Screen_GamePuzzle));
 
             };
         }
@@ -279,8 +285,6 @@ public class UIManager : MonoBehaviour
         var listView = root.Q<ListView>("games-list");
         if (listView != null)
         {
-
-            Debug.Log("drinnen");
             listView.selectionType = SelectionType.None;
 
             if (listView.makeItem == null)
@@ -356,7 +360,6 @@ public class UIManager : MonoBehaviour
         var listView = root.Q<ListView>("statistic-list");
         if (listView != null)
         {
-            Debug.Log("drinnen");
             listView.selectionType = SelectionType.None;
 
             if (listView.makeItem == null)
@@ -410,10 +413,39 @@ public class UIManager : MonoBehaviour
         return null;
     }
 
+    private IEnumerable<Object> BindGamePuzzleScreen()
+    {
+        //bind root 
+        var root = Screen_GamePuzzle.visualTree;
+
+        //TODO
+        //list view implementieren mit 
+        var listView = root.Q<ListView>("overview-list");
+        //test
+        OverViewListData g = new OverViewListData();
+        g.createOverViewListData(true);
+        overviewGamePuzzle.Add(g);
+         
+
+        if (listView != null)
+        {
+            Debug.Log("Drinnen in overview");
+            listView.selectionType = SelectionType.None;
+
+            if (listView.makeItem == null)
+                listView.makeItem = MakeItemGamePuzzleOverview;
+            if (listView.bindItem == null)
+                listView.bindItem = BindItemGamePuzzleOverview;
+
+            listView.itemsSource = games;
+            listView.Refresh();
+        }
+        return null;
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Game Logic
-    
+
 
 
 
@@ -477,5 +509,41 @@ public class UIManager : MonoBehaviour
         var playerColor = Color.blue;
         playerColor.a = 0.9f;
         element.Q("icon").style.unityBackgroundImageTintColor = playerColor;
+    }
+
+    //LIST VIEW OVERVIEW INGAME ///////////////////////////////////////////////////////////////////////////////
+    private VisualElement MakeItemGamePuzzleOverview()
+    {
+        var element = overview_item.CloneTree();
+        //element.schedule.Execute(() => UpdateOverview(element)).Every(200);
+        return element;
+    }
+
+    private void BindItemGamePuzzleOverview(VisualElement element, int index)
+    {
+        element.Q<Label>("game-name").text = "Game Jan";
+
+        var playerColor = Color.blue;
+        playerColor.a = 0.9f;
+        element.Q("icon").style.unityBackgroundImageTintColor = playerColor;
+    }
+
+    private void UpdateOverview(VisualElement element)
+    {
+        //var tank = element.userData as TankManager;
+        //if (tank == null)
+        //   return;
+
+        //var healthBar = element.Q("health-bar");
+        //var healthBarFill = element.Q("health-bar-fill");
+
+        //var totalWidth = healthBar.resolvedStyle.width;
+
+        //var healthComponent = tank.m_Instance.GetComponent<TankHealth>();
+        //var currentHealth = healthComponent.m_CurrentHealth;
+        //var startingHealth = healthComponent.m_StartingHealth;
+        //var percentHealth = currentHealth / startingHealth;
+
+        //healthBarFill.style.width = totalWidth * percentHealth;
     }
 }

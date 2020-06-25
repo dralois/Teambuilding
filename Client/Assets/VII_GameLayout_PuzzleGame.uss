@@ -1,0 +1,16 @@
+.unity-text-field__label {
+    display: none;
+    visibility: hidden;
+}
+
+.unity-text-field__input {
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgb(168, 168, 168);
+    border-right-color: rgb(168, 168, 168);
+    border-top-color: rgb(168, 168, 168);
+    border-bottom-color: rgb(168, 168, 168);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 80px;
+}
