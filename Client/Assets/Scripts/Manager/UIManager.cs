@@ -130,9 +130,9 @@ public class UIManager : MonoBehaviour
     private void GoToStartScreen()
     {
 
-        SetScreenEnableState(Screen_GamePuzzle, false);
+        SetScreenEnableState(Screen_GamePuzzle, true);
 
-        SetScreenEnableState(Screen_Start, true);
+        SetScreenEnableState(Screen_Start, false);
         SetScreenEnableState(Screen_Menu, false);
         SetScreenEnableState(Screen_JoinSession, false);
         SetScreenEnableState(Screen_CreateGame, false);
@@ -417,6 +417,28 @@ public class UIManager : MonoBehaviour
     {
         //bind root 
         var root = Screen_GamePuzzle.visualTree;
+
+        //set left button function
+        var joinButton = root.Q<Button>("left_button");
+        if (joinButton != null)
+        {
+            //button function
+            joinButton.clickable.clicked += () =>
+            {
+                Debug.Log("Links gedrückt");
+            };
+        }
+
+        //set right button function
+        joinButton = root.Q<Button>("right_button");
+        if (joinButton != null)
+        {
+            //button function
+            joinButton.clickable.clicked += () =>
+            {
+                Debug.Log("Rechts gedrückt");
+            };
+        }
 
         //TODO
         //list view implementieren mit 

@@ -3,23 +3,23 @@
         <Style src="VII_GameLayout_PuzzleGame.uss" />
         <ui:VisualElement name="leiste_oben" style="height: 25%;&#10;width: 100%;&#10;justify-content: flex-end;&#10;">
             <ui:VisualElement name="leiste_bunt" style="height: 60%;&#10;background-color: rgb(156, 156, 231);&#10;justify-content: center;&#10;align-items: center;&#10;">
-                <ui:ScrollView mode="Horizontal" name="overview-list" style="width: 90%;&#10;height: 50%;&#10;background-color: rgba(224, 224, 224, 255);&#10;" />
+                <ui:ListView focusable="True" name="overview-list" item-height="700" style="width: 90%;&#10;height: 50%;&#10;background-color: rgb(224, 224, 224);&#10;" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="content_leiste_unten" style="height: 75%;&#10;width: 100%;&#10;padding-left: 7%;&#10;padding-right: 7%;&#10;padding-top: 7%;&#10;padding-bottom: 7%;&#10;justify-content: flex-end;&#10;">
             <ui:VisualElement name="Puzzle" style="height: 100%;&#10;width: 100%;&#10;background-color: rgb(209, 209, 209);&#10;border-top-left-radius: 7%;&#10;border-bottom-left-radius: 7%;&#10;border-top-right-radius: 7%;&#10;border-bottom-right-radius: 7%;&#10;align-items: center;&#10;justify-content: center;&#10;flex-direction: row;&#10;">
-                <ui:VisualElement style="height: 100%;&#10;justify-content: center;&#10;width: 15%;&#10;background-color: rgba(214, 214, 214, 0);&#10;">
-                    <ui:Button text="left" name="left_button" style="background-color: rgba(228, 228, 228, 0);&#10;border-left-width: 0;&#10;border-right-width: 0;&#10;border-top-width: 0;&#10;border-bottom-width: 0;&#10;" />
+                <ui:VisualElement style="height: 100%;&#10;justify-content: center;&#10;width: 15%;&#10;background-color: rgba(214, 214, 214, 0);&#10;align-items: center;&#10;overflow: visible;&#10;">
+                    <ui:Button name="left_button" style="background-color: rgba(228, 228, 228, 0);&#10;border-left-width: 0;&#10;border-right-width: 0;&#10;border-top-width: 0;&#10;border-bottom-width: 0;&#10;background-image: url(&apos;/Assets/Art/Sprites/Objects/Links2.png&apos;);&#10;height: 100%;&#10;width: 100%;&#10;-unity-background-scale-mode: scale-to-fit;&#10;border-top-left-radius: 0;&#10;border-bottom-left-radius: 0;&#10;border-top-right-radius: 0;&#10;border-bottom-right-radius: 0;&#10;margin-left: 0;&#10;margin-right: 0;&#10;margin-top: 0;&#10;margin-bottom: 0;&#10;padding-left: 0;&#10;padding-right: 0;&#10;padding-top: 0;&#10;padding-bottom: 0;&#10;-unity-slice-left: 0;&#10;-unity-slice-top: 0;&#10;-unity-slice-right: 0;&#10;-unity-slice-bottom: 0;&#10;overflow: visible;&#10;display: flex;&#10;visibility: visible;&#10;-unity-background-image-tint-color: rgb(255, 255, 255);&#10;" />
                 </ui:VisualElement>
                 <ui:VisualElement style="width: 70%;&#10;height: 100%;&#10;background-color: rgba(168, 168, 168, 0.5);&#10;justify-content: center;&#10;align-items: center;&#10;">
                     <ui:VisualElement name="puzzle_piece" style="width: 100%;&#10;height: 100%;&#10;" />
                 </ui:VisualElement>
-                <ui:VisualElement style="height: 100%;&#10;justify-content: center;&#10;width: 15%;&#10;background-color: rgba(255, 255, 255, 0);&#10;">
-                    <ui:Button text="right" name="right_button" style="background-color: rgba(228, 228, 228, 0);&#10;border-left-width: 0;&#10;border-right-width: 0;&#10;border-top-width: 0;&#10;border-bottom-width: 0;&#10;" />
+                <ui:VisualElement style="height: 100%;&#10;justify-content: center;&#10;width: 15%;&#10;background-color: rgba(255, 255, 255, 0);&#10;align-items: center;&#10;">
+                    <ui:Button name="right_button" style="background-color: rgba(228, 228, 228, 0);&#10;border-left-width: 0;&#10;border-right-width: 0;&#10;border-top-width: 0;&#10;border-bottom-width: 0;&#10;width: 100%;&#10;height: 100%;&#10;display: flex;&#10;overflow: visible;&#10;background-image: url(&apos;/Assets/Art/Sprites/Objects/Rechts 1.png&apos;);&#10;-unity-background-scale-mode: scale-to-fit;&#10;" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="button" style="align-items: flex-start;&#10;flex-direction: row;&#10;height: 18%;&#10;width: 100%;&#10;padding-left: 0;&#10;padding-right: 0;&#10;padding-top: 0;&#10;padding-bottom: 0;&#10;margin-left: 0;&#10;margin-top: 3%;&#10;margin-bottom: 3%;&#10;font-size: 100%;&#10;margin-right: 0;&#10;visibility: visible;&#10;">
-                <ui:ListView focusable="true" name="pieces-list" style="flex-direction: row;&#10;width: 100%;&#10;height: 100%;&#10;" />
+            <ui:VisualElement name="button" style="align-items: flex-start;&#10;flex-direction: row;&#10;height: 18%;&#10;width: 100%;&#10;padding-left: 0;&#10;padding-right: 0;&#10;padding-top: 0;&#10;padding-bottom: 0;&#10;margin-left: 0;&#10;margin-top: 3%;&#10;margin-bottom: 3%;&#10;font-size: 100%;&#10;margin-right: 0;&#10;visibility: visible;&#10;background-color: rgba(188, 188, 188, 0);&#10;">
+                <ui:ListView focusable="true" name="pieces-list" style="flex-direction: row;&#10;width: 100%;&#10;height: 100%;&#10;background-color: rgba(188, 188, 188, 0);&#10;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
