@@ -5,7 +5,7 @@ import socketserver
 import hashlib
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import sys
-
+# useless comment
 HOST_NAME = 'holymacaroni.de'
 PORT = 8080
 room_key = ""
