@@ -1,6 +1,20 @@
 import http.server
+from http import HTTPStatus
 import socketserver
 from http.server import HTTPServer, BaseHTTPRequestHandler
+
+HOST_NAME = 'holymacaroni.de'
+PORT = 8080
+
+
+class Gamehandler(BaseHTTPRequestHandler):
+    def do_HEAD(self):
+        ...
+
+    def do_GET(self):
+        print(self.path)
+        print(self.client_address)
+        self.send_response_only(HTTPStatus.OK, f"path is: {self.path}, host, port: {self.client_address}")
 
 
 def run(server_class=HTTPServer, handler_class=BaseHTTPRequestHandler):
@@ -11,7 +25,7 @@ def run(server_class=HTTPServer, handler_class=BaseHTTPRequestHandler):
 
 def start():
     PORT = 8080
-    Handler = http.server.SimpleHTTPRequestHandler
+    Handler = Gamehandler
 
     with socketserver.TCPServer(("", PORT), Handler) as httpd:
         print("serving at port", PORT)
