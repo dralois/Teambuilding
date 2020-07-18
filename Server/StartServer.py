@@ -45,6 +45,7 @@ class GameHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         print(self.path)
+        self.send_response_only(HTTPStatus.OK, "passt")
         self.parse_message()
         self.end_headers()
 
@@ -73,13 +74,13 @@ class GameHandler(BaseHTTPRequestHandler):
             global manager
             global room_key
             global identifier
-            room_key = self.headers["roomkey"]
+            room_key = self.headers["roomKey"]
             manager.set(room_key, self.headers["name"], identifier)
             identifier += 1
             gamestate += 1
 
         self.send_header("success", str(success))
-        self.send_header("ident", str(manager.key))
+        self.send_header("ident", str(manager.identifier))
 
 
 
