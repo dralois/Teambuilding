@@ -1,11 +1,11 @@
 import http.server
 from http import HTTPStatus
 from Server.DataClasses import Manager
+# from DataClasses import Manager
 import socketserver
 import hashlib
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import sys
-# useless comment
 HOST_NAME = 'holymacaroni.de'
 PORT = 8080
 room_key = ""
@@ -51,13 +51,13 @@ class GameHandler(BaseHTTPRequestHandler):
 
     def parse_message(self):
         nachricht = self.path.split("/")
-        if nachricht[1] == "createRoom":
+        if nachricht[1] == "CREATEROOM":
             self.create_room()
-        elif nachricht[1] == "openRoom":
+        elif nachricht[1] == "OPENROOM":
             self.open_room()
-        elif nachricht[1] == "joinRoom":
+        elif nachricht[1] == "JOINROOM":
             self.join_room()
-        elif nachricht[1] == "readyPlayer":
+        elif nachricht[1] == "READY":
             self.ready_player()
         elif nachricht[1] == "KILLME":
             sys.exit()
@@ -74,18 +74,18 @@ class GameHandler(BaseHTTPRequestHandler):
             global manager
             global room_key
             global identifier
-            room_key = self.headers["roomKey"]
+            room_key = self.headers["room_id"]
             manager.set(room_key, self.headers["name"], identifier)
             identifier += 1
             gamestate += 1
 
         self.send_header("success", str(success))
-        self.send_header("ident", str(manager.identifier))
-
-
+        self.send_header("pers_id", str(manager.identifier))
 
     def open_room(self):
+        global gamestate
         ...
+
 
     def join_room(self):
         ...
