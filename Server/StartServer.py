@@ -7,7 +7,7 @@ HOST_NAME = 'holymacaroni.de'
 PORT = 8080
 
 
-class Gamehandler(BaseHTTPRequestHandler):
+class GameHandler(BaseHTTPRequestHandler):
     def do_HEAD(self):
         ...
 
@@ -15,17 +15,11 @@ class Gamehandler(BaseHTTPRequestHandler):
         print(self.path)
         print(self.client_address)
         self.send_response_only(HTTPStatus.OK, f"path is: {self.path}, host, port: {self.client_address}")
-
-
-def run(server_class=HTTPServer, handler_class=BaseHTTPRequestHandler):
-    server_address = ('', 8000)
-    httpd = server_class(server_address, handler_class)
-    httpd.serve_forever()
-
+        self.end_headers()
 
 def start():
     PORT = 8080
-    Handler = Gamehandler
+    Handler = GameHandler
 
     with socketserver.TCPServer(("", PORT), Handler) as httpd:
         print("serving at port", PORT)
