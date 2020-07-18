@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="header" style="flex-grow: 1; align-items: center; justify-content: center;">
+        <ui:Button text="Send Request" name="send-request" style="width: initial; min-width: 400px; min-height: 100px; font-size: 50px;" />
+    </ui:VisualElement>
+</ui:UXML>
