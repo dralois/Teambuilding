@@ -15,7 +15,7 @@ identifier = 0
 participants = {}
 
 
-class Gamehandler(BaseHTTPRequestHandler):
+class GameHandler(BaseHTTPRequestHandler):
     def do_HEAD(self):
         ...
 
@@ -94,7 +94,7 @@ class Gamehandler(BaseHTTPRequestHandler):
 
 def start():
     PORT = 8080
-    Handler = Gamehandler
+    Handler = GameHandler
 
 
     with socketserver.TCPServer(("", PORT), Handler) as httpd:
