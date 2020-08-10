@@ -129,13 +129,20 @@ class GameHandler(BaseHTTPRequestHandler):
             return
         else:
             try:
-                if int(self.headers["pers_id"]) not in participants.keys():
+                if int(self.headers["pers_id"]) not in participants.keys() or int(self.headers["room_id"]) != room_key:
                     self.send_header("success", str(False))
                     self.send_header("reason", "wrong gamestate")
                     return
                 else:
                     participants[int(self.headers["pers_id"])][1] = bool(self.headers["ready"])
                     # todo: ready loop if  everyone is ready, what
+                    self.send_header("success", str(True))
+                    self.send_header("no_user", str(len(participants)))
+                    ready = 0
+                    for key in participants.values():
+                        if key[1]:
+                            ready += 1
+                    self.send_header("no_ready", str(ready))
             except KeyError:
                 self.send_header("success", str(False))
                 self.send_header("reason", "wrong format")
