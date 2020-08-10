@@ -84,14 +84,63 @@ class GameHandler(BaseHTTPRequestHandler):
 
     def open_room(self):
         global gamestate
-        ...
+        try:
+            if self.headers["room_id"] != room_key or self.headers["pers_id"] != manager.identifier or gamestate != 1:
+                self.send_header("success", str(False))
+                self.send_header("reason", "wrong room, manager")
+                return
+            else:
+                gamestate += 1
+                # todo: add level  selection here  maybe?
+                self.send_header("success", str(True))
 
+        except KeyError:
+            self.send_header("success", str(False))
+            self.send_header("reason", "wrong format")
+            return
 
     def join_room(self):
-        ...
+        global gamestate
+        global participants
+        global identifier
+        try:
+            if self.headers["room_id"] != room_key or gamestate != 2:
+                self.send_header("success", str(False))
+                self.send_header("reason", "wrong room or wrong gamestate")
+                return
+            else:
+                print(self.headers["name"])
+                identifier += 1
+                participants[identifier] = [self.headers["name"], False]
+                self.send_header("success", str(True))
+                self.send_header("pers_id", str(identifier))
+
+        except KeyError:
+            self.send_header("success", str(False))
+            self.send_header("reason", "wrong format")
+            return
 
     def ready_player(self):
-        ...
+        global gamestate
+        global participants
+        if gamestate != 2:
+            self.send_header("success", str(False))
+            self.send_header("reason", "wrong gamestate")
+            return
+        else:
+            try:
+                if int(self.headers["pers_id"]) not in participants.keys():
+                    self.send_header("success", str(False))
+                    self.send_header("reason", "wrong gamestate")
+                    return
+                else:
+                    participants[int(self.headers["pers_id"])][1] = bool(self.headers["ready"])
+                    # todo: ready loop if  everyone is ready, what
+            except KeyError:
+                self.send_header("success", str(False))
+                self.send_header("reason", "wrong format")
+                return
+
 
 def start():
     PORT = 8080
