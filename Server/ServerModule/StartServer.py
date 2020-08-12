@@ -1,13 +1,13 @@
 import http.server
-from http import HTTPStatus
-from Server.DataClasses import Manager
-# from DataClasses import Manager
-import socketserver
 import hashlib
-from http.server import HTTPServer, BaseHTTPRequestHandler
 import sys
-HOST_NAME = 'holymacaroni.de'
-PORT = 8080
+
+from http import HTTPStatus
+from http.server import HTTPServer, BaseHTTPRequestHandler
+
+from .DataClasses import Manager
+
+
 room_key = ""
 manager = Manager()
 gamestate = 0
@@ -16,6 +16,7 @@ participants = {}
 
 
 class GameHandler(BaseHTTPRequestHandler):
+
     def do_HEAD(self):
         ...
 
@@ -38,31 +39,26 @@ class GameHandler(BaseHTTPRequestHandler):
         elif gamestate == 1:
             if ident == manager.identifier:
                 print("good input")
-        # self.send_response_only(HTTPStatus.OK, f"path is: {self.path}, host, port: {self.client_address}")
-        self.parse_message()
+
+        command = self.path.split("/")[1]
+        if hasattr(self, command):
+            getattr(self, command)()
+
         self.send_header("Manager", "ID")
         self.end_headers()
 
     def do_POST(self):
         print(self.path)
         self.send_response_only(HTTPStatus.OK, "passt")
-        self.parse_message()
+
+        command = self.path.split("/")[1]
+        if hasattr(self, command):
+            getattr(self, command)()
+
         self.end_headers()
 
-    def parse_message(self):
-        nachricht = self.path.split("/")
-        if nachricht[1] == "CREATEROOM":
-            self.create_room()
-        elif nachricht[1] == "OPENROOM":
-            self.open_room()
-        elif nachricht[1] == "JOINROOM":
-            self.join_room()
-        elif nachricht[1] == "READY":
-            self.ready_player()
-        elif nachricht[1] == "KILLME":
-            sys.exit()
-        else:
-            print("bad input")
+    def kill_me(self):
+        sys.exit(0)
 
     def create_room(self):
         global gamestate
@@ -147,17 +143,3 @@ class GameHandler(BaseHTTPRequestHandler):
                 self.send_header("success", str(False))
                 self.send_header("reason", "wrong format")
                 return
-
-
-def start():
-    PORT = 8080
-    Handler = GameHandler
-
-
-    with socketserver.TCPServer(("", PORT), Handler) as httpd:
-        print("serving at port", PORT)
-        httpd.serve_forever()
-
-
-if __name__ == "__main__":
-    start()
