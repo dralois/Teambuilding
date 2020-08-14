@@ -72,7 +72,6 @@ public class UIManager : MonoBehaviour
         Screen_GamePuzzle.postUxmlReload = BindGamePuzzleScreen;
     }
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -84,7 +83,6 @@ public class UIManager : MonoBehaviour
         //open LogIn as start menu
         GoToStartScreen();
     }
-
 
     // Update is called once per frame
     void Update()
@@ -130,9 +128,9 @@ public class UIManager : MonoBehaviour
     private void GoToStartScreen()
     {
 
-        SetScreenEnableState(Screen_GamePuzzle, true);
+        SetScreenEnableState(Screen_GamePuzzle, false);
 
-        SetScreenEnableState(Screen_Start, false);
+        SetScreenEnableState(Screen_Start, true);
         SetScreenEnableState(Screen_Menu, false);
         SetScreenEnableState(Screen_JoinSession, false);
         SetScreenEnableState(Screen_CreateGame, false);
@@ -159,7 +157,7 @@ public class UIManager : MonoBehaviour
             screen.gameObject.GetComponent<UIElementsEventSystem>().enabled = false;
         }
     }
-
+    
 
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -255,6 +253,19 @@ public class UIManager : MonoBehaviour
                 //TODO je nachdem welches spiel ausgewählt wurde
             };
         }
+
+        //set button function create game
+        var backButton = root.Q<Button>("back_button");
+        if (backButton != null)
+        {
+            //button function
+            backButton.clickable.clicked += () =>
+            {
+                StartCoroutine(ScreenChange(Screen_CreateGame, Screen_Menu));
+
+            };
+        }
+
         return null;
     }
 
@@ -271,6 +282,18 @@ public class UIManager : MonoBehaviour
             createButton.clickable.clicked += () =>
             {
                 StartCoroutine(ScreenChange(Screen_JoinGame, Screen_GamePuzzle));
+
+            };
+        }
+
+        //set button function create game
+        var backButton = root.Q<Button>("back_button");
+        if (backButton != null)
+        {
+            //button function
+            backButton.clickable.clicked += () =>
+            {
+                StartCoroutine(ScreenChange(Screen_JoinGame, Screen_Menu));
 
             };
         }
@@ -303,10 +326,7 @@ public class UIManager : MonoBehaviour
     {
         //bind root 
         var root = Screen_JoinSession.visualTree;
-
-        //TODO
-        // input des session key und des namen
-
+               
         //set button function
         var joinButton = root.Q<Button>("join_session_button");
         if (joinButton != null)
@@ -314,7 +334,18 @@ public class UIManager : MonoBehaviour
             //button function
             joinButton.clickable.clicked += () =>
             {
-                StartCoroutine(ScreenChange(Screen_JoinSession, Screen_Menu));
+                //test
+                var sessionkey = root.Q<TextField>("input_sessionkey").value;
+                var name = root.Q<TextField>("input_name").value;
+
+                if (sessionkey != null && name != null)
+                {
+                    if (checkLogIn(/*sessionkey*/ "" , /*name*/ "" ))
+                    {
+                        StartCoroutine(ScreenChange(Screen_JoinSession, Screen_Menu));
+                    }
+                }
+
             };
         }
         return null;
@@ -340,6 +371,18 @@ public class UIManager : MonoBehaviour
                 StartCoroutine(ScreenChange(Screen_Settings, Screen_JoinSession));
             };
         }
+
+        //set button function create game
+        var backButton = root.Q<Button>("back_button");
+        if (backButton != null)
+        {
+            //button function
+            backButton.clickable.clicked += () =>
+            {
+                StartCoroutine(ScreenChange(Screen_Settings, Screen_Menu));
+
+            };
+        }
         return null;
     }
 
@@ -347,7 +390,7 @@ public class UIManager : MonoBehaviour
     {
         //bind root 
         var root = Screen_Statistic_employee.visualTree;
-
+        
         //TODO
         //List view implementieren
 
@@ -371,7 +414,17 @@ public class UIManager : MonoBehaviour
             listView.Refresh();
         }
 
+        //set button function create game
+        var backButton = root.Q<Button>("back_button");
+        if (backButton != null)
+        {
+            //button function
+            backButton.clickable.clicked += () =>
+            {
+                StartCoroutine(ScreenChange(Screen_Statistic_employee, Screen_Menu));
 
+            };
+        }
 
         //info: button hat keine funktion
         return null;
@@ -410,6 +463,19 @@ public class UIManager : MonoBehaviour
             listView.itemsSource = statisticsEmployee;
             listView.Refresh();
         }
+
+        //set button function create game
+        var backButton = root.Q<Button>("back_button");
+        if (backButton != null)
+        {
+            //button function
+            backButton.clickable.clicked += () =>
+            {
+                StartCoroutine(ScreenChange(Screen_Statistic_manager, Screen_Menu));
+
+            };
+        }
+
         return null;
     }
 
@@ -468,7 +534,12 @@ public class UIManager : MonoBehaviour
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Game Logic
 
-
+    //Überprüft ob die Eingabe korrekt zum LogIn ist und logt dann in die entsprechende Session ein.
+    private bool checkLogIn(string session_key, string name)
+    {
+        //TODO Serverdaten abgleichen
+        return true;
+    }
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -526,7 +597,7 @@ public class UIManager : MonoBehaviour
 
     private void BindItemStatisticEmployee(VisualElement element, int index)
     {
-        element.Q<Label>("session-name").text = "Game Jan";
+        element.Q<Label>("session-name").text = statisticsEmployee[index].name;
 
         var playerColor = Color.blue;
         playerColor.a = 0.9f;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StatisticEmployee : MonoBehaviour
 {
-    private string name;
+    public string name;
     private int id;
     private Sprite logo;
 
