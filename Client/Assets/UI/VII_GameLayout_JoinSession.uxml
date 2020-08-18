@@ -2,7 +2,9 @@
     <ui:VisualElement name="background" focusable="true" style="height: 100%; width: 100%; background-color: rgb(224, 224, 224); justify-content: space-between;">
         <ui:VisualElement name="leiste_oben" style="height: 25%; width: 100%; justify-content: flex-end;">
             <ui:VisualElement name="leiste_bunt" style="height: 60%; background-color: rgb(255, 155, 0);" />
-            <ui:VisualElement name="logo" focusable="true" style="overflow: hidden; height: 70%; width: 25%; position: absolute; left: 38%; right: auto; bottom: 10%; background-image: url(&apos;/Assets/Art/Sprites/Objects/Schloss.png&apos;);" />
+            <ui:VisualElement name="logo" focusable="true" style="overflow: hidden; height: 70%; width: 25%; position: absolute; left: 38%; right: auto; bottom: 10%; background-image: url(&apos;/Assets/Art/Sprites/Objects/Schloss.png&apos;);">
+                <ui:Button name="back_button" style="background-color: rgba(228, 228, 228, 0); height: 100%; width: 100%; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0;" />
+            </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="content_leiste_unten" style="height: 75%; width: 100%; padding-left: 7%; padding-right: 7%; padding-top: 7%; padding-bottom: 7%; justify-content: flex-end;">
             <ui:VisualElement style="height: 100%; width: 100%; background-color: rgb(209, 209, 209); border-top-left-radius: 7%; border-bottom-left-radius: 7%; border-top-right-radius: 7%; border-bottom-right-radius: 7%; justify-content: center;">
