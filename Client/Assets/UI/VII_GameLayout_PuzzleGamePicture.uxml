@@ -4,7 +4,7 @@
         <ui:VisualElement name="puzzle_piece" style="height: 70%; width: 80%; top: 10%; overflow: visible; visibility: visible; background-color: rgba(0, 0, 0, 0); -unity-background-scale-mode: scale-to-fit;" />
         <ui:Button name="back_button" style="height: 100%; width: 100%; overflow: visible; position: absolute; background-color: rgba(228, 228, 228, 0);" />
         <ui:VisualElement style="height: 8%; width: 80%; justify-content: flex-start; align-items: flex-start; top: 15%; overflow: visible;">
-            <ui:Button text="place piece" name="place_button" style="height: 70%; width: 80%; padding-top: 1%; margin-top: 1%; background-color: rgba(168, 168, 168, 255); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; -unity-text-align: middle-left; font-size: 1000%; padding-left: 10%;" />
+            <ui:Button text="place piece" name="place_button" style="height: 70%; width: 80%; padding-top: 1%; margin-top: 1%; background-color: rgb(168, 168, 168); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 100px; border-bottom-left-radius: 100px; border-top-right-radius: 100px; border-bottom-right-radius: 100px; -unity-text-align: middle-left; font-size: 1000%; padding-left: 10%;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

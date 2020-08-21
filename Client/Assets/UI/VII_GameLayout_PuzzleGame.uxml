@@ -3,7 +3,8 @@
         <Style src="VII_GameLayout_PuzzleGame.uss" />
         <ui:VisualElement name="leiste_oben" style="height: 25%; width: 100%; justify-content: flex-end;">
             <ui:VisualElement name="leiste_bunt" style="height: 60%; background-color: rgb(156, 156, 231); justify-content: center; align-items: center;">
-                <ui:ListView focusable="True" name="overview-list" item-height="700" style="width: 90%; height: 50%; background-color: rgb(224, 224, 224); display: flex; visibility: visible;" />
+                <ui:ListView focusable="True" name="overview-list" item-height="700" style="width: 90%; height: 50%; background-color: rgb(224, 224, 224); display: none; visibility: hidden;" />
+                <ui:Label text="Seite 1 von 5" name="index_label" style="font-size: 1000%;" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="content_leiste_unten" style="height: 75%; width: 100%; padding-left: 7%; padding-right: 7%; padding-top: 7%; padding-bottom: 7%; justify-content: flex-end;">
