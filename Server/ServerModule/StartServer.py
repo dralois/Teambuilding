@@ -1,6 +1,7 @@
 import http.server
 import hashlib
 import sys
+import random
 
 from http import HTTPStatus
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -8,11 +9,13 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from .DataClasses import Manager
 
 
-room_key = ""
-manager = Manager()
+room_key = ""  # to join this room
+manager = Manager()  # hold information about session
 gamestate = 0
-identifier = 0
-participants = {}
+identifier = 0      # running int to identify users
+participants = {}   # holds info of identifier (key) with value [name, ready]
+picture_range = range(0, 0)
+places = []         # array with identifiers, position in array determines picture the user gets
 
 
 class GameHandler(BaseHTTPRequestHandler):
@@ -111,7 +114,7 @@ class GameHandler(BaseHTTPRequestHandler):
             try:
                 if int(self.headers["pers_id"]) not in participants.keys() or self.headers["room_id"] != room_key:
                     self.send_header("success", str(False))
-                    self.send_header("reason", "wrong gamestate")
+                    self.send_header("reason", "wrong format")
                     return
                 else:
                     participants[int(self.headers["pers_id"])][1] = bool(self.headers["ready"])
@@ -159,3 +162,72 @@ class GameHandler(BaseHTTPRequestHandler):
             ...
         else:
             self.send_header("success", str(False))
+
+    def START(self):
+        global gamestate
+        global participants
+        global manager
+        if gamestate != 1:
+            self.send_header("success", str(False))
+            self.send_header("reason", "wrong gamestate")
+            return
+        else:
+            try:
+                if int(self.headers["pers_id"]) != manager.identifier or self.headers["room_id"] != room_key:
+                    self.send_header("success", str(False))
+                    self.send_header("reason", "wrong room or not manager")
+                    return
+                else:
+                    for user in participants.keys():
+                        if participants[user][1] is False:
+                            self.send_header("success", str(False))
+                            self.send_header("reason", "not everyone is ready")
+                    gamestate += 1
+                    global manager
+                    if manager.picture == 1:
+                        select_picture_parts(5, len(participants))
+                    elif manager.picture == 2:
+                        select_picture_parts(10, len(participants))
+                    else:
+                        self.send_header("success", str(False))
+                        self.send_header("reason", "picture does not exist")
+                        return
+                    global places
+                    for user in participants.keys():
+                        places.append(user)
+                    random.shuffle(places)
+                    self.send_header("success", str(True))
+                    self.send_header("places", str(places))
+            except KeyError:
+                self.send_header("success", str(False))
+                self.send_header("reason", "wrong format")
+                return
+
+    def GETSTARTINFO(self):
+        global gamestate
+        global participants
+        global manager
+        if gamestate != 2:
+            self.send_header("success", str(False))
+            self.send_header("reason", "wrong gamestate")
+            return
+        else:
+            try:
+                if int(self.headers["pers_id"]) not in participants.keys() or self.headers["room_id"] != room_key:
+                    self.send_header("success", str(False))
+                    self.send_header("reason", "wrong room or not manager")
+                    return
+                else:
+                    global places
+                    self.send_header("places", str(places))
+                    self.send_header("picture", str(manager.picture))
+            except KeyError:
+                self.send_header("success", str(False))
+                self.send_header("reason", "wrong format")
+                return
+
+
+def select_picture_parts(image_length, users):
+    global picture_range
+    start = random.randint(0, image_length - (users - 1))
+    picture_range = range(start, start + (users - 1))
