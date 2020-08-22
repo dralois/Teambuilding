@@ -80,7 +80,7 @@ class GameHandler(BaseHTTPRequestHandler):
                 manager.set(room_key, int(self.headers["picture"]), identifier)
                 identifier += 1
                 gamestate += 1
-            except KeyError:
+            except (KeyError, TypeError):
                 self.send_header("success", str(False))
                 self.send_header("reason", "worng headers")
                 return
@@ -125,8 +125,11 @@ class GameHandler(BaseHTTPRequestHandler):
                     self.send_header("reason", "wrong format")
                     return
                 else:
-                    participants[int(self.headers["pers_id"])][1] = bool(self.headers["ready"])
-                    # todo: ready loop if  everyone is ready, what
+                    if self.headers["ready"] == "True":
+                        participants[int(self.headers["pers_id"])][1] = True
+                    else:
+                        participants[int(self.headers["pers_id"])][1] = False
+                        # todo: ready loop if  everyone is ready, what
                     self.send_header("success", str(True))
                     self.send_header("no_user", str(len(participants)))
                     ready = 0
@@ -143,10 +146,14 @@ class GameHandler(BaseHTTPRequestHandler):
         global gamestate
         global room_key
         global identifier
+        global places
+        global selected
         try:
             gamestate = 0
             global participants
             participants.clear()
+            places.clear()
+            selected.clear()
             room_key = ""
             identifier = 0
             self.send_header("success", str(True))
@@ -312,7 +319,8 @@ class GameHandler(BaseHTTPRequestHandler):
     def GETRESULT(self):
         ...
 
+
 def select_picture_parts(image_length, users):
     global picture_range
     start = random.randint(0, image_length - (users - 1))
-    picture_range = range(start, start + (users - 1))
+    picture_range = range(start, start + (users - 2))
