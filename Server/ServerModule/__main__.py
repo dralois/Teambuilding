@@ -9,8 +9,4 @@ __HOST_NAME = ("localhost", "212.83.56.221")[__isServer]
 __PORT = 8080
 
 with socketserver.TCPServer((__HOST_NAME, __PORT), GameHandler) as tcp:
-    try:
-        tcp.serve_forever()
-    except:
-        tcp.shutdown()
-        tcp.server_close()
+    tcp.serve_forever()
