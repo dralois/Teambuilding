@@ -75,10 +75,15 @@ class GameHandler(BaseHTTPRequestHandler):
             global manager
             global room_key
             global identifier
-            room_key = self.headers["room_id"]
-            manager.set(room_key, int(self.headers["picture"]), identifier)
-            identifier += 1
-            gamestate += 1
+            try:
+                room_key = self.headers["room_id"]
+                manager.set(room_key, int(self.headers["picture"]), identifier)
+                identifier += 1
+                gamestate += 1
+            except KeyError:
+                self.send_header("success", str(False))
+                self.send_header("reason", "worng headers")
+                return
 
         self.send_header("success", str(success))
         self.send_header("pers_id", str(manager.identifier))
