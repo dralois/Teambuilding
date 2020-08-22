@@ -76,7 +76,7 @@ class GameHandler(BaseHTTPRequestHandler):
             global room_key
             global identifier
             room_key = self.headers["room_id"]
-            manager.set(room_key, self.headers["picture"], identifier)
+            manager.set(room_key, int(self.headers["picture"]), identifier)
             identifier += 1
             gamestate += 1
 
@@ -186,6 +186,7 @@ class GameHandler(BaseHTTPRequestHandler):
                         if participants[user][1] is False:
                             self.send_header("success", str(False))
                             self.send_header("reason", "not everyone is ready")
+                            return
                     gamestate += 1
                     if manager.picture == 1:
                         select_picture_parts(5, len(participants))
@@ -200,9 +201,12 @@ class GameHandler(BaseHTTPRequestHandler):
                         places.append(user)
                     random.shuffle(places)
                     global selected
+                    global picture_range
                     selected = [None] * len(participants)
                     self.send_header("success", str(True))
                     self.send_header("places", str(places))
+                    self.send_header("range", str(picture_range))
+
             except KeyError:
                 self.send_header("success", str(False))
                 self.send_header("reason", "wrong format")
@@ -225,8 +229,10 @@ class GameHandler(BaseHTTPRequestHandler):
                     return
                 else:
                     global places
+                    global picture_range
                     self.send_header("places", str(places))
                     self.send_header("picture", str(manager.picture))
+                    self.send_header("range", str(picture_range))
             except KeyError:
                 self.send_header("success", str(False))
                 self.send_header("reason", "wrong format")
