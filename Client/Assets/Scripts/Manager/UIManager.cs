@@ -25,6 +25,7 @@ public class UIManager : MonoBehaviour
     public PanelRenderer Screen_Statistic_manager;
     public PanelRenderer Screen_Statistic_employee;
 
+    public PanelRenderer Screen_GamePuzzle_Picture;
     public PanelRenderer Screen_GamePuzzle;
 
     //list view JOINGAME_screen
@@ -52,6 +53,13 @@ public class UIManager : MonoBehaviour
     //Logic
     private Boolean manager = false;
 
+    //PuzzleGame
+    public List<Sprite> wholePuzzlePicture = new List<Sprite>();
+    private List<(bool, bool)> informationPicture = new List<(bool, bool)>();  //(owning, placed)
+    private List<int> placedPictures = new List<int>();            //pictures that got placed
+    private int index = 0;
+    private int currentPicture = -1;
+
 
     // OnEnable
     // Register our postUxmlReload callbacks to be notified if and when
@@ -70,6 +78,8 @@ public class UIManager : MonoBehaviour
         Screen_Statistic_employee.postUxmlReload = BindEmployeeStatisticScreen;
         Screen_Statistic_manager.postUxmlReload = BindManagerStatisticScreen;
         Screen_GamePuzzle.postUxmlReload = BindGamePuzzleScreen;
+        Screen_GamePuzzle_Picture.postUxmlReload = BindGamePuzzlePictureScreen;
+
     }
 
     // Start is called before the first frame update
@@ -87,7 +97,9 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        //Update für das PuzzleSpiel
+        //TODO erst wenn das spiel gestartet ist immer actualisieren
+        updateInformationPictureList();
     }
 
 
@@ -127,9 +139,6 @@ public class UIManager : MonoBehaviour
 
     private void GoToStartScreen()
     {
-
-        SetScreenEnableState(Screen_GamePuzzle, false);
-
         SetScreenEnableState(Screen_Start, true);
         SetScreenEnableState(Screen_Menu, false);
         SetScreenEnableState(Screen_JoinSession, false);
@@ -139,7 +148,8 @@ public class UIManager : MonoBehaviour
         SetScreenEnableState(Screen_Statistic_employee, false);
         SetScreenEnableState(Screen_Statistic_manager, false);
 
-
+        SetScreenEnableState(Screen_GamePuzzle, false);
+        SetScreenEnableState(Screen_GamePuzzle_Picture, false);
     }
 
     void SetScreenEnableState(PanelRenderer screen, bool state)
@@ -175,7 +185,7 @@ public class UIManager : MonoBehaviour
             //button function
             joinButton.clickable.clicked += () =>
             {
-                StartCoroutine(ScreenChange(Screen_Start, Screen_JoinSession));
+                StartCoroutine(ScreenChange(Screen_Start, Screen_Menu));
             };
         }
         return null;
@@ -193,7 +203,7 @@ public class UIManager : MonoBehaviour
             //button function
             joinButton.clickable.clicked += () =>
             {
-                StartCoroutine(ScreenChange(Screen_Menu, Screen_JoinGame));
+                StartCoroutine(ScreenChange(Screen_Menu, Screen_JoinSession));
             };
         }
         
@@ -342,9 +352,21 @@ public class UIManager : MonoBehaviour
                 {
                     if (checkLogIn(/*sessionkey*/ "" , /*name*/ "" ))
                     {
-                        StartCoroutine(ScreenChange(Screen_JoinSession, Screen_Menu));
+                        StartCoroutine(ScreenChange(Screen_JoinSession, Screen_GamePuzzle));
                     }
                 }
+
+            };
+        }
+
+        //set button function create game
+        var backButton = root.Q<Button>("back_button");
+        if (backButton != null)
+        {
+            //button function
+            backButton.clickable.clicked += () =>
+            {
+                StartCoroutine(ScreenChange(Screen_JoinSession, Screen_Menu));
 
             };
         }
@@ -481,8 +503,30 @@ public class UIManager : MonoBehaviour
 
     private IEnumerable<Object> BindGamePuzzleScreen()
     {
+        //test nur
+        for (int i = 0; i < wholePuzzlePicture.Count; ++i)
+        {
+            informationPicture.Add((true, false));
+            placedPictures.Add(-1);
+        }
+
+        //welches bild wird in dem spiel verwendet (holt es sich)
+        inizializeLists();
+
         //bind root 
         var root = Screen_GamePuzzle.visualTree;
+
+        var screenPuzzle = root.Q<VisualElement>("puzzle_piece");
+        if(placedPictures[index] != -1)
+        {
+            screenPuzzle.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(wholePuzzlePicture[placedPictures[index]].texture);
+        }
+
+        var indexlabel = root.Q<Label>("index_label");
+        if(indexlabel != null)
+        {
+            indexlabel.text = "Seite " + (index + 1) + " von " + wholePuzzlePicture.Count;
+        }
 
         //set left button function
         var joinButton = root.Q<Button>("left_button");
@@ -492,6 +536,31 @@ public class UIManager : MonoBehaviour
             joinButton.clickable.clicked += () =>
             {
                 Debug.Log("Links gedrückt");
+                //schauen dass das bild nicht aus dem array geht 
+                if(index > 0)
+                {
+                    index--;
+                    if (placedPictures[index] != -1)
+                    {
+                        screenPuzzle.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(wholePuzzlePicture[placedPictures[index]].texture);
+                    }
+                    else
+                    {
+                        screenPuzzle.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(null);
+                    }
+                } else if(index == 0)
+                {
+                    if (placedPictures[index] != -1)
+                    {
+                        screenPuzzle.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(wholePuzzlePicture[placedPictures[index]].texture);
+                    }
+                    else
+                    {
+                        screenPuzzle.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(null);
+                    }
+                }
+                //text updaten
+                indexlabel.text = "Seite " + (index + 1) + " von " + wholePuzzlePicture.Count;
             };
         }
 
@@ -503,31 +572,113 @@ public class UIManager : MonoBehaviour
             joinButton.clickable.clicked += () =>
             {
                 Debug.Log("Rechts gedrückt");
+                if(index < wholePuzzlePicture.Count - 1)
+                {
+                    index++;
+                    if (placedPictures[index] != -1)
+                    {
+                        screenPuzzle.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(wholePuzzlePicture[placedPictures[index]].texture);
+                    } else
+                    {
+                        screenPuzzle.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(null);
+                    }
+                }
+                //update text
+                indexlabel.text = "Seite " + (index + 1) + " von " + wholePuzzlePicture.Count;
             };
         }
 
-        //TODO
-        //list view implementieren mit 
-        var listView = root.Q<ListView>("overview-list");
-        //test
-        OverViewListData g = new OverViewListData();
-        g.createOverViewListData(true);
-        overviewGamePuzzle.Add(g);
-         
-
-        if (listView != null)
+        //Owned PuzzlePieces
+        (int, int, int) pieces = getIndexOfOwnPuzzlePieces();
+        var part1 = root.Q<Button>("part1");
+        if(part1 != null)
         {
-            Debug.Log("Drinnen in overview");
-            listView.selectionType = SelectionType.None;
-
-            if (listView.makeItem == null)
-                listView.makeItem = MakeItemGamePuzzleOverview;
-            if (listView.bindItem == null)
-                listView.bindItem = BindItemGamePuzzleOverview;
-
-            listView.itemsSource = games;
-            listView.Refresh();
+            if (pieces.Item1 != -1 && informationPicture[pieces.Item1].Item2 == false)
+            {
+                part1.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(wholePuzzlePicture[pieces.Item1].texture);
+                //button function
+                part1.clickable.clicked += () =>
+                {
+                    Debug.Log("part1 gedrückt");
+                    currentPicture = pieces.Item1;
+                    StartCoroutine(ScreenChange(Screen_GamePuzzle, Screen_GamePuzzle_Picture));
+                };
+            }
         }
+        var part2 = root.Q<Button>("part2");
+        if (part2 != null)
+        {
+            if (pieces.Item2 != -1 && informationPicture[pieces.Item2].Item2 == false)
+            {
+                part2.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(wholePuzzlePicture[pieces.Item2].texture);
+                //button function
+                part2.clickable.clicked += () =>
+                {
+                    Debug.Log("part2 gedrückt");
+                    currentPicture = pieces.Item2;
+                    StartCoroutine(ScreenChange(Screen_GamePuzzle, Screen_GamePuzzle_Picture));
+                };
+            }
+        }
+        var part3 = root.Q<Button>("part3");
+        if (part3 != null)
+        {
+            if (pieces.Item3 != -1 && informationPicture[pieces.Item3].Item2 == false)
+            {
+                part3.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(wholePuzzlePicture[pieces.Item3].texture);
+                //button function
+                part3.clickable.clicked += () =>
+                {
+                    Debug.Log("part3 gedrückt");
+                    currentPicture = pieces.Item3;
+                    StartCoroutine(ScreenChange(Screen_GamePuzzle, Screen_GamePuzzle_Picture));
+                };
+            }
+        }
+
+        return null;
+    }
+
+    private IEnumerable<Object> BindGamePuzzlePictureScreen()
+    {
+        //bind root 
+        var root = Screen_GamePuzzle_Picture.visualTree;
+
+        var screenPuzzle = root.Q<VisualElement>("puzzle_piece");
+        if(screenPuzzle != null && currentPicture != -1)
+        {
+            screenPuzzle.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(wholePuzzlePicture[currentPicture].texture);
+        }
+
+        //set left button function
+        var placebutton = root.Q<Button>("place_button");
+        if (placebutton != null)
+        {
+            //button function
+            placebutton.clickable.clicked += () =>
+            {
+                if (placedPictures[index] == -1)
+                {
+                    informationPicture[currentPicture] = (true, true);
+                    placedPictures[index] = currentPicture;
+                }
+                currentPicture = -1;
+                StartCoroutine(ScreenChange(Screen_GamePuzzle_Picture, Screen_GamePuzzle));
+            };
+        }
+
+        //set left button function
+        var backbutton = root.Q<Button>("back_button");
+        if (backbutton != null)
+        {
+            //button function
+            backbutton.clickable.clicked += () =>
+            {
+                currentPicture = -1;
+                StartCoroutine(ScreenChange(Screen_GamePuzzle_Picture, Screen_GamePuzzle));
+            };
+        }
+
         return null;
     }
 
@@ -541,6 +692,28 @@ public class UIManager : MonoBehaviour
         return true;
     }
 
+    //PuzzleGame
+
+    //Gibt die 3 Indices, der Teile die einem selbst gehören zurück, wenn man weniger als 3 Teile hat, dann steht -1 dort
+    private (int, int, int) getIndexOfOwnPuzzlePieces()
+    {
+        return (0, 1, 2);
+    }
+
+    private void inizializeLists()
+    {
+        //TODO 
+        //inizialisiert die Listen für das Spiel 
+        //circus und circusPicture
+        //holt vom server die information welches bild benutzt wird, weißt dann das bild (list<sprites>) dem circusPicture zu 
+        //und holt vom server immer die Informationen für circus ob was schon gesetzt wurde.
+    }
+
+    private void updateInformationPictureList()
+    {
+        //TODO
+        //hol vom server die liste InformationPicture und überschrieb sie auch im server 
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     // In-Game Virtualized ListView Implementation
