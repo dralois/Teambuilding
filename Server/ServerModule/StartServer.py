@@ -54,13 +54,14 @@ class GameHandler(BaseHTTPRequestHandler):
         command = self.path.split("/")[1]
         if hasattr(self, command):
             getattr(self, command)()
-
+        else:
+            self.send_header("success", str(False))
         self.end_headers()
 
-    def kill_me(self):
+    def KILLME(self):
         sys.exit(0)
 
-    def create_room(self):
+    def CREATEROOM(self):
         global gamestate
         success = True
         if gamestate != 0:
@@ -71,36 +72,19 @@ class GameHandler(BaseHTTPRequestHandler):
             global room_key
             global identifier
             room_key = self.headers["room_id"]
-            manager.set(room_key, self.headers["name"], identifier)
+            manager.set(room_key, self.headers["picture"], identifier)
             identifier += 1
             gamestate += 1
 
         self.send_header("success", str(success))
         self.send_header("pers_id", str(manager.identifier))
 
-    def open_room(self):
-        global gamestate
-        try:
-            if self.headers["room_id"] != room_key or self.headers["pers_id"] != manager.identifier or gamestate != 1:
-                self.send_header("success", str(False))
-                self.send_header("reason", "wrong room, manager")
-                return
-            else:
-                gamestate += 1
-                # todo: add level  selection here  maybe?
-                self.send_header("success", str(True))
-
-        except KeyError:
-            self.send_header("success", str(False))
-            self.send_header("reason", "wrong format")
-            return
-
-    def join_room(self):
+    def JOINROOM(self):
         global gamestate
         global participants
         global identifier
         try:
-            if self.headers["room_id"] != room_key or gamestate != 2:
+            if self.headers["room_id"] != room_key or gamestate != 1:
                 self.send_header("success", str(False))
                 self.send_header("reason", "wrong room or wrong gamestate")
                 return
@@ -116,16 +100,16 @@ class GameHandler(BaseHTTPRequestHandler):
             self.send_header("reason", "wrong format")
             return
 
-    def ready_player(self):
+    def READY(self):
         global gamestate
         global participants
-        if gamestate != 2:
+        if gamestate != 1:
             self.send_header("success", str(False))
             self.send_header("reason", "wrong gamestate")
             return
         else:
             try:
-                if int(self.headers["pers_id"]) not in participants.keys() or int(self.headers["room_id"]) != room_key:
+                if int(self.headers["pers_id"]) not in participants.keys() or self.headers["room_id"] != room_key:
                     self.send_header("success", str(False))
                     self.send_header("reason", "wrong gamestate")
                     return
@@ -143,3 +127,35 @@ class GameHandler(BaseHTTPRequestHandler):
                 self.send_header("success", str(False))
                 self.send_header("reason", "wrong format")
                 return
+
+    def RESET(self):
+        global gamestate
+        global room_key
+        global identifier
+        try:
+            gamestate = 0
+            global participants
+            participants.clear()
+            room_key = ""
+            identifier = 0
+            self.send_header("success", str(True))
+
+        except KeyError:
+            self.send_header("success", str(False))
+            self.send_header("reason", "wrong format")
+            return
+
+    def UPDATE(self):
+        global gamestate
+        self.send_header("gamestate", str(gamestate))
+        if gamestate == 0:
+            return
+        elif gamestate == 1:
+            global participants
+            self.send_header("participants", str(participants))
+        elif gamestate == 2:
+            ...
+        elif gamestate == 3:
+            ...
+        else:
+            self.send_header("success", str(False))
