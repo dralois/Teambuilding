@@ -80,7 +80,7 @@ class GameHandler(BaseHTTPRequestHandler):
                 manager.set(room_key, int(self.headers["picture"]), identifier)
                 identifier += 1
                 gamestate += 1
-            except (KeyError, TypeError):
+            except KeyError:
                 self.send_header("success", str(False))
                 self.send_header("reason", "worng headers")
                 return
