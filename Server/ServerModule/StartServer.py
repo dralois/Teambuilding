@@ -63,7 +63,7 @@ class GameHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def KILLME(self):
-        sys.exit(0)
+        raise KeyboardInterrupt
 
     def CREATEROOM(self):
         global gamestate
