@@ -187,7 +187,6 @@ class GameHandler(BaseHTTPRequestHandler):
                             self.send_header("success", str(False))
                             self.send_header("reason", "not everyone is ready")
                     gamestate += 1
-                    global manager
                     if manager.picture == 1:
                         select_picture_parts(5, len(participants))
                     elif manager.picture == 2:
@@ -297,6 +296,8 @@ class GameHandler(BaseHTTPRequestHandler):
                 self.send_header("reason", "wrong format")
                 return
 
+    def GETRESULT(self):
+        ...
 
 def select_picture_parts(image_length, users):
     global picture_range
