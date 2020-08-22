@@ -54,7 +54,7 @@ class GameHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         print(self.path)
         self.send_response_only(HTTPStatus.OK, "passt")
-
+        print(self.headers)
         command = self.path.split("/")[1]
         if hasattr(self, command):
             getattr(self, command)()
