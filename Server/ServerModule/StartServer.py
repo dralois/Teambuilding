@@ -16,6 +16,7 @@ identifier = 0      # running int to identify users
 participants = {}   # holds info of identifier (key) with value [name, ready]
 picture_range = range(0, 0)
 places = []         # array with identifiers, position in array determines picture the user gets
+selected = []
 
 
 class GameHandler(BaseHTTPRequestHandler):
@@ -86,6 +87,7 @@ class GameHandler(BaseHTTPRequestHandler):
         global gamestate
         global participants
         global identifier
+        global room_key
         try:
             if self.headers["room_id"] != room_key or gamestate != 1:
                 self.send_header("success", str(False))
@@ -106,6 +108,7 @@ class GameHandler(BaseHTTPRequestHandler):
     def READY(self):
         global gamestate
         global participants
+        global room_key
         if gamestate != 1:
             self.send_header("success", str(False))
             self.send_header("reason", "wrong gamestate")
@@ -167,6 +170,7 @@ class GameHandler(BaseHTTPRequestHandler):
         global gamestate
         global participants
         global manager
+        global room_key
         if gamestate != 1:
             self.send_header("success", str(False))
             self.send_header("reason", "wrong gamestate")
@@ -196,6 +200,8 @@ class GameHandler(BaseHTTPRequestHandler):
                     for user in participants.keys():
                         places.append(user)
                     random.shuffle(places)
+                    global selected
+                    selected = [None] * len(participants)
                     self.send_header("success", str(True))
                     self.send_header("places", str(places))
             except KeyError:
@@ -207,6 +213,7 @@ class GameHandler(BaseHTTPRequestHandler):
         global gamestate
         global participants
         global manager
+        global room_key
         if gamestate != 2:
             self.send_header("success", str(False))
             self.send_header("reason", "wrong gamestate")
@@ -221,6 +228,70 @@ class GameHandler(BaseHTTPRequestHandler):
                     global places
                     self.send_header("places", str(places))
                     self.send_header("picture", str(manager.picture))
+            except KeyError:
+                self.send_header("success", str(False))
+                self.send_header("reason", "wrong format")
+                return
+
+    def SUBMITPLACE(self):
+        global gamestate
+        global places
+        global room_key
+        if gamestate != 2:
+            self.send_header("success", str(False))
+            self.send_header("reason", "wrong gamestate")
+            return
+        else:
+            try:
+                if int(self.headers["pers_id"]) not in places or self.headers["room_id"] != room_key:
+                    self.send_header("success", str(False))
+                    self.send_header("reason", "wrong room or not manager")
+                    return
+                else:
+                    global selected
+                    if self.headers["place"] == "None":
+                        selected[selected.index(self.headers["pers_id"])] = None
+                        self.send_header("success", str(True))
+                    if selected[int(self.headers["place"])] is None:
+                        selected[int(self.headers["place"])] = self.headers["pers_id"]
+                        self.send_header("success", str(True))
+                    elif self.headers["pers_id"] == selected[int(self.headers["place"])]:
+                        self.send_header("success", str(True))
+                    else:
+                        self.send_header("success", str(False))
+                        self.send_header("reason", "already occupied")
+            except KeyError:
+                self.send_header("success", str(False))
+                self.send_header("reason", "wrong format")
+                return
+
+    def END(self):
+        global gamestate
+        global manager
+        global room_key
+        global places
+        if gamestate != 2:
+            self.send_header("success", str(False))
+            self.send_header("reason", "wrong gamestate")
+            return
+        else:
+            try:
+                if int(self.headers["pers_id"]) != manager.identifier or self.headers["room_id"] != room_key:
+                    self.send_header("success", str(False))
+                    self.send_header("reason", "wrong room or not manager")
+                    return
+                else:
+                    global selected
+                    for user in selected:
+                        if user is None:
+                            self.send_header("success", str(False))
+                            self.send_header("reason", "Not everyone has selected a place")
+                            return
+                    gamestate += 1
+
+                    self.send_header("success", str(True))
+                    self.send_header("places", str(places))
+                    self.send_header("selected", str(selected))
             except KeyError:
                 self.send_header("success", str(False))
                 self.send_header("reason", "wrong format")
