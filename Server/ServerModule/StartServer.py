@@ -216,7 +216,7 @@ class GameHandler(BaseHTTPRequestHandler):
                     random.shuffle(places)
                     global selected
                     global picture_range
-                    selected = [None] * len(participants)
+                    selected = [-1] * len(participants)
                     self.send_header("success", str(True))
                     self.send_header("places", str(places))
                     self.send_header("range", str(picture_range))
@@ -268,10 +268,12 @@ class GameHandler(BaseHTTPRequestHandler):
                     return
                 else:
                     global selected
-                    if self.headers["place"] == "None":
-                        selected[selected.index(self.headers["pers_id"])] = None
+                    if self.headers["place"] == "-1":
+                        selected[selected.index(self.headers["pers_id"])] = -1
                         self.send_header("success", str(True))
-                    if selected[int(self.headers["place"])] is None:
+                    elif selected[int(self.headers["place"])] is -1:
+                        if self.headers["pers_id"] in selected:
+                            selected[selected.index(self.headers["pers_id"])] = -1
                         selected[int(self.headers["place"])] = self.headers["pers_id"]
                         self.send_header("success", str(True))
                     elif self.headers["pers_id"] == selected[int(self.headers["place"])]:
