@@ -160,9 +160,11 @@ class GameHandler(BaseHTTPRequestHandler):
             global participants
             self.send_header("participants", str(participants))
         elif gamestate == 2:
-            ...
+            self.send_header("places", str(places))
+            self.send_header("selected", str(selected))
         elif gamestate == 3:
-            ...
+            self.send_header("places", str(places))
+            self.send_header("selected", str(selected))
         else:
             self.send_header("success", str(False))
 
