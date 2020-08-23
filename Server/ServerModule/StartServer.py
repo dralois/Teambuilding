@@ -7,14 +7,14 @@ import json
 from http import HTTPStatus
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
-from .DataClasses import Manager, ParticipantEncoder
+from .DataClasses import Manager, ParticipantEncoder, Participant, Participants
 
 
 room_key = ""  # to join this room
 manager = Manager()  # hold information about session
 gamestate = 0
 identifier = 0      # running int to identify users
-participants = {}   # holds info of identifier (key) with value [name, ready]
+participants = Participants()   # holds info of identifier (key) with value [name, ready]
 picture_range = range(0, 0)
 places = []         # array with identifiers, position in array determines picture the user gets
 selected = []
@@ -99,7 +99,7 @@ class GameHandler(BaseHTTPRequestHandler):
             else:
                 print(self.headers["name"])
                 identifier += 1
-                participants[identifier] = [self.headers["name"], False]
+                participants.items[identifier].set(identifier, self.headers["name"], False)
                 self.send_header("success", str(True))
                 self.send_header("pers_id", str(identifier))
 
@@ -118,21 +118,21 @@ class GameHandler(BaseHTTPRequestHandler):
             return
         else:
             try:
-                if int(self.headers["pers_id"]) not in participants.keys() or self.headers["room_id"] != room_key:
+                if int(self.headers["pers_id"]) not in participants.items or self.headers["room_id"] != room_key:
                     self.send_header("success", str(False))
                     self.send_header("reason", "wrong format")
                     return
                 else:
                     if self.headers["ready"] == "True":
-                        participants[int(self.headers["pers_id"])][1] = True
+                        participants.items[int(self.headers["pers_id"])].ready = True
                     else:
-                        participants[int(self.headers["pers_id"])][1] = False
+                        participants.items[int(self.headers["pers_id"])].ready = False
                         # todo: ready loop if  everyone is ready, what
                     self.send_header("success", str(True))
-                    self.send_header("no_user", str(len(participants)))
+                    self.send_header("no_user", str(len(participants.items)))
                     ready = 0
-                    for key in participants.values():
-                        if key[1]:
+                    for _,user in participants.items:
+                        if user.ready:
                             ready += 1
                     self.send_header("no_ready", str(ready))
             except KeyError:
@@ -149,7 +149,7 @@ class GameHandler(BaseHTTPRequestHandler):
         try:
             gamestate = 0
             global participants
-            participants.clear()
+            participants = Participants()
             places.clear()
             selected.clear()
             room_key = ""
@@ -168,7 +168,7 @@ class GameHandler(BaseHTTPRequestHandler):
             return
         elif gamestate == 1:
             global participants
-            self.send_header("participants", ParticipantEncoder().encode(iter(participants.items())))
+            self.send_header("participants", ParticipantEncoder().encode(participants))
         elif gamestate == 2:
             self.send_header("places", json.dumps(places))
             self.send_header("selected", json.dumps(selected))
@@ -194,27 +194,27 @@ class GameHandler(BaseHTTPRequestHandler):
                     self.send_header("reason", "wrong room or not manager")
                     return
                 else:
-                    for user in participants.keys():
-                        if participants[user][1] is False:
+                    for _,user in participants.items:
+                        if not user.ready:
                             self.send_header("success", str(False))
                             self.send_header("reason", "not everyone is ready")
                             return
                     gamestate += 1
                     if manager.picture == 1:
-                        select_picture_parts(5, len(participants))
+                        select_picture_parts(5, len(participants.items))
                     elif manager.picture == 2:
-                        select_picture_parts(10, len(participants))
+                        select_picture_parts(10, len(participants.items))
                     else:
                         self.send_header("success", str(False))
                         self.send_header("reason", "picture does not exist")
                         return
                     global places
-                    for user in participants.keys():
-                        places.append(user)
+                    for _,user in participants.items:
+                        places.append(user.identifier)
                     random.shuffle(places)
                     global selected
                     global picture_range
-                    selected = [-1] * len(participants)
+                    selected = [-1] * len(participants.items)
                     self.send_header("success", str(True))
                     self.send_header("places", json.dumps(places))
                     self.send_header("range", json.dumps(list(picture_range)))
@@ -235,7 +235,7 @@ class GameHandler(BaseHTTPRequestHandler):
             return
         else:
             try:
-                if int(self.headers["pers_id"]) not in participants.keys() or self.headers["room_id"] != room_key:
+                if int(self.headers["pers_id"]) not in participants.items or self.headers["room_id"] != room_key:
                     self.send_header("success", str(False))
                     self.send_header("reason", "wrong room or not manager")
                     return
