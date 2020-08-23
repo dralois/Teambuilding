@@ -273,7 +273,7 @@ class GameHandler(BaseHTTPRequestHandler):
                     elif selected[int(self.headers["place"])] is -1:
                         if self.headers["pers_id"] in selected:
                             selected[selected.index(self.headers["pers_id"])] = -1
-                        selected[int(self.headers["place"])] = self.headers["pers_id"]
+                        selected[int(self.headers["place"])] = int(self.headers["pers_id"])
                         self.send_header("success", str(True))
                     elif self.headers["pers_id"] == selected[int(self.headers["place"])]:
                         self.send_header("success", str(True))
