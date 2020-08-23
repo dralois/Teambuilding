@@ -1,3 +1,4 @@
+import json
 
 class Manager:
     def __init__(self):
@@ -9,3 +10,14 @@ class Manager:
         self.key = key
         self.picture = picture
         self.identifier = identifier
+
+class ParticipantEncoder(json.JSONEncoder):
+
+    def default(self, obj):
+        try:
+            it = iter(obj)
+        except TypeError:
+            pass
+        else:
+            return list(it)
+        return super().default(obj)

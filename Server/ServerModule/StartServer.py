@@ -7,7 +7,7 @@ import json
 from http import HTTPStatus
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
-from .DataClasses import Manager
+from .DataClasses import Manager, ParticipantEncoder
 
 
 room_key = ""  # to join this room
@@ -21,9 +21,6 @@ selected = []
 
 
 class GameHandler(BaseHTTPRequestHandler):
-
-    def do_HEAD(self):
-        ...
 
     def do_GET(self):
         print(self.path)
@@ -171,7 +168,7 @@ class GameHandler(BaseHTTPRequestHandler):
             return
         elif gamestate == 1:
             global participants
-            self.send_header("participants", json.dumps(participants))
+            self.send_header("participants", ParticipantEncoder().encode(iter(participants.items())))
         elif gamestate == 2:
             self.send_header("places", json.dumps(places))
             self.send_header("selected", json.dumps(selected))
@@ -220,7 +217,7 @@ class GameHandler(BaseHTTPRequestHandler):
                     selected = [-1] * len(participants)
                     self.send_header("success", str(True))
                     self.send_header("places", json.dumps(places))
-                    self.send_header("range", json.dumps(picture_range))
+                    self.send_header("range", json.dumps(list(picture_range)))
 
             except KeyError:
                 self.send_header("success", str(False))
@@ -247,7 +244,7 @@ class GameHandler(BaseHTTPRequestHandler):
                     global picture_range
                     self.send_header("places", json.dumps(places))
                     self.send_header("picture", str(manager.picture))
-                    self.send_header("range", json.dumps(picture_range))
+                    self.send_header("range", json.dumps(list(picture_range)))
             except KeyError:
                 self.send_header("success", str(False))
                 self.send_header("reason", "wrong format")
