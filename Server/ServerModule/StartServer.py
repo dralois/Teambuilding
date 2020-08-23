@@ -99,6 +99,7 @@ class GameHandler(BaseHTTPRequestHandler):
             else:
                 print(self.headers["name"])
                 identifier += 1
+                participants.items[identifier] = Participant()
                 participants.items[identifier].set(identifier, self.headers["name"], False)
                 self.send_header("success", str(True))
                 self.send_header("pers_id", str(identifier))
