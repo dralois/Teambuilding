@@ -2,6 +2,7 @@ import http.server
 import hashlib
 import sys
 import random
+import json
 
 from http import HTTPStatus
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -170,13 +171,13 @@ class GameHandler(BaseHTTPRequestHandler):
             return
         elif gamestate == 1:
             global participants
-            self.send_header("participants", str(participants))
+            self.send_header("participants", json.dumps(participants))
         elif gamestate == 2:
-            self.send_header("places", str(places))
-            self.send_header("selected", str(selected))
+            self.send_header("places", json.dumps(places))
+            self.send_header("selected", json.dumps(selected))
         elif gamestate == 3:
-            self.send_header("places", str(places))
-            self.send_header("selected", str(selected))
+            self.send_header("places", json.dumps(places))
+            self.send_header("selected", json.dumps(selected))
         else:
             self.send_header("success", str(False))
 
@@ -218,8 +219,8 @@ class GameHandler(BaseHTTPRequestHandler):
                     global picture_range
                     selected = [-1] * len(participants)
                     self.send_header("success", str(True))
-                    self.send_header("places", str(places))
-                    self.send_header("range", str(picture_range))
+                    self.send_header("places", json.dumps(places))
+                    self.send_header("range", json.dumps(picture_range))
 
             except KeyError:
                 self.send_header("success", str(False))
@@ -244,9 +245,9 @@ class GameHandler(BaseHTTPRequestHandler):
                 else:
                     global places
                     global picture_range
-                    self.send_header("places", str(places))
+                    self.send_header("places", json.dumps(places))
                     self.send_header("picture", str(manager.picture))
-                    self.send_header("range", str(picture_range))
+                    self.send_header("range", json.dumps(picture_range))
             except KeyError:
                 self.send_header("success", str(False))
                 self.send_header("reason", "wrong format")
@@ -311,8 +312,8 @@ class GameHandler(BaseHTTPRequestHandler):
                     gamestate += 1
 
                     self.send_header("success", str(True))
-                    self.send_header("places", str(places))
-                    self.send_header("selected", str(selected))
+                    self.send_header("places", json.dumps(places))
+                    self.send_header("selected", json.dumps(selected))
             except KeyError:
                 self.send_header("success", str(False))
                 self.send_header("reason", "wrong format")
