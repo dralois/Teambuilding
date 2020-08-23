@@ -1,0 +1,108 @@
+.MenuBackground {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(224, 224, 224);
+    justify-content: space-between;
+}
+
+.UpperMenu {
+    height: 25%;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+.UpperMenuBar {
+    height: 60%;
+    background-color: rgb(255, 155, 0);
+}
+
+.UpperMenuIcon {
+    overflow: hidden;
+    height: 70%;
+    width: 25%;
+    position: absolute;
+    left: 38%;
+    bottom: 10%;
+}
+
+.LowerMenu {
+    height: 75%;
+    width: 100%;
+    padding-left: 7%;
+    padding-right: 7%;
+    padding-top: 7%;
+    padding-bottom: 7%;
+    justify-content: flex-end;
+}
+
+.MenuTextInput {
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-direction: column;
+    height: 30%;
+}
+
+.MenuTextInputLabel {
+    font-size: 1200%;
+    -unity-font-style: bold;
+}
+
+.MenuTextInputField {
+    margin-top: 10%;
+    width: 90%;
+    height: 40%;
+    font-size: 1000%;
+}
+
+.MenuButton {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 90%;
+    height: 10%;
+    margin-left: 0;
+    margin-right: 5%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    min-height: 10%;
+    min-width: 90%;
+    max-width: 100%;
+    max-height: 20%;
+}
+
+.MenuButtonClickable {
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 100px;
+    border-bottom-left-radius: 100px;
+    border-top-right-radius: 100px;
+    border-bottom-right-radius: 100px;
+    background-color: rgb(168, 168, 168);
+    color: rgb(0, 0, 0);
+    -unity-font-style: bold;
+    -unity-text-align: middle-left;
+    padding-left: 25%;
+    padding-right: 0;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    white-space: nowrap;
+    flex-grow: 1;
+    flex-shrink: 0;
+    width: 100%;
+    height: 90%;
+    font-size: 1000%;
+    overflow: visible;
+    flex-direction: row;
+}
+
+.MenuButtonClickableIcon {
+    width: 20%;
+    height: 180%;
+    position: absolute;
+    left: 10%;
+    top: -50%;
+    right: 0;
+    bottom: 0;
+}

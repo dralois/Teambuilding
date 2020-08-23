@@ -5,18 +5,9 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/Menu.unity
     guid: 5f7b20501e4a0d8418b1ba1d4adb05c6
-  - enabled: 1
-    path: Assets/Scenes/Settings.unity
-    guid: 9d376459c48b6de45b726e20ac347d33
-  - enabled: 1
-    path: Assets/Scenes/Employee-GameWait-Scene.unity
-    guid: ca20c3d2e1479e54a9e16abdfa0678fc
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 6e72a11e817dfdf4e94f7e39c4c0e4a5,
       type: 2}

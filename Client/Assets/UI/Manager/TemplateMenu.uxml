@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="background" class="MenuBackground">
+        <Style src="/Assets/UI/Style/MenuStyle.uss" />
+        <ui:VisualElement name="upper" class="UpperMenu">
+            <ui:VisualElement name="upper-bar" class="UpperMenuBar" />
+            <ui:VisualElement name="upper-icon" class="UpperMenuIcon" style="background-image: url(&apos;/Assets/Art/Sprites/logo/logo3_zugeschnitten.png&apos;); -unity-background-image-tint-color: rgba(0, 0, 0, 255);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="lower" class="LowerMenu" />
+    </ui:VisualElement>
+</ui:UXML>

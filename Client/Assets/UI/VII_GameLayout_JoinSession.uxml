@@ -1,25 +1,28 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <ui:VisualElement name="background" focusable="true" style="height: 100%; width: 100%; background-color: rgb(224, 224, 224); justify-content: space-between;">
-        <ui:VisualElement name="leiste_oben" style="height: 25%; width: 100%; justify-content: flex-end;">
-            <ui:VisualElement name="leiste_bunt" style="height: 60%; background-color: rgb(255, 155, 0);" />
-            <ui:VisualElement name="logo" focusable="true" style="overflow: hidden; height: 70%; width: 25%; position: absolute; left: 38%; right: auto; bottom: 10%; background-image: url(&apos;/Assets/Art/Sprites/Objects/Schloss.png&apos;);">
+    <ui:VisualElement name="background" class="MenuBackground">
+        <Style src="VII_GameLayout_JoinSession.uss" />
+        <Style src="Style/MenuStyle.uss" />
+        <ui:VisualElement name="leiste_oben" class="UpperMenu">
+            <ui:VisualElement name="leiste_bunt" class="UpperMenuBar" />
+            <ui:VisualElement name="logo" class="UpperMenuIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/Schloss.png&apos;);">
                 <ui:Button name="back_button" style="background-color: rgba(228, 228, 228, 0); height: 100%; width: 100%; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="content_leiste_unten" style="height: 75%; width: 100%; padding-left: 7%; padding-right: 7%; padding-top: 7%; padding-bottom: 7%; justify-content: flex-end;">
-            <ui:VisualElement style="height: 100%; width: 100%; background-color: rgb(209, 209, 209); border-top-left-radius: 7%; border-bottom-left-radius: 7%; border-top-right-radius: 7%; border-bottom-right-radius: 7%; justify-content: center;">
-                <ui:VisualElement name="session_key" style="justify-content: flex-start; align-items: center; height: 20%; width: 100%;">
-                    <ui:TextField picking-mode="Ignore" name="input_sessionkey" style="margin-top: 10%; width: 90%; height: 50%; font-size: 1000%;" />
-                    <ui:Label text="session key" name="label_input" style="padding-left: 10%; padding-right: 0; padding-top: 0; padding-bottom: 0; height: 50%; font-size: 1000%; -unity-font-style: bold; width: 100%;" />
+        <ui:VisualElement name="content_leiste_unten" class="LowerMenu">
+            <ui:VisualElement name="VisualElement" style="height: 100%; width: 100%; background-color: rgb(209, 209, 209); border-top-left-radius: 7%; border-bottom-left-radius: 7%; border-top-right-radius: 7%; border-bottom-right-radius: 7%; justify-content: center;">
+                <ui:VisualElement name="room-key" class="MenuTextInput">
+                    <ui:TextField picking-mode="Ignore" name="input_roomkey" class="MenuTextInputField" />
+                    <ui:Label text="room key" name="label_input" class="MenuTextInputLabel" />
                 </ui:VisualElement>
-                <ui:VisualElement name="name" style="justify-content: flex-start; align-items: center; height: 20%; width: 100%;">
-                    <ui:TextField picking-mode="Ignore" name="input_name" style="margin-top: 10%; width: 90%; height: 50%; font-size: 1000%; -unity-background-image-tint-color: rgba(194, 194, 194, 0);" />
-                    <ui:Label text="name" name="label_input" style="padding-left: 10%; padding-right: 0; padding-top: 0; padding-bottom: 0; height: 50%; font-size: 1000%; -unity-font-style: bold; width: 100%;" />
+                <ui:VisualElement name="name" class="MenuTextInput">
+                    <ui:TextField picking-mode="Ignore" name="input_name" class="MenuTextInputField" />
+                    <ui:Label text="name" name="label_input" class="MenuTextInputLabel" />
                 </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement name="button" style="align-items: flex-start; flex-direction: row; height: 10%; width: 100%; padding-left: 0; padding-right: 20%; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-top: 7%; margin-bottom: 7%; font-size: 100%; margin-right: 13%;">
-                <ui:Button text="join session" name="join_session_button" style="height: 100%; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 100px; border-bottom-left-radius: 100px; border-top-right-radius: 100px; border-bottom-right-radius: 100px; background-color: rgb(168, 168, 168); color: rgb(0, 0, 0); font-size: 1200%; -unity-font-style: bold; -unity-text-align: middle-left; padding-left: 20%; width: 100%;" />
-                <ui:VisualElement name="logo_button" style="position: absolute; height: 100%; width: 10%; left: 6%; bottom: 20%; background-image: url(&apos;/Assets/Art/Sprites/Objects/Schloss.png&apos;);" />
+            <ui:VisualElement name="session-button" class="MenuButton">
+                <ui:Button text="join session" name="join_session_button" class="MenuButtonClickable">
+                    <ui:VisualElement name="logo_button" class="MenuButtonClickableIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/Schloss.png&apos;);" />
+                </ui:Button>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

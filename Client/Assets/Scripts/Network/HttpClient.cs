@@ -1,28 +1,35 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
-using System.Collections.Generic;
 
 public class HttpClient : MonoBehaviour
 {
 	public static string serverAdress = "http://212.83.56.221:8080/";
 
-	public static IEnumerator CallMethod(string method, Dictionary<string, string> data)
+	public static IEnumerator CallMethod(string method, Headers data, System.Action<Headers> resultCallback)
 	{
 		string uri = serverAdress + UnityWebRequest.EscapeURL(method);
-		using (var request = UnityWebRequest.Post(uri, data))
+		using (var request = UnityWebRequest.Post(uri, ""))
 		{
-			Debug.Log($"Sending {uri}");
+			foreach(var kvp in data.Fields)
+			{
+				request.SetRequestHeader(kvp.Key, kvp.Value);
+			}
+
 			yield return request.SendWebRequest();
+
 			if (request.isDone)
 			{
 				if(request.responseCode == 200)
 				{
 					var headers = request.GetResponseHeaders();
-					Debug.Log($"Recieved {request.responseCode}");
-					foreach(var header in headers)
+					if(headers != null)
 					{
-						Debug.Log($"{header.Key} : {header.Value}");
+						resultCallback(new Headers(headers));
+					}
+					else
+					{
+						resultCallback(new Headers());
 					}
 				}
 				else

@@ -1,0 +1,22 @@
+.unity-toggle__input {
+    justify-content: flex-end;
+}
+
+.unity-toggle__checkmark {
+    justify-content: center;
+    align-items: center;
+    flex-grow: 0;
+    height: 100%;
+    flex-shrink: 1;
+    width: 35%;
+    max-width: 35%;
+    max-height: 100%;
+    min-width: 35%;
+    min-height: 100%;
+}
+
+.unity-toggle__label {
+    flex-grow: 1;
+    flex-shrink: 0;
+    -unity-text-align: middle-left;
+}
