@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="button" class="MenuButton">
+        <Style src="/Assets/UI/Style/MenuStyle.uss" />
+        <ui:Button text="text" name="clickable" class="MenuButtonClickable">
+            <ui:VisualElement name="icon" class="MenuButtonClickableIcon" />
+        </ui:Button>
+    </ui:VisualElement>
+</ui:UXML>

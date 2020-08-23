@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:Toggle label="Toggle" picking-mode="Ignore" style="font-size: 1200%; flex-direction: row; flex-grow: 1;">
+        <Style src="player-item.uss" />
+    </ui:Toggle>
+</ui:UXML>

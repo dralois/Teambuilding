@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a9878a2f03ab4e489255855e0872a40, type: 3}
+  m_Name: Smash
+  m_EditorClassIdentifier: 
+  allPics:
+  - {fileID: 21300000, guid: e6814b757e4e2594fac7f8e91cdc95d8, type: 3}
+  - {fileID: 21300000, guid: 8ca6545228d04e146b988bc34978d1eb, type: 3}
+  - {fileID: 21300000, guid: f9314f8d793bb654e980c2ec30128875, type: 3}
+  - {fileID: 21300000, guid: 147c41126eafc584b866526a8759929f, type: 3}
+  - {fileID: 21300000, guid: c256b901a4726d446a82b73c643b3c90, type: 3}
+  - {fileID: 21300000, guid: 2c00a3d7c0d79a744bef7fe75d751ae1, type: 3}
+  - {fileID: 21300000, guid: 1cb071a5cdade774bb6149aa48cf2de6, type: 3}
+  - {fileID: 21300000, guid: 9f8d7750c4b2c924aa7af975bb0cdb7a, type: 3}
+  - {fileID: 21300000, guid: a8b928e2031892b41825c6affc87e35e, type: 3}
+  - {fileID: 21300000, guid: f43b1693d09707f43b686494438ed933, type: 3}
+  itemBase: {fileID: 9197481963319205126, guid: 15fabcf21677db14e81c271d6d99fc34,
+    type: 3}

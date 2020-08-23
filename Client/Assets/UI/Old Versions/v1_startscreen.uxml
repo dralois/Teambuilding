@@ -1,9 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <ui:VisualElement style="flex-grow: 1;&#10;background-color: rgb(0, 201, 255);&#10;">
-        <Style src="v1_startscreen.uss" />
-        <ui:Button focusable="false" name="start_button" class="startscreen_button" style="align-items: center;&#10;justify-content: center;&#10;">
-            <ui:VisualElement name="Logo_image" style="left: auto;&#10;flex-grow: 0;&#10;flex-shrink: 1;&#10;width: 50%;&#10;height: 25%;&#10;background-image: url(&apos;/Assets/Objects/Assets/Logo_VWT_zugeschnitten.png&apos;);&#10;align-items: auto;&#10;justify-content: flex-start;&#10;" />
-            <ui:Label text="TeamBase" style="-unity-font: url(&apos;Library/unity default resources&apos;);&#10;-unity-font-style: bold;&#10;font-size: 30px;&#10;color: rgba(255, 255, 255, 255);&#10;" />
-        </ui:Button>
-    </ui:VisualElement>
-</ui:UXML>
