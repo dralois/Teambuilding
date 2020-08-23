@@ -202,9 +202,9 @@ class GameHandler(BaseHTTPRequestHandler):
                             return
                     gamestate += 1
                     if manager.picture == 1:
-                        select_picture_parts(5, len(participants.items))
+                        select_picture_parts(4, len(participants.items.items()))
                     elif manager.picture == 2:
-                        select_picture_parts(10, len(participants.items))
+                        select_picture_parts(9, len(participants.items.items()))
                     else:
                         self.send_header("success", str(False))
                         self.send_header("reason", "picture does not exist")
@@ -215,7 +215,7 @@ class GameHandler(BaseHTTPRequestHandler):
                     random.shuffle(places)
                     global selected
                     global picture_range
-                    selected = [-1] * len(participants.items)
+                    selected = [-1] * len(participants.items.items())
                     self.send_header("success", str(True))
                     self.send_header("places", json.dumps(places))
                     self.send_header("range", json.dumps(list(picture_range)))
@@ -323,5 +323,5 @@ class GameHandler(BaseHTTPRequestHandler):
 
 def select_picture_parts(image_length, users):
     global picture_range
-    start = random.randint(0, image_length - (users - 1))
-    picture_range = range(start, start + (users - 2))
+    start = random.randint(0, image_length - users)
+    picture_range = range(start, start + users)
