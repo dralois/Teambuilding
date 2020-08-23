@@ -132,7 +132,7 @@ class GameHandler(BaseHTTPRequestHandler):
                     self.send_header("success", str(True))
                     self.send_header("no_user", str(len(participants.items)))
                     ready = 0
-                    for _,user in participants.items:
+                    for _,user in participants.items.items():
                         if user.ready:
                             ready += 1
                     self.send_header("no_ready", str(ready))
@@ -195,7 +195,7 @@ class GameHandler(BaseHTTPRequestHandler):
                     self.send_header("reason", "wrong room or not manager")
                     return
                 else:
-                    for _,user in participants.items:
+                    for _,user in participants.items.items():
                         if not user.ready:
                             self.send_header("success", str(False))
                             self.send_header("reason", "not everyone is ready")
@@ -210,7 +210,7 @@ class GameHandler(BaseHTTPRequestHandler):
                         self.send_header("reason", "picture does not exist")
                         return
                     global places
-                    for _,user in participants.items:
+                    for _,user in participants.items.items():
                         places.append(user.identifier)
                     random.shuffle(places)
                     global selected
