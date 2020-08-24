@@ -46,25 +46,21 @@ MonoBehaviour:
   Screen_Start: {fileID: 0}
   Screen_JoinSession: {fileID: 0}
   Screen_Menu: {fileID: 0}
-  Screen_CreateGame: {fileID: 0}
-  Screen_JoinGame: {fileID: 0}
+  Screen_CreateRoom: {fileID: 0}
+  Screen_StartGame: {fileID: 0}
+  Screen_GameLobby: {fileID: 0}
   Screen_Settings: {fileID: 0}
   Screen_Statistic_manager: {fileID: 0}
   Screen_Statistic_employee: {fileID: 0}
-  Screen_GamePuzzle_Picture: {fileID: 0}
   Screen_GamePuzzle: {fileID: 0}
-  games_item: {fileID: 9197481963319205126, guid: 0b37694987554194a97ec7fa0f4fe5bf,
+  player_ready_item: {fileID: 9197481963319205126, guid: bb1b7363974e92f4cb8d61c741e0b875,
     type: 3}
-  puzzle_selection_item: {fileID: 9197481963319205126, guid: 15fabcf21677db14e81c271d6d99fc34,
+  puzzle_piece_item: {fileID: 9197481963319205126, guid: 45c27e9fc92e90a44b1ab787c50723fb,
     type: 3}
   statistic_employee_item: {fileID: 9197481963319205126, guid: 29b178f806e8c0a47b41536b2219211d,
     type: 3}
-  statistic_manager_item: {fileID: 0}
-  overview_item: {fileID: 9197481963319205126, guid: 0b37694987554194a97ec7fa0f4fe5bf,
+  statistic_manager_item: {fileID: 9197481963319205126, guid: 29b178f806e8c0a47b41536b2219211d,
     type: 3}
-  wholePuzzlePicture:
-  - {fileID: 21300000, guid: 338b0ce9fcb21b0448de9da83166f1c6, type: 3}
-  - {fileID: 21300000, guid: 31a55bdcaafdf1f4da514e75662d08d1, type: 3}
-  - {fileID: 21300000, guid: f96fe47367d256240ac6af518419fe93, type: 3}
-  - {fileID: 21300000, guid: 58a42cd676ac97c45a1b8c93f0334597, type: 3}
-  - {fileID: 21300000, guid: 4c4d2a3abc6c9044b81d8d01ae7313dc, type: 3}
+  puzzles:
+  - {fileID: 11400000, guid: 12760dc4e4d9a984b9dfed65b4e0200f, type: 2}
+  - {fileID: 11400000, guid: 2543191f20ffac94d8e4f0c334a74ae7, type: 2}

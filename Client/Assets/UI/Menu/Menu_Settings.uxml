@@ -1,0 +1,33 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="background" focusable="true" class="MenuBackground">
+        <Style src="/Assets/UI/Style/MenuStyle.uss" />
+        <ui:VisualElement name="leiste_oben" class="UpperMenu">
+            <ui:VisualElement name="leiste_bunt" class="UpperMenuBar" style="background-color: rgb(255, 0, 143);" />
+            <ui:VisualElement name="logo" class="UpperMenuIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/Settings (2).png&apos;);">
+                <ui:Button name="back_button" class="BackButton" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="content_leiste_unten" class="LowerMenu" style="font-size: 30%;">
+            <ui:VisualElement name="button" class="MenuButton">
+                <ui:Button text="change session" name="change_session_button" class="MenuButtonClickable">
+                    <ui:VisualElement name="logo_button" class="MenuButtonClickableIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/undo.png&apos;);" />
+                </ui:Button>
+            </ui:VisualElement>
+            <ui:VisualElement name="input" style="justify-content: center; flex-grow: 1;">
+                <ui:VisualElement class="MenuTextInput">
+                    <ui:Label name="input_name" class="MenuTextInputField" />
+                </ui:VisualElement>
+                <ui:VisualElement name="button" class="MenuButton" style="height: 20%; max-height: 30%; min-height: 20%;">
+                    <ui:Button text="change name" name="changename_button" class="MenuButtonClickable">
+                        <ui:VisualElement name="icon" class="MenuButtonClickableIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/Settings (2).png&apos;);" />
+                    </ui:Button>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="button" class="MenuButton">
+                <ui:Button text="logout" name="logout_button" class="MenuButtonClickable">
+                    <ui:VisualElement name="logo_button" class="MenuButtonClickableIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/Settings (2).png&apos;);" />
+                </ui:Button>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

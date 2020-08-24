@@ -1,12 +1,12 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:VisualElement name="background" class="MenuBackground">
         <Style src="/Assets/UI/Style/MenuStyle.uss" />
         <ui:VisualElement name="upper" class="UpperMenu">
             <ui:VisualElement name="upper-bar" class="UpperMenuBar" />
-            <ui:VisualElement name="upper-icon" class="UpperMenuIcon" style="background-image: url(&apos;/Assets/Art/Sprites/logo/logo3_zugeschnitten.png&apos;); -unity-background-image-tint-color: rgb(0, 0, 0); -unity-background-scale-mode: stretch-to-fill; -unity-slice-bottom: 100;" />
+            <ui:VisualElement name="upper-icon" class="UpperMenuIcon" style="background-image: url(&apos;/Assets/Art/Sprites/logo/logo3_zugeschnitten.png&apos;); -unity-background-image-tint-color: rgb(0, 0, 0);" />
         </ui:VisualElement>
         <ui:VisualElement name="lower" class="LowerMenu">
-            <ui:ListView focusable="True" item-height="400" name="player-list" style="flex-grow: 1;" />
+            <ui:ListView focusable="True" item-height="200" name="player-list" selection-type="None" style="flex-grow: 1;" />
             <ui:VisualElement name="start-game" class="MenuButton">
                 <ui:Button text="start game" name="start-game-button" class="MenuButtonClickable">
                     <ui:VisualElement class="MenuButtonClickableIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/Game1.png&apos;);" />

@@ -1,0 +1,21 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="background" focusable="true" class="MenuBackground">
+        <Style src="/Assets/UI/Style/MenuStyle.uss" />
+        <ui:VisualElement name="leiste_oben" class="UpperMenu">
+            <ui:VisualElement name="leiste_bunt" class="UpperMenuBar" style="background-color: rgb(156, 156, 231);" />
+            <ui:VisualElement name="logo" class="UpperMenuIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/Statistic.png&apos;);">
+                <ui:Button name="back_button" class="BackButton" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="content_leiste_unten" class="LowerMenu">
+            <ui:VisualElement style="background-color: rgb(209, 209, 209); border-top-left-radius: 7%; border-bottom-left-radius: 7%; border-top-right-radius: 7%; border-bottom-right-radius: 7%; flex-grow: 1;">
+                <ui:ListView focusable="True" name="statistic" style="height: 100%; width: 100%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="button" class="MenuButton">
+                <ui:Button text="employee" name="change_statistic_button" class="MenuButtonClickable">
+                    <ui:VisualElement name="logo_button" class="MenuButtonClickableIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/User.png&apos;);" />
+                </ui:Button>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

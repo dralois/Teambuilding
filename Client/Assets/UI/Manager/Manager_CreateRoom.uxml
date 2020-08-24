@@ -1,20 +1,19 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:VisualElement name="background" focusable="true" class="MenuBackground">
         <Style src="/Assets/UI/Style/MenuStyle.uss" />
-        <Style src="Manager_CreateRoom.uss" />
         <ui:VisualElement name="leiste_oben" class="UpperMenu">
             <ui:VisualElement name="leiste_bunt" class="UpperMenuBar" />
-            <ui:VisualElement name="logo" focusable="true" class="UpperMenuIcon">
-                <ui:Button name="back_button" style="background-color: rgba(228, 228, 228, 0); height: 100%; width: 100%; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; background-image: url(&apos;/Assets/Art/Sprites/Objects/Schloss.png&apos;);" />
+            <ui:VisualElement name="logo" focusable="true" class="UpperMenuIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/Schloss.png&apos;);">
+                <ui:Button name="back_button" class="BackButton" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="content_leiste_unten" class="LowerMenu">
             <ui:VisualElement style="height: 100%; width: 100%; background-color: rgb(209, 209, 209); border-top-left-radius: 7%; border-bottom-left-radius: 7%; border-top-right-radius: 7%; border-bottom-right-radius: 7%; justify-content: center; align-items: stretch; flex-wrap: nowrap; flex-direction: column-reverse; padding-left: 5%; padding-right: 5%; padding-top: 5%; padding-bottom: 5%;">
                 <ui:VisualElement name="room_id" class="MenuTextInput">
-                    <ui:TextField name="input_roomid" class="MenuTextInputField" />
+                    <ui:Label name="input_roomid" class="MenuTextInputField" />
                     <ui:Label text="room id" name="label_input" class="MenuTextInputLabel" />
                 </ui:VisualElement>
-                <ui:ListView focusable="True" name="puzzle_selection" item-height="500" style="justify-content: center; flex-grow: 1; align-items: center;" />
+                <ui:ListView focusable="True" name="puzzle_selection" item-height="300" style="justify-content: center; flex-grow: 1; align-items: center;" />
             </ui:VisualElement>
             <ui:VisualElement name="create_room" class="MenuButton">
                 <ui:Button text="create room" name="create_room_button" class="MenuButtonClickable">

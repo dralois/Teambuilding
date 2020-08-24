@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Toggle label="Player" picking-mode="Ignore" value="true">
+        <Style src="/Assets/UI/Style/MenuStyle.uss" />
+    </ui:Toggle>
+</ui:UXML>

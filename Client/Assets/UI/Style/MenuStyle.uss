@@ -17,12 +17,17 @@
 }
 
 .UpperMenuIcon {
-    overflow: hidden;
     height: 70%;
     width: 25%;
     position: absolute;
     left: 38%;
     bottom: 10%;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.BackButton {
+    background-color: rgba(255, 255, 255, 0);
+    flex-grow: 1;
 }
 
 .LowerMenu {
@@ -39,11 +44,11 @@
     justify-content: space-around;
     align-items: flex-start;
     flex-direction: column;
-    height: 30%;
+    height: 40%;
 }
 
 .MenuTextInputLabel {
-    font-size: 1200%;
+    font-size: 500%;
     -unity-font-style: bold;
 }
 
@@ -51,7 +56,12 @@
     margin-top: 10%;
     width: 90%;
     height: 40%;
-    font-size: 1000%;
+    font-size: 400%;
+    background-color: rgb(233, 233, 233);
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
 }
 
 .MenuButton {
@@ -71,14 +81,10 @@
 }
 
 .MenuButtonClickable {
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
-    border-top-left-radius: 100px;
-    border-bottom-left-radius: 100px;
-    border-top-right-radius: 100px;
-    border-bottom-right-radius: 100px;
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
     background-color: rgb(168, 168, 168);
     color: rgb(0, 0, 0);
     -unity-font-style: bold;
@@ -92,17 +98,42 @@
     flex-shrink: 0;
     width: 100%;
     height: 90%;
-    font-size: 1000%;
+    font-size: 400%;
     overflow: visible;
     flex-direction: row;
 }
 
 .MenuButtonClickableIcon {
-    width: 20%;
-    height: 180%;
+    width: 25%;
+    height: 220%;
     position: absolute;
-    left: 10%;
+    left: 5%;
     top: -50%;
     right: 0;
     bottom: 0;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.unity-toggle__label {
+    flex-grow: 1;
+    flex-shrink: 0;
+    -unity-text-align: middle-left;
+    font-size: 400%;
+}
+
+.unity-toggle__checkmark {
+    justify-content: center;
+    align-items: center;
+    flex-grow: 0;
+    height: 100%;
+    flex-shrink: 1;
+    width: 35%;
+    max-width: 35%;
+    max-height: 100%;
+    min-width: 35%;
+    min-height: 100%;
+}
+
+.unity-toggle__input {
+    justify-content: flex-end;
 }

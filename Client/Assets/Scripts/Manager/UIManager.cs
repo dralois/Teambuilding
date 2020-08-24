@@ -1,72 +1,56 @@
-﻿using System.Linq;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using Unity.UIElements.Runtime;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Object = UnityEngine.Object;
-using Random = UnityEngine.Random;
 
 public class UIManager : MonoBehaviour
 {
-	public PanelRenderer Screen_Start;
-	public PanelRenderer Screen_JoinSession;
-	public PanelRenderer Screen_Menu;
-	public PanelRenderer Screen_CreateRoom;
-	public PanelRenderer Screen_StartGame;
-	public PanelRenderer Screen_GameLobby;
-	public PanelRenderer Screen_Settings;
-	public PanelRenderer Screen_Statistic_manager;
-	public PanelRenderer Screen_Statistic_employee;
+	public UIDocument Screen_Start;
+	public UIDocument Screen_Menu;
+	public UIDocument Screen_Settings;
+	public UIDocument Screen_JoinRoom;
+	public UIDocument Screen_RoomLobby;
+	public UIDocument Screen_CreateRoom;
+	public UIDocument Screen_StartGame;
+	public UIDocument Screen_GamePuzzle;
+	public UIDocument Screen_Statistic_manager;
+	public UIDocument Screen_Statistic_employee;
 
-	public PanelRenderer Screen_GamePuzzle_Picture;
-	public PanelRenderer Screen_GamePuzzle;
-
-	//list view items
+	// List view items
 	public VisualTreeAsset player_ready_item;
+	public VisualTreeAsset puzzle_piece_item;
 	public VisualTreeAsset statistic_employee_item;
 	public VisualTreeAsset statistic_manager_item;
-	public VisualTreeAsset overview_item;
 
-	//Puzzles
+	// Puzzles
 	public Puzzle[] puzzles;
 
-	//Listen für die ListViews
+	// Listen für die ListViews
 	private List<StatisticEmployee> statisticsEmployee = new List<StatisticEmployee>();
 	private List<StatisticEmployee> statisticsManager = new List<StatisticEmployee>();
-	private List<OverViewListData> overviewGamePuzzle = new List<OverViewListData>();                         //ist dort schon ein PuzzleTeil gesetzt?
 
+	// Logic
 	private const int updateInterval = 2000;
-	//Logic
 	private string playerId;
 	private string roomId;
 	private bool isManager;
 
-	//PuzzleGame
-	public List<Sprite> wholePuzzlePicture = new List<Sprite>();
-	private List<(bool, bool)> informationPicture = new List<(bool, bool)>();  //(owning, placed)
-	private List<int> placedPictures = new List<int>();            //pictures that got placed
-	private int index = 0;
-	private int currentPicture = -1;
-
 	private void OnEnable()
 	{
 		//Bind Screens
-		Screen_Start.postUxmlReload = BindStartScreen;
-		Screen_JoinSession.postUxmlReload = BindJoinSessionScreen;
-		Screen_Menu.postUxmlReload = BindMenuScreen;
-		Screen_CreateRoom.postUxmlReload = BindCreateRoomScreen;
-		Screen_StartGame.postUxmlReload = BindStartGameScreen;
-		Screen_GameLobby.postUxmlReload = BindGameLobbyScreen;
-		Screen_Settings.postUxmlReload = BindSettingsScreen;
-		Screen_Statistic_employee.postUxmlReload = BindEmployeeStatisticScreen;
-		Screen_Statistic_manager.postUxmlReload = BindManagerStatisticScreen;
-		Screen_GamePuzzle.postUxmlReload = BindGamePuzzleScreen;
-		Screen_GamePuzzle_Picture.postUxmlReload = BindGamePuzzlePictureScreen;
-
+		BindStartScreen();
+		BindMenuScreen();
+		BindSettingsScreen();
+		BindJoinRoomScreen();
+		BindRoomLobbyScreen();
+		BindCreateRoomScreen();
+		BindStartGameScreen();
+		BindGamePuzzleScreen();
+		BindEmployeeStatisticScreen();
+		BindManagerStatisticScreen();
 	}
 
-	// Start is called before the first frame update
 	void Start()
 	{
 
@@ -78,23 +62,13 @@ public class UIManager : MonoBehaviour
 		GoToStartScreen();
 	}
 
-	// Update is called once per frame
-	void Update()
-	{
-		//Update für das PuzzleSpiel
-		//TODO erst wenn das spiel gestartet ist immer actualisieren
-		updateInformationPictureList();
-	}
-
-
 	///////////////////////////////////////////////////////////////////////////////////////////////////
 	// Screen Transition Logic
+	///////////////////////////////////////////////////////////////////////////////////////////////////
 
-	//change Screen 
-	IEnumerator ScreenChange(PanelRenderer from, PanelRenderer to)
+	IEnumerator ScreenChange(UIDocument from, UIDocument to)
 	{
-		from.visualTree.style.display = DisplayStyle.None;
-		from.gameObject.GetComponent<UIElementsEventSystem>().enabled = false;
+		from.rootVisualElement.style.display = DisplayStyle.None;
 
 		to.enabled = true;
 
@@ -102,15 +76,14 @@ public class UIManager : MonoBehaviour
 		yield return null;
 		yield return null;
 
-		to.visualTree.style.display = DisplayStyle.Flex;
-		to.visualTree.style.visibility = Visibility.Hidden;
-		to.gameObject.GetComponent<UIElementsEventSystem>().enabled = true;
+		to.rootVisualElement.style.display = DisplayStyle.Flex;
+		to.rootVisualElement.style.visibility = Visibility.Hidden;
 
 		yield return null;
 		yield return null;
 		yield return null;
 
-		to.visualTree.style.visibility = Visibility.Visible;
+		to.rootVisualElement.style.visibility = Visibility.Visible;
 
 		yield return null;
 		yield return null;
@@ -125,116 +98,105 @@ public class UIManager : MonoBehaviour
 	{
 		SetScreenEnableState(Screen_Start, true);
 		SetScreenEnableState(Screen_Menu, false);
-		SetScreenEnableState(Screen_JoinSession, false);
+		SetScreenEnableState(Screen_JoinRoom, false);
 		SetScreenEnableState(Screen_CreateRoom, false);
 		SetScreenEnableState(Screen_Settings, false);
-		SetScreenEnableState(Screen_GameLobby, false);
+		SetScreenEnableState(Screen_RoomLobby, false);
 		SetScreenEnableState(Screen_StartGame, false);
+		SetScreenEnableState(Screen_GamePuzzle, false);
 		SetScreenEnableState(Screen_Statistic_employee, false);
 		SetScreenEnableState(Screen_Statistic_manager, false);
-
-		SetScreenEnableState(Screen_GamePuzzle, false);
-		SetScreenEnableState(Screen_GamePuzzle_Picture, false);
 	}
 
-	void SetScreenEnableState(PanelRenderer screen, bool state)
+	void SetScreenEnableState(UIDocument screen, bool state)
 	{
 		if (state)
 		{
-			screen.visualTree.style.display = DisplayStyle.Flex;
+			screen.rootVisualElement.style.display = DisplayStyle.Flex;
 			screen.enabled = true;
-			screen.gameObject.GetComponent<UIElementsEventSystem>().enabled = true;
 		}
 		else
 		{
-			screen.visualTree.style.display = DisplayStyle.None;
+			screen.rootVisualElement.style.display = DisplayStyle.None;
 			screen.enabled = false;
-			screen.gameObject.GetComponent<UIElementsEventSystem>().enabled = false;
 		}
 	}
-
-
 
 	///////////////////////////////////////////////////////////////////////////////
 	///Bind 
-	///
-	private IEnumerable<Object> BindStartScreen()
+	///////////////////////////////////////////////////////////////////////////////
+
+	private void BindStartScreen()
 	{
 		//bind root 
-		var root = Screen_Start.visualTree;
+		var root = Screen_Start.rootVisualElement;
 
 		//set button function
-		var joinButton = root.Q<Button>("start_button");
-		if (joinButton != null)
+		root.Q<Button>("start_button").clickable.clicked += () =>
 		{
-			//button function
-			joinButton.clickable.clicked += () =>
-			{
-				StartCoroutine(ScreenChange(Screen_Start, Screen_Menu));
-			};
-		}
-		return null;
+			StartCoroutine(ScreenChange(Screen_Start, Screen_Menu));
+		};
 	}
 
-	private IEnumerable<Object> BindMenuScreen()
+	private void BindMenuScreen()
 	{
 		//bind root 
-		var root = Screen_Menu.visualTree;
+		var root = Screen_Menu.rootVisualElement;
 
-		//set button function
-		var joinButton = root.Q<Button>("join_game_button");
-		if (joinButton != null)
+		root.Q<Button>("join_game_button").clickable.clicked += () =>
 		{
-			//button function
-			joinButton.clickable.clicked += () =>
-			{
-				StartCoroutine(ScreenChange(Screen_Menu, Screen_JoinSession));
-			};
-		}
+			StartCoroutine(ScreenChange(Screen_Menu, Screen_JoinRoom));
+		};
 
-		joinButton = root.Q<Button>("create_game_button");
-		if (joinButton != null)
+		root.Q<Button>("create_game_button").clickable.clicked += () =>
 		{
-			//button function
-			joinButton.clickable.clicked += () =>
-			{
-				StartCoroutine(ScreenChange(Screen_Menu, Screen_CreateRoom));
-			};
-		}
+			StartCoroutine(ScreenChange(Screen_Menu, Screen_CreateRoom));
+		};
 
-		joinButton = root.Q<Button>("statistics_button");
-		if (joinButton != null)
+		root.Q<Button>("statistics_button").clickable.clicked += () =>
 		{
-			//button function
-			joinButton.clickable.clicked += () =>
+			if (isManager)
 			{
-				if (isManager)
-				{
-					StartCoroutine(ScreenChange(Screen_Menu, Screen_Statistic_manager));
-				}
-				else
-				{
-					StartCoroutine(ScreenChange(Screen_Menu, Screen_Statistic_employee));
-				}
+				StartCoroutine(ScreenChange(Screen_Menu, Screen_Statistic_manager));
+			}
+			else
+			{
+				StartCoroutine(ScreenChange(Screen_Menu, Screen_Statistic_employee));
+			}
+		};
 
-			};
-		}
-
-		joinButton = root.Q<Button>("settings_button");
-		if (joinButton != null)
+		root.Q<Button>("settings_button").clickable.clicked += () =>
 		{
-			//button function
-			joinButton.clickable.clicked += () =>
-			{
-				StartCoroutine(ScreenChange(Screen_Menu, Screen_Settings));
-			};
-		}
-		return null;
+			StartCoroutine(ScreenChange(Screen_Menu, Screen_Settings));
+		};
 	}
 
-	private IEnumerable<Object> BindCreateRoomScreen()
+	private void BindSettingsScreen()
 	{
-		var root = Screen_CreateRoom.visualTree;
+		//bind root 
+		var root = Screen_Settings.rootVisualElement;
+
+		//TODO
+		//Name input 
+
+		//set button function create game
+		root.Q<Button>("logout_button").clickable.clicked += () =>
+		{
+			//TODO
+			//alle daten müssen gelöscht werden von der vorherigen Session
+			StartCoroutine(ScreenChange(Screen_Settings, Screen_JoinRoom));
+		};
+
+		//set button function create game
+		root.Q<Button>("back_button").clickable.clicked += () =>
+		{
+			StartCoroutine(ScreenChange(Screen_Settings, Screen_Menu));
+		};
+	}
+
+	private void BindCreateRoomScreen()
+	{
+		var root = Screen_CreateRoom.rootVisualElement;
 
 		// Puzzle Liste
 		var lv = root.Q<ListView>("puzzle_selection");
@@ -277,13 +239,11 @@ public class UIManager : MonoBehaviour
 		// Zum Menue
 		var backButton = root.Q<Button>("back_button");
 		backButton.clickable.clicked += () => StartCoroutine(ScreenChange(Screen_CreateRoom, Screen_Menu));
-
-		return null;
 	}
 
-	private IEnumerable<Object> BindStartGameScreen()
+	private void BindStartGameScreen()
 	{
-		var root = Screen_StartGame.visualTree;
+		var root = Screen_StartGame.rootVisualElement;
 
 		bool startGame = false;
 		bool startPossible = false;
@@ -344,17 +304,15 @@ public class UIManager : MonoBehaviour
 				StartCoroutine(ScreenChange(Screen_StartGame, Screen_GamePuzzle));
 			}
 		};
-
-		return null;
 	}
 
-	private IEnumerable<Object> BindJoinSessionScreen()
+	private void BindJoinRoomScreen()
 	{
 		//bind root 
-		var root = Screen_JoinSession.visualTree;
+		var root = Screen_JoinRoom.rootVisualElement;
 
 		// Join room
-		root.Q<Button>("join_session_button").clickable.clicked += () =>
+		root.Q<Button>("join-room-button").clickable.clicked += () =>
 		{
 			//test
 			roomId = root.Q<TextField>("input_roomkey").value;
@@ -368,22 +326,20 @@ public class UIManager : MonoBehaviour
 				}
 			));
 
-			StartCoroutine(ScreenChange(Screen_JoinSession, Screen_GameLobby));
+			StartCoroutine(ScreenChange(Screen_JoinRoom, Screen_RoomLobby));
 		};
 
 		// Zum Menue
 		root.Q<Button>("back_button").clickable.clicked += () =>
 		{
-			StartCoroutine(ScreenChange(Screen_JoinSession, Screen_Menu));
+			StartCoroutine(ScreenChange(Screen_JoinRoom, Screen_Menu));
 
 		};
-
-		return null;
 	}
 
-	private IEnumerable<Object> BindGameLobbyScreen()
+	private void BindRoomLobbyScreen()
 	{
-		var root = Screen_GameLobby.visualTree;
+		var root = Screen_RoomLobby.rootVisualElement;
 
 		bool startGame = false;
 		List<Player> playerlist = new List<Player>();
@@ -413,7 +369,7 @@ public class UIManager : MonoBehaviour
 					startGame = result.GetHeader<int>("gamestate") == 2;
 					if (startGame)
 					{
-						StartCoroutine(ScreenChange(Screen_GameLobby, Screen_GamePuzzle));
+						StartCoroutine(ScreenChange(Screen_RoomLobby, Screen_GamePuzzle));
 					}
 					else
 					{
@@ -469,49 +425,17 @@ public class UIManager : MonoBehaviour
 				}
 			));
 		};
-
-		return null;
 	}
 
-	private IEnumerable<Object> BindSettingsScreen()
+	private void BindGamePuzzleScreen()
 	{
-		//bind root 
-		var root = Screen_Settings.visualTree;
-
-		//TODO
-		//Name input 
-
-		//set button function create game
-		var createButton = root.Q<Button>("logout_button");
-		if (createButton != null)
-		{
-			//button function
-			createButton.clickable.clicked += () =>
-			{
-				//TODO
-				//alle daten müssen gelöscht werden von der vorherigen Session
-				StartCoroutine(ScreenChange(Screen_Settings, Screen_JoinSession));
-			};
-		}
-
-		//set button function create game
-		var backButton = root.Q<Button>("back_button");
-		if (backButton != null)
-		{
-			//button function
-			backButton.clickable.clicked += () =>
-			{
-				StartCoroutine(ScreenChange(Screen_Settings, Screen_Menu));
-
-			};
-		}
-		return null;
+		// TODO
 	}
 
-	private IEnumerable<Object> BindEmployeeStatisticScreen()
+	private void BindEmployeeStatisticScreen()
 	{
 		//bind root 
-		var root = Screen_Statistic_employee.visualTree;
+		var root = Screen_Statistic_employee.rootVisualElement;
 
 		//TODO
 		//List view implementieren
@@ -523,39 +447,28 @@ public class UIManager : MonoBehaviour
 
 		//in list view anzeigen welches spiel vom manager ausgewählt wurde
 		var listView = root.Q<ListView>("statistic-list");
-		if (listView != null)
+		listView.makeItem = () => statistic_employee_item.CloneTree();
+		listView.bindItem = (e, i) =>
 		{
-			listView.selectionType = SelectionType.None;
-
-			if (listView.makeItem == null)
-				listView.makeItem = MakeItemStatisticEmployee;
-			if (listView.bindItem == null)
-				listView.bindItem = BindItemStatisticEmployee;
-
-			listView.itemsSource = statisticsEmployee;
-			listView.Refresh();
-		}
+			e.Q<Label>("session-name").text = statisticsEmployee[i].name;
+			var playerColor = Color.blue;
+			playerColor.a = 0.9f;
+			e.Q("icon").style.unityBackgroundImageTintColor = playerColor;
+		};
+		listView.itemsSource = statisticsEmployee;
+		listView.Refresh();
 
 		//set button function create game
-		var backButton = root.Q<Button>("back_button");
-		if (backButton != null)
+		root.Q<Button>("back_button").clickable.clicked += () =>
 		{
-			//button function
-			backButton.clickable.clicked += () =>
-			{
-				StartCoroutine(ScreenChange(Screen_Statistic_employee, Screen_Menu));
-
-			};
-		}
-
-		//info: button hat keine funktion
-		return null;
+			StartCoroutine(ScreenChange(Screen_Statistic_employee, Screen_Menu));
+		};
 	}
 
-	private IEnumerable<Object> BindManagerStatisticScreen()
+	private void BindManagerStatisticScreen()
 	{
 		//bind root 
-		var root = Screen_Statistic_manager.visualTree;
+		var root = Screen_Statistic_manager.rootVisualElement;
 
 		//set button function create game
 		var createButton = root.Q<Button>("change_statistic_button");
@@ -573,292 +486,21 @@ public class UIManager : MonoBehaviour
 		//TODO
 		//list view implementieren mit 
 		var listView = root.Q<ListView>("statistic-list");
-		if (listView != null)
+		listView.makeItem = () => statistic_manager_item.CloneTree();
+		listView.bindItem = (e, i) =>
 		{
-			listView.selectionType = SelectionType.None;
-
-			if (listView.makeItem == null)
-				listView.makeItem = MakeItemStatisticEmployee;
-			if (listView.bindItem == null)
-				listView.bindItem = BindItemStatisticEmployee;
-
-			listView.itemsSource = statisticsEmployee;
-			listView.Refresh();
-		}
+			var playerColor = Color.blue;
+			playerColor.a = 0.9f;
+			e.Q("icon").style.unityBackgroundImageTintColor = playerColor;
+			e.Q<Label>("session-name").text = statisticsEmployee[i].name;
+		};
+		listView.itemsSource = statisticsEmployee;
+		listView.Refresh();
 
 		//set button function create game
-		var backButton = root.Q<Button>("back_button");
-		if (backButton != null)
+		root.Q<Button>("back_button").clickable.clicked += () =>
 		{
-			//button function
-			backButton.clickable.clicked += () =>
-			{
-				StartCoroutine(ScreenChange(Screen_Statistic_manager, Screen_Menu));
-
-			};
-		}
-
-		return null;
-	}
-
-	private IEnumerable<Object> BindGamePuzzleScreen()
-	{
-		//test nur
-		for (int i = 0; i < wholePuzzlePicture.Count; ++i)
-		{
-			informationPicture.Add((true, false));
-			placedPictures.Add(-1);
-		}
-
-		//welches bild wird in dem spiel verwendet (holt es sich)
-		inizializeLists();
-
-		//bind root 
-		var root = Screen_GamePuzzle.visualTree;
-
-		var screenPuzzle = root.Q<VisualElement>("puzzle_piece");
-		if (placedPictures[index] != -1)
-		{
-			screenPuzzle.style.backgroundImage = Background.FromTexture2D(wholePuzzlePicture[placedPictures[index]].texture);
-		}
-
-		var indexlabel = root.Q<Label>("index_label");
-		if (indexlabel != null)
-		{
-			indexlabel.text = "Seite " + (index + 1) + " von " + wholePuzzlePicture.Count;
-		}
-
-		//set left button function
-		var joinButton = root.Q<Button>("left_button");
-		if (joinButton != null)
-		{
-			//button function
-			joinButton.clickable.clicked += () =>
-			{
-				Debug.Log("Links gedrückt");
-				//schauen dass das bild nicht aus dem array geht 
-				if (index > 0)
-				{
-					index--;
-					if (placedPictures[index] != -1)
-					{
-						screenPuzzle.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(wholePuzzlePicture[placedPictures[index]].texture);
-					}
-					else
-					{
-						screenPuzzle.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(null);
-					}
-				}
-				else if (index == 0)
-				{
-					if (placedPictures[index] != -1)
-					{
-						screenPuzzle.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(wholePuzzlePicture[placedPictures[index]].texture);
-					}
-					else
-					{
-						screenPuzzle.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(null);
-					}
-				}
-				//text updaten
-				indexlabel.text = "Seite " + (index + 1) + " von " + wholePuzzlePicture.Count;
-			};
-		}
-
-		//set right button function
-		joinButton = root.Q<Button>("right_button");
-		if (joinButton != null)
-		{
-			//button function
-			joinButton.clickable.clicked += () =>
-			{
-				Debug.Log("Rechts gedrückt");
-				if (index < wholePuzzlePicture.Count - 1)
-				{
-					index++;
-					if (placedPictures[index] != -1)
-					{
-						screenPuzzle.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(wholePuzzlePicture[placedPictures[index]].texture);
-					}
-					else
-					{
-						screenPuzzle.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(null);
-					}
-				}
-				//update text
-				indexlabel.text = "Seite " + (index + 1) + " von " + wholePuzzlePicture.Count;
-			};
-		}
-
-		//Owned PuzzlePieces
-		(int, int, int) pieces = getIndexOfOwnPuzzlePieces();
-		var part1 = root.Q<Button>("part1");
-		if (part1 != null)
-		{
-			if (pieces.Item1 != -1 && informationPicture[pieces.Item1].Item2 == false)
-			{
-				part1.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(wholePuzzlePicture[pieces.Item1].texture);
-				//button function
-				part1.clickable.clicked += () =>
-				{
-					Debug.Log("part1 gedrückt");
-					currentPicture = pieces.Item1;
-					StartCoroutine(ScreenChange(Screen_GamePuzzle, Screen_GamePuzzle_Picture));
-				};
-			}
-		}
-		var part2 = root.Q<Button>("part2");
-		if (part2 != null)
-		{
-			if (pieces.Item2 != -1 && informationPicture[pieces.Item2].Item2 == false)
-			{
-				part2.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(wholePuzzlePicture[pieces.Item2].texture);
-				//button function
-				part2.clickable.clicked += () =>
-				{
-					Debug.Log("part2 gedrückt");
-					currentPicture = pieces.Item2;
-					StartCoroutine(ScreenChange(Screen_GamePuzzle, Screen_GamePuzzle_Picture));
-				};
-			}
-		}
-		var part3 = root.Q<Button>("part3");
-		if (part3 != null)
-		{
-			if (pieces.Item3 != -1 && informationPicture[pieces.Item3].Item2 == false)
-			{
-				part3.style.backgroundImage = UnityEngine.UIElements.Background.FromTexture2D(wholePuzzlePicture[pieces.Item3].texture);
-				//button function
-				part3.clickable.clicked += () =>
-				{
-					Debug.Log("part3 gedrückt");
-					currentPicture = pieces.Item3;
-					StartCoroutine(ScreenChange(Screen_GamePuzzle, Screen_GamePuzzle_Picture));
-				};
-			}
-		}
-
-		return null;
-	}
-
-	private IEnumerable<Object> BindGamePuzzlePictureScreen()
-	{
-		//bind root 
-		var root = Screen_GamePuzzle_Picture.visualTree;
-
-		var screenPuzzle = root.Q<VisualElement>("puzzle_piece");
-		if (screenPuzzle != null && currentPicture != -1)
-		{
-			screenPuzzle.style.backgroundImage = Background.FromTexture2D(wholePuzzlePicture[currentPicture].texture);
-		}
-
-		//set left button function
-		var placebutton = root.Q<Button>("place_button");
-		if (placebutton != null)
-		{
-			//button function
-			placebutton.clickable.clicked += () =>
-			{
-				if (placedPictures[index] == -1)
-				{
-					informationPicture[currentPicture] = (true, true);
-					placedPictures[index] = currentPicture;
-				}
-				currentPicture = -1;
-				StartCoroutine(ScreenChange(Screen_GamePuzzle_Picture, Screen_GamePuzzle));
-			};
-		}
-
-		//set left button function
-		var backbutton = root.Q<Button>("back_button");
-		if (backbutton != null)
-		{
-			//button function
-			backbutton.clickable.clicked += () =>
-			{
-				currentPicture = -1;
-				StartCoroutine(ScreenChange(Screen_GamePuzzle_Picture, Screen_GamePuzzle));
-			};
-		}
-
-		return null;
-	}
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Game Logic
-
-	//Überprüft ob die Eingabe korrekt zum LogIn ist und logt dann in die entsprechende Session ein.
-	private bool checkLogIn(string session_key, string name)
-	{
-		//TODO Serverdaten abgleichen
-		return true;
-	}
-
-	//PuzzleGame
-
-	//Gibt die 3 Indices, der Teile die einem selbst gehören zurück, wenn man weniger als 3 Teile hat, dann steht -1 dort
-	private (int, int, int) getIndexOfOwnPuzzlePieces()
-	{
-		return (0, 1, 2);
-	}
-
-	private void inizializeLists()
-	{
-		//TODO 
-		//inizialisiert die Listen für das Spiel 
-		//circus und circusPicture
-		//holt vom server die information welches bild benutzt wird, weißt dann das bild (list<sprites>) dem circusPicture zu 
-		//und holt vom server immer die Informationen für circus ob was schon gesetzt wurde.
-	}
-
-	private void updateInformationPictureList()
-	{
-		//TODO
-		//hol vom server die liste InformationPicture und überschrieb sie auch im server 
-	}
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////
-	// In-Game Virtualized ListView Implementation
-
-	//LIST VIEW JOIN GAME /////////////////////////////////////////////////////////////////////////////
-
-	private void BindItemJoinGame(VisualElement element, int index)
-	{
-		var playerColor = Color.blue;
-		playerColor.a = 0.9f;
-		element.Q("icon").style.unityBackgroundImageTintColor = playerColor;
-	}
-
-	//LIST VIEW STATISTIC EMPLOYEE ///////////////////////////////////////////////////////////////////////////
-	private VisualElement MakeItemStatisticEmployee()
-	{
-		var element = statistic_employee_item.CloneTree();
-		return element;
-	}
-
-	private void BindItemStatisticEmployee(VisualElement element, int index)
-	{
-		element.Q<Label>("session-name").text = statisticsEmployee[index].name;
-
-		var playerColor = Color.blue;
-		playerColor.a = 0.9f;
-		element.Q("icon").style.unityBackgroundImageTintColor = playerColor;
-	}
-
-	//LIST VIEW OVERVIEW INGAME ///////////////////////////////////////////////////////////////////////////////
-	private VisualElement MakeItemGamePuzzleOverview()
-	{
-		var element = overview_item.CloneTree();
-		//element.schedule.Execute(() => UpdateOverview(element)).Every(200);
-		return element;
-	}
-
-	private void BindItemGamePuzzleOverview(VisualElement element, int index)
-	{
-		element.Q<Label>("game-name").text = "Game Jan";
-
-		var playerColor = Color.blue;
-		playerColor.a = 0.9f;
-		element.Q("icon").style.unityBackgroundImageTintColor = playerColor;
+			StartCoroutine(ScreenChange(Screen_Statistic_manager, Screen_Menu));
+		};
 	}
 }

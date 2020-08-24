@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="select-visual" style="width: 100%; height: 100%; align-items: center; justify-content: center; margin-left: 1%; margin-right: 1%; margin-top: 1%; margin-bottom: 1%; padding-left: 2%; padding-right: 0; padding-top: 2%; padding-bottom: 0;">
+        <Style src="/Assets/UI/Style/MenuStyle.uss" />
+        <ui:Button name="select-button" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; width: 100%; height: 100%; background-image: url(&apos;/Assets/Art/Sprites/PuzzlePicture/smashbanner/smash1.png&apos;);" />
+    </ui:VisualElement>
+</ui:UXML>

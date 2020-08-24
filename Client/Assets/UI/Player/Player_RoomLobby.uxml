@@ -1,12 +1,12 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:VisualElement name="background" class="MenuBackground">
         <Style src="/Assets/UI/Style/MenuStyle.uss" />
         <ui:VisualElement name="upper" class="UpperMenu">
             <ui:VisualElement name="upper-bar" class="UpperMenuBar" />
-            <ui:VisualElement name="upper-icon" class="UpperMenuIcon" style="background-image: url(&apos;/Assets/Art/Sprites/logo/logo3_zugeschnitten.png&apos;); -unity-background-image-tint-color: rgb(0, 0, 0); -unity-slice-bottom: 100;" />
+            <ui:VisualElement name="upper-icon" class="UpperMenuIcon" style="background-image: url(&apos;/Assets/Art/Sprites/logo/logo3_zugeschnitten.png&apos;); -unity-background-image-tint-color: rgb(0, 0, 0);" />
         </ui:VisualElement>
         <ui:VisualElement name="lower" class="LowerMenu">
-            <ui:ListView focusable="True" name="player-list" item-height="400" style="flex-grow: 1; flex-shrink: 0;" />
+            <ui:ListView focusable="True" name="player-list" item-height="200" selection-type="None" style="flex-grow: 1; flex-shrink: 0;" />
             <ui:VisualElement name="not-ready" class="MenuButton" style="display: none;">
                 <ui:Button text="not ready" name="not-ready-button" class="MenuButtonClickable">
                     <ui:VisualElement class="MenuButtonClickableIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/unchecked_cut.png&apos;);" />

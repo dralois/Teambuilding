@@ -1,0 +1,31 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="background" focusable="true" class="MenuBackground">
+        <Style src="/Assets/UI/Style/MenuStyle.uss" />
+        <ui:VisualElement name="leiste_oben" class="UpperMenu">
+            <ui:VisualElement name="leiste_bunt" class="UpperMenuBar" style="background-color: rgb(255, 0, 0);" />
+            <ui:VisualElement name="logo" focusable="true" class="UpperMenuIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/Game1.png&apos;);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="content_leiste_unten" class="LowerMenu" style="justify-content: space-around;">
+            <ui:VisualElement name="button" class="MenuButton">
+                <ui:Button text="join game" name="join_game_button" class="MenuButtonClickable">
+                    <ui:VisualElement name="logo_button" class="MenuButtonClickableIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/Game1.png&apos;);" />
+                </ui:Button>
+            </ui:VisualElement>
+            <ui:VisualElement name="button" class="MenuButton">
+                <ui:Button text="create game" name="create_game_button" class="MenuButtonClickable">
+                    <ui:VisualElement name="logo_button" class="MenuButtonClickableIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/Pusselteil.png&apos;);" />
+                </ui:Button>
+            </ui:VisualElement>
+            <ui:VisualElement name="button" class="MenuButton">
+                <ui:Button text="statistics" name="statistics_button" class="MenuButtonClickable">
+                    <ui:VisualElement name="logo_button" class="MenuButtonClickableIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/Statistic.png&apos;);" />
+                </ui:Button>
+            </ui:VisualElement>
+            <ui:VisualElement name="button" class="MenuButton">
+                <ui:Button text="settings" name="settings_button" class="MenuButtonClickable">
+                    <ui:VisualElement name="logo_button" class="MenuButtonClickableIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/Settings (2).png&apos;);" />
+                </ui:Button>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
