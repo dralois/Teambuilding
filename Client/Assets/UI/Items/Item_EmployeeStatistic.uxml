@@ -8,14 +8,14 @@
         </ui:VisualElement>
         <ui:VisualElement name="text" style="flex-grow: 1; font-size: 4%;">
             <ui:VisualElement name="oben" class="MenuTextInputLabel">
-                <ui:Label text="Game1" name="session-name" />
+                <ui:Label text="Session 25/08/20" name="session-name" style="font-size: 50%;" />
             </ui:VisualElement>
             <ui:VisualElement name="unten" class="MenuTextInputLabel" style="height: 100%; width: 100%; margin-top: 3%;">
                 <ui:VisualElement name="statistic-1" style="height: 30%; width: 100%; margin-top: 2%;">
-                    <ui:Label text="value 1" name="value1" />
+                    <ui:Label text="value 1" name="value1" style="font-size: 50%;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="statistic-2" style="height: 30%; width: 100%; margin-top: 2%;">
-                    <ui:Label text="value 2" name="value2" />
+                    <ui:Label text="value 2" name="value2" style="font-size: 50%;" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
