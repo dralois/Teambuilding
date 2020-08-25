@@ -235,9 +235,9 @@ class GameHandler(BaseHTTPRequestHandler):
             self.end_headers()
             answer = f'"gamestate": {str(gamestate)}'
             self.wfile.write(bytes(answer, "utf-8"))
-            answer = json.dumps({"items":places})
+            answer = json.dumps({"places":places})
             self.wfile.write(bytes(answer, "utf-8"))
-            answer = json.dumps({"items":selected})
+            answer = json.dumps({"selected":selected})
             self.wfile.write(bytes(answer, "utf-8"))
         elif gamestate == 3:
             self.send_header("places", json.dumps({"items" : places}))
@@ -245,15 +245,14 @@ class GameHandler(BaseHTTPRequestHandler):
             self.end_headers()
             answer = f'"gamestate": {str(gamestate)}'
             self.wfile.write(bytes(answer, "utf-8"))
-            answer = json.dumps({"items":places})
+            answer = json.dumps({"places":places})
             self.wfile.write(bytes(answer, "utf-8"))
-            answer = json.dumps({"items":selected})
+            answer = json.dumps({"selected":selected})
             self.wfile.write(bytes(answer, "utf-8"))
         else:
             self.send_header("success", str(False))
             self.end_headers()
-            answer = f'"success": False'
-            self.wfile.write(bytes(answer, "utf-8"))
+            self.wfile.write(b'"success": False')
 
     def START(self):
         global gamestate
