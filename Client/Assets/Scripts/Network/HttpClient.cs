@@ -4,6 +4,7 @@ using System.Collections;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 public class HttpClient : MonoBehaviour
 {
@@ -25,15 +26,12 @@ public class HttpClient : MonoBehaviour
 			{
 				if(!(request.isHttpError || request.isNetworkError))
 				{
-					var headers = request.GetResponseHeaders();
-					var response = "[" + Regex.Unescape(request.downloadHandler.text) + "]";
+					var response = request.downloadHandler.text;
+					var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(response);
 
-					Debug.Log(response);
-					dynamic values = JsonConvert.DeserializeObject(response);
-
-					if (headers != null)
+					if (values != null)
 					{
-						resultCallback(new Headers(headers), true);
+						resultCallback(new Headers(values), true);
 					}
 					else
 					{
