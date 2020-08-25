@@ -20,7 +20,6 @@ public class HttpClient : MonoBehaviour
 
 			if (request.isDone)
 			{
-				
 				if(request.responseCode == 200 && !(request.isHttpError || request.isNetworkError))
 				{
 					var headers = request.GetResponseHeaders();

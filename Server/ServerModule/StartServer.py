@@ -22,6 +22,12 @@ selected = []
 
 class GameHandler(BaseHTTPRequestHandler):
 
+    def do_OPTIONS(self):
+        self.send_response(200, "ok")
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header("Access-Control-Allow-Headers", "X-Requested-With")
+
     def do_GET(self):
         print(self.path)
         print(self.client_address)
@@ -46,6 +52,7 @@ class GameHandler(BaseHTTPRequestHandler):
         if hasattr(self, command):
             getattr(self, command)()
 
+        self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header("Manager", "ID")
         self.end_headers()
 
@@ -58,6 +65,8 @@ class GameHandler(BaseHTTPRequestHandler):
             getattr(self, command)()
         else:
             self.send_header("success", str(False))
+
+        self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
 
     def KILLME(self):
