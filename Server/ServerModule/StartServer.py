@@ -30,6 +30,7 @@ class GameHandler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Headers", "Accept, X-Access-Token, X-Application-Name, X-Request-Sent-Time")
 
     def do_GET(self):
+        print("GET")
         print(self.path)
         print(self.client_address)
         # print(self.headers)
@@ -53,11 +54,13 @@ class GameHandler(BaseHTTPRequestHandler):
         if hasattr(self, command):
             getattr(self, command)()
 
-        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Credentials", "true")
         self.send_header("Manager", "ID")
         self.end_headers()
 
     def do_POST(self):
+        print("POST")
         print(self.path)
         self.send_response_only(HTTPStatus.OK, "passt")
         print(self.headers)
@@ -67,7 +70,8 @@ class GameHandler(BaseHTTPRequestHandler):
         else:
             self.send_header("success", str(False))
 
-        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Credentials", "true")
         self.end_headers()
 
     def KILLME(self):
