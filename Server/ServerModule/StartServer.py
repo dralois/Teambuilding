@@ -67,6 +67,10 @@ class GameHandler(BaseHTTPRequestHandler):
         print("POST")
         print(self.path)
         self.send_response_only(HTTPStatus.OK, "passt")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Credentials", "true")
+        self.send_header("Access-Control-Allow-Headers", "Accept, X-Access-Token, X-Application-Name, X-Request-Sent-Time")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         print(self.headers)
         command = self.path.split("/")[1]
         self.send_header("Content-type", "text/plain")
@@ -76,8 +80,6 @@ class GameHandler(BaseHTTPRequestHandler):
             self.send_header("success", str(False))
             self.end_headers()
 
-        # self.send_header("Access-Control-Allow-Origin", "*")
-        # self.send_header("Access-Control-Allow-Credentials", "true")
 
     def KILLME(self):
         sys.exit(0)
@@ -299,9 +301,9 @@ class GameHandler(BaseHTTPRequestHandler):
                     self.send_header("places", json.dumps({"items" : places}))
                     self.send_header("range", json.dumps({"items" : list(picture_range)}))
                     self.end_headers()
-                    answer = json.dumps({"items" : places})
+                    answer = json.dumps({"places" : places})
                     self.wfile.write(bytes(answer,"utf-8"))
-                    answer = json.dumps({"items" : list(picture_range)})
+                    answer = json.dumps({"range" : list(picture_range)})
                     self.wfile.write(bytes(answer,"utf-8"))
 
 
@@ -419,9 +421,9 @@ class GameHandler(BaseHTTPRequestHandler):
                     self.send_header("places", json.dumps({"items" : places}))
                     self.send_header("selected", json.dumps({"items" : selected}))
                     self.end_headers()
-                    answer = json.dumps({"items" : places})
+                    answer = json.dumps({"places" : places})
                     self.wfile.write(bytes(answer, "utf-8"))
-                    answer = json.dumps({"items" : selected})
+                    answer = json.dumps({"selected" : selected})
                     self.wfile.write(bytes(answer, "utf-8"))
             except KeyError:
                 self.send_header("success", str(False))
