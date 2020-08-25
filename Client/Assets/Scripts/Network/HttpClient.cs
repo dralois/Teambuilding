@@ -23,7 +23,7 @@ public class HttpClient : MonoBehaviour
 
 			if (request.isDone && request.downloadHandler.isDone)
 			{
-				if(request.responseCode == 200 && !(request.isHttpError || request.isNetworkError))
+				if(!(request.isHttpError || request.isNetworkError))
 				{
 					var headers = request.GetResponseHeaders();
 					var response = "[" + Regex.Unescape(request.downloadHandler.text) + "]";

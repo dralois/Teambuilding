@@ -78,8 +78,8 @@ class GameHandler(BaseHTTPRequestHandler):
             getattr(self, command)()
         else:            
             self.send_header("success", str(False))
-            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
             self.end_headers()
+            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
 
 
     def KILLME(self):
@@ -103,14 +103,14 @@ class GameHandler(BaseHTTPRequestHandler):
             except (KeyError, TypeError):
                 self.send_header("success", str(False))
                 self.send_header("reason", "worng headers")
-                self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                 self.end_headers()
+                self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                 return
 
         self.send_header("success", str(success))
         self.send_header("pers_id", str(manager.identifier))
-        self.wfile.write(bytes(json.dumps({"success":True, "pers_id":str(manager.identifier)}),"utf-8"))
         self.end_headers()
+        self.wfile.write(bytes(json.dumps({"success":True, "pers_id":str(manager.identifier)}),"utf-8"))
 
     def JOINROOM(self):
         global gamestate
@@ -121,8 +121,8 @@ class GameHandler(BaseHTTPRequestHandler):
             if self.headers["room_id"] != room_key or gamestate != 1:
                 self.send_header("success", str(False))
                 self.send_header("reason", "wrong room or wrong gamestate")
-                self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                 self.end_headers()
+                self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                 return
             else:
                 print(self.headers["name"])
@@ -131,14 +131,14 @@ class GameHandler(BaseHTTPRequestHandler):
                 participants.items[identifier].set(identifier, self.headers["name"], False)
                 self.send_header("success", str(True))
                 self.send_header("pers_id", str(identifier))
-                self.wfile.write(bytes(json.dumps({"success":True, "pers_id":str(identifier)}),"utf-8"))
                 self.end_headers()
+                self.wfile.write(bytes(json.dumps({"success":True, "pers_id":str(identifier)}),"utf-8"))
 
         except KeyError:
             self.send_header("success", str(False))
             self.send_header("reason", "wrong format")
-            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
             self.end_headers()
+            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
             return
 
     def READY(self):
@@ -148,16 +148,16 @@ class GameHandler(BaseHTTPRequestHandler):
         if gamestate != 1:
             self.send_header("success", str(False))
             self.send_header("reason", "wrong gamestate")
-            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
             self.end_headers()
+            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
             return
         else:
             try:
                 if int(self.headers["pers_id"]) not in participants.items or self.headers["room_id"] != room_key:
                     self.send_header("success", str(False))
                     self.send_header("reason", "wrong format")
-                    self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                     self.end_headers()
+                    self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                     return
                 else:
                     if self.headers["ready"] == "True":
@@ -172,14 +172,14 @@ class GameHandler(BaseHTTPRequestHandler):
                         if user.ready:
                             ready += 1
                     self.send_header("no_ready", str(ready))
-                    self.wfile.write(bytes(json.dumps({"success":True}),"utf-8"))
                     self.end_headers()
+                    self.wfile.write(bytes(json.dumps({"success":True}),"utf-8"))
 
             except KeyError:
                 self.send_header("success", str(False))
                 self.send_header("reason", "wrong format")
-                self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                 self.end_headers()
+                self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                 return
 
     def RESET(self):
@@ -197,43 +197,43 @@ class GameHandler(BaseHTTPRequestHandler):
             room_key = ""
             identifier = 0
             self.send_header("success", str(True))
-            self.wfile.write(bytes(json.dumps({"success":True}),"utf-8"))
             self.end_headers()
+            self.wfile.write(bytes(json.dumps({"success":True}),"utf-8"))
 
         except KeyError:
             self.send_header("success", str(False))
             self.send_header("reason", "wrong format")
-            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
             self.end_headers()
+            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
             return
 
     def UPDATE(self):
         global gamestate
         self.send_header("gamestate", str(gamestate))
         if gamestate == 0:
-            self.wfile.write(bytes(json.dumps({"gamestate":str(gamestate)}),"utf-8"))
             self.end_headers()
+            self.wfile.write(bytes(json.dumps({"gamestate":str(gamestate)}),"utf-8"))
             return
         elif gamestate == 1:
             global participants
             self.send_header("participants", ParticipantEncoder().encode(participants))
-            self.wfile.write(bytes(json.dumps({"gamestate":str(gamestate), "participants":ParticipantEncoder().encode(participants)}),"utf-8"))
             self.end_headers()
+            self.wfile.write(bytes(json.dumps({"gamestate":str(gamestate), "participants":ParticipantEncoder().encode(participants)}),"utf-8"))
 
         elif gamestate == 2:
             self.send_header("places", json.dumps({"items" : places}))
             self.send_header("selected", json.dumps({"items" : selected}))
-            self.wfile.write(bytes(json.dumps({"gamestate":str(gamestate), "places":places, "selected":selected}),"utf-8"))
             self.end_headers() 
+            self.wfile.write(bytes(json.dumps({"gamestate":str(gamestate), "places":places, "selected":selected}),"utf-8"))
         elif gamestate == 3:
             self.send_header("places", json.dumps({"items" : places}))
             self.send_header("selected", json.dumps({"items" : selected}))
-            self.wfile.write(bytes(json.dumps({"gamestate":str(gamestate), "places":places, "selected":selected}),"utf-8"))
             self.end_headers()
+            self.wfile.write(bytes(json.dumps({"gamestate":str(gamestate), "places":places, "selected":selected}),"utf-8"))
         else:
             self.send_header("success", str(False))
-            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
             self.end_headers()
+            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
 
     def START(self):
         global gamestate
@@ -243,24 +243,24 @@ class GameHandler(BaseHTTPRequestHandler):
         if gamestate != 1:
             self.send_header("success", str(False))
             self.send_header("reason", "wrong gamestate")
-            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
             self.end_headers()
+            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
             return
         else:
             try:
                 if int(self.headers["pers_id"]) != manager.identifier or self.headers["room_id"] != room_key:
                     self.send_header("success", str(False))
                     self.send_header("reason", "wrong room or not manager")
-                    self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                     self.end_headers()
+                    self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                     return
                 else:
                     for _,user in participants.items.items():
                         if not user.ready:
                             self.send_header("success", str(False))
                             self.send_header("reason", "not everyone is ready")
-                            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                             self.end_headers()
+                            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                             return
                     gamestate += 1
                     if manager.picture == 1:
@@ -270,8 +270,8 @@ class GameHandler(BaseHTTPRequestHandler):
                     else:
                         self.send_header("success", str(False))
                         self.send_header("reason", "picture does not exist")
-                        self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                         self.end_headers()
+                        self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                         return
                     global places
                     for _,user in participants.items.items():
@@ -283,15 +283,15 @@ class GameHandler(BaseHTTPRequestHandler):
                     self.send_header("success", str(True))
                     self.send_header("places", json.dumps({"items" : places}))
                     self.send_header("range", json.dumps({"items" : list(picture_range)}))
-                    self.wfile.write(bytes(json.dumps({"places":places, "range":list(picture_range)}),"utf-8"))
                     self.end_headers()                    
+                    self.wfile.write(bytes(json.dumps({"places":places, "range":list(picture_range)}),"utf-8"))
 
 
             except KeyError:
                 self.send_header("success", str(False))
                 self.send_header("reason", "wrong format")
-                self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                 self.end_headers()
+                self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                 return
 
     def GETSTARTINFO(self):
@@ -302,16 +302,16 @@ class GameHandler(BaseHTTPRequestHandler):
         if gamestate != 2:
             self.send_header("success", str(False))
             self.send_header("reason", "wrong gamestate")            
-            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
             self.end_headers()
+            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
             return
         else:
             try:
                 if int(self.headers["pers_id"]) not in participants.items or self.headers["room_id"] != room_key:
                     self.send_header("success", str(False))
                     self.send_header("reason", "wrong room or not manager")                    
-                    self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                     self.end_headers()
+                    self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                     return
                 else:
                     global places
@@ -319,13 +319,13 @@ class GameHandler(BaseHTTPRequestHandler):
                     self.send_header("places", json.dumps({"items" : places}))
                     self.send_header("picture", str(manager.picture))
                     self.send_header("range", json.dumps({"items" : list(picture_range)}))                    
-                    self.wfile.write(bytes(json.dumps({"places":{"items":places}, "range":{"items":list(picture_range)}}),"utf-8"))
                     self.end_headers()
+                    self.wfile.write(bytes(json.dumps({"places":{"items":places}, "range":{"items":list(picture_range)}}),"utf-8"))
             except KeyError:
                 self.send_header("success", str(False))
                 self.send_header("reason", "wrong format")                
-                self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                 self.end_headers()
+                self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                 return
 
     def SUBMITPLACE(self):
@@ -335,45 +335,45 @@ class GameHandler(BaseHTTPRequestHandler):
         if gamestate != 2:
             self.send_header("success", str(False))
             self.send_header("reason", "wrong gamestate")            
-            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
             self.end_headers()
+            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
             return
         else:
             try:
                 if int(self.headers["pers_id"]) not in places or self.headers["room_id"] != room_key:
                     self.send_header("success", str(False))
                     self.send_header("reason", "wrong room or not manager")                    
-                    self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                     self.end_headers()
+                    self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                     return
                 else:
                     global selected
                     if self.headers["place"] == "-1":
                         selected[selected.index(self.headers["pers_id"])] = -1
                         self.send_header("success", str(True))                        
-                        self.wfile.write(bytes(json.dumps({"success":True}),"utf-8"))
                         self.end_headers()
+                        self.wfile.write(bytes(json.dumps({"success":True}),"utf-8"))
                     elif selected[int(self.headers["place"])] is -1:
                         if self.headers["pers_id"] in selected:
                             selected[selected.index(self.headers["pers_id"])] = -1
                         selected[int(self.headers["place"])] = int(self.headers["pers_id"])
                         self.send_header("success", str(True))                        
-                        self.wfile.write(bytes(json.dumps({"success":True}),"utf-8"))
                         self.end_headers()
+                        self.wfile.write(bytes(json.dumps({"success":True}),"utf-8"))
                     elif self.headers["pers_id"] == selected[int(self.headers["place"])]:
                         self.send_header("success", str(True))
-                        self.wfile.write(bytes(json.dumps({"success":True}),"utf-8"))
                         self.end_headers()
+                        self.wfile.write(bytes(json.dumps({"success":True}),"utf-8"))
                     else:
                         self.send_header("success", str(False))
                         self.send_header("reason", "already occupied")
-                        self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                         self.end_headers()
+                        self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
             except KeyError:
                 self.send_header("success", str(False))
                 self.send_header("reason", "wrong format")
-                self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                 self.end_headers()
+                self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                 return
 
     def END(self):
@@ -384,16 +384,16 @@ class GameHandler(BaseHTTPRequestHandler):
         if gamestate != 2:
             self.send_header("success", str(False))
             self.send_header("reason", "wrong gamestate")
-            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
             self.end_headers()
+            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
             return
         else:
             try:
                 if int(self.headers["pers_id"]) != manager.identifier or self.headers["room_id"] != room_key:
                     self.send_header("success", str(False))
                     self.send_header("reason", "wrong room or not manager")
-                    self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                     self.end_headers()
+                    self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                     return
                 else:
                     global selected
@@ -401,22 +401,22 @@ class GameHandler(BaseHTTPRequestHandler):
                         if user is None:
                             self.send_header("success", str(False))
                             self.send_header("reason", "Not everyone has selected a place")
-                            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                             self.end_headers()
+                            self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                             return
                     gamestate += 1
 
                     self.send_header("success", str(True))
                     self.send_header("places", json.dumps({"items" : places}))
                     self.send_header("selected", json.dumps({"items" : selected}))
-                    self.wfile.write(bytes(json.dumps({"success":True,"places":{"items":places}, "range":{"items":list(picture_range)}}),"utf-8"))
                     self.end_headers()
+                    self.wfile.write(bytes(json.dumps({"success":True,"places":{"items":places}, "range":{"items":list(picture_range)}}),"utf-8"))
             except KeyError:
                 self.send_header("success", str(False))
                 self.send_header("reason", "wrong format")
                 self.send_header("success", str(False))
-                self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                 self.end_headers()
+                self.wfile.write(bytes(json.dumps({"success":False}),"utf-8"))
                 return
 
     def GETRESULT(self):
