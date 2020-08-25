@@ -30,6 +30,7 @@ class GameHandler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Request-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Accept, X-Access-Token, X-Application-Name, X-Request-Sent-Time, room_id, picture, success, pers_id, name, ready, no_user, no_ready, gamestate, participants, places, selected, range, reason")
         self.send_header("Access-Control-Request-Headers", "Accept, X-Access-Token, X-Application-Name, X-Request-Sent-Time, room_id, picture, success, pers_id, name, ready, no_user, no_ready, gamestate, participants, places, selected, range, reason")
+        self.end_headers()
 
     def do_GET(self):
         print("GET")
