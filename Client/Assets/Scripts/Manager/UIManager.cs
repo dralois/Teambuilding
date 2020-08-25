@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
+using InputField = UnityEngine.UI.InputField;
 
 public class UIManager : MonoBehaviour
 {
+
+	public Canvas Screen_TextInput;
+	public InputField Input_TextInput;
+	[Space]
 	public UIDocument Screen_Start;
 	public UIDocument Screen_Menu;
 	public UIDocument Screen_Settings;
@@ -16,14 +21,12 @@ public class UIManager : MonoBehaviour
 	public UIDocument Screen_GamePuzzle;
 	public UIDocument Screen_Statistic_manager;
 	public UIDocument Screen_Statistic_employee;
-
-	// List view items
+	[Space]
 	public VisualTreeAsset player_ready_item;
 	public VisualTreeAsset puzzle_piece_item;
 	public VisualTreeAsset statistic_employee_item;
 	public VisualTreeAsset statistic_manager_item;
-
-	// Puzzles
+	[Space]
 	public Puzzle[] puzzles;
 
 	// Listen für die ListViews
@@ -36,9 +39,12 @@ public class UIManager : MonoBehaviour
 	private string roomId;
 	private bool isManager;
 
+	private System.Action<string> onText = null;
+
 	private void OnEnable()
 	{
 		//Bind Screens
+		BindTextInput();
 		BindStartScreen();
 		BindMenuScreen();
 		BindSettingsScreen();
@@ -69,7 +75,6 @@ public class UIManager : MonoBehaviour
 	IEnumerator ScreenChange(UIDocument from, UIDocument to)
 	{
 		from.rootVisualElement.style.display = DisplayStyle.None;
-
 		to.enabled = true;
 
 		yield return null;
@@ -94,6 +99,20 @@ public class UIManager : MonoBehaviour
 		from.enabled = false;
 	}
 
+	private void TextChange(UIDocument doc, bool enableText)
+	{
+		if (enableText)
+		{
+			Screen_TextInput.gameObject.SetActive(true);
+			doc.gameObject.SetActive(false);
+		}
+		else
+		{
+			Screen_TextInput.gameObject.SetActive(false);
+			doc.gameObject.SetActive(true);
+		}
+	}
+
 	private void GoToStartScreen()
 	{
 		SetScreenEnableState(Screen_Start, true);
@@ -108,7 +127,7 @@ public class UIManager : MonoBehaviour
 		SetScreenEnableState(Screen_Statistic_manager, false);
 	}
 
-	void SetScreenEnableState(UIDocument screen, bool state)
+	private void SetScreenEnableState(UIDocument screen, bool state)
 	{
 		if (state)
 		{
@@ -125,6 +144,16 @@ public class UIManager : MonoBehaviour
 	///////////////////////////////////////////////////////////////////////////////
 	///Bind 
 	///////////////////////////////////////////////////////////////////////////////
+
+	private void BindTextInput()
+	{
+		Input_TextInput.onEndEdit.AddListener(new UnityEngine.Events.UnityAction<string>((s) =>
+		{
+			onText?.Invoke(s);
+			onText = null;
+			Input_TextInput.text = "";
+		}));
+	}
 
 	private void BindStartScreen()
 	{
@@ -176,18 +205,22 @@ public class UIManager : MonoBehaviour
 		//bind root 
 		var root = Screen_Settings.rootVisualElement;
 
-		//TODO
-		//Name input 
-
-		//set button function create game
-		root.Q<Button>("logout_button").clickable.clicked += () =>
+		// Name
+		root.Q<Button>("input_name").clickable.clicked += () =>
 		{
-			//TODO
-			//alle daten müssen gelöscht werden von der vorherigen Session
-			StartCoroutine(ScreenChange(Screen_Settings, Screen_JoinRoom));
+			onText = (s) =>
+			{
+				root.Q<Button>("input_name").text = s;
+				TextChange(Screen_Settings, false);
+			};
+			TextChange(Screen_Settings, true);
 		};
 
-		//set button function create game
+		root.Q<Button>("logout_button").clickable.clicked += () =>
+		{
+			StartCoroutine(ScreenChange(Screen_Settings, Screen_Menu));
+		};
+
 		root.Q<Button>("back_button").clickable.clicked += () =>
 		{
 			StartCoroutine(ScreenChange(Screen_Settings, Screen_Menu));
@@ -215,30 +248,45 @@ public class UIManager : MonoBehaviour
 			return curr;
 		};
 
+		// Room code
+		root.Q<Button>("input_roomid").clickable.clicked += () =>
+		{
+			onText = (s) =>
+			{
+				root.Q<Button>("input_roomid").text = s;
+				TextChange(Screen_CreateRoom, false);
+			};
+			TextChange(Screen_CreateRoom, true);
+		};
+
 		// Room Erstellung
-		var createButton = root.Q<Button>("create_room_button");
-		createButton.clickable.clicked += () =>
+		root.Q<Button>("create_room_button").clickable.clicked += () =>
 		{
 			// Room Code
-			roomId = root.Q<TextField>("input_roomid").value;
+			roomId = root.Q<Button>("input_roomid").text;
 			// Sende Befehl
 			StartCoroutine(HttpClient.CallMethod("CREATEROOM",
 				new Headers().AddHeader("picture", (lv.selectedIndex + 1).ToString()).AddHeader("room_id", roomId),
-				(result) =>
+				(result, worked) =>
 				{
-					if (result.GetHeader<bool>("success"))
+					if (worked)
 					{
-						isManager = true;
-						playerId = result.GetHeader<string>("pers_id");
-						StartCoroutine(ScreenChange(Screen_CreateRoom, Screen_StartGame));
+						if (result.GetHeader<bool>("success"))
+						{
+							isManager = true;
+							playerId = result.GetHeader<string>("pers_id");
+							StartCoroutine(ScreenChange(Screen_CreateRoom, Screen_StartGame));
+						}
 					}
 				}
 			));
 		};
 
 		// Zum Menue
-		var backButton = root.Q<Button>("back_button");
-		backButton.clickable.clicked += () => StartCoroutine(ScreenChange(Screen_CreateRoom, Screen_Menu));
+		root.Q<Button>("back_button").clickable.clicked += () =>
+		{
+			StartCoroutine(ScreenChange(Screen_CreateRoom, Screen_Menu));
+		};
 	}
 
 	private void BindStartGameScreen()
@@ -269,28 +317,31 @@ public class UIManager : MonoBehaviour
 		{
 			StartCoroutine(HttpClient.CallMethod("UPDATE",
 				new Headers(),
-				(result) =>
+				(result, worked) =>
 				{
-					var fetched = JSONArray.FromJson<Player>(result.GetHeader<string>("participants"));
-					foreach (var player in fetched)
+					if (worked)
 					{
-						if (!playerlist.Exists(p =>
+						var fetched = JSONArray.FromJson<Player>(result.GetHeader<string>("participants"));
+						foreach (var player in fetched)
 						{
-							if (p.identifier == player.identifier)
+							if (!playerlist.Exists(p =>
 							{
-								p.name = player.name;
-								p.ready = player.ready;
-								return true;
+								if (p.identifier == player.identifier)
+								{
+									p.name = player.name;
+									p.ready = player.ready;
+									return true;
+								}
+								return false;
+							})
+							)
+							{
+								playerlist.Add(player);
+								lv.Refresh();
 							}
-							return false;
-						})
-						)
-						{
-							playerlist.Add(player);
-							lv.Refresh();
 						}
+						startPossible = playerlist.All(p => p.ready);
 					}
-					startPossible = playerlist.All(p => p.ready);
 				}
 			));
 		}).Every(updateInterval).Until(() => startGame);
@@ -300,8 +351,13 @@ public class UIManager : MonoBehaviour
 		{
 			if (startPossible)
 			{
-				startGame = true;
-				StartCoroutine(ScreenChange(Screen_StartGame, Screen_GamePuzzle));
+				StartCoroutine(HttpClient.CallMethod("UPDATE",
+				new Headers().AddHeader("pers_id", playerId).AddHeader("room_id", roomId),
+				(result, worked) =>
+				{
+					startGame = true;
+					StartCoroutine(ScreenChange(Screen_StartGame, Screen_GamePuzzle));
+				}));
 			}
 		};
 	}
@@ -311,29 +367,52 @@ public class UIManager : MonoBehaviour
 		//bind root 
 		var root = Screen_JoinRoom.rootVisualElement;
 
+		// Room code
+		root.Q<Button>("input_roomkey").clickable.clicked += () =>
+		{
+			onText = (s) =>
+			{
+				root.Q<Button>("input_roomkey").text = s;
+				TextChange(Screen_JoinRoom, false);
+			};
+			TextChange(Screen_JoinRoom, true);
+		};
+
+		// Name
+		root.Q<Button>("input_name").clickable.clicked += () =>
+		{
+			onText = (s) =>
+			{
+				root.Q<Button>("input_name").text = s;
+				TextChange(Screen_JoinRoom, false);
+			};
+			TextChange(Screen_JoinRoom, true);
+		};
+
 		// Join room
 		root.Q<Button>("join-room-button").clickable.clicked += () =>
 		{
 			//test
-			roomId = root.Q<TextField>("input_roomkey").value;
-			var name = root.Q<TextField>("input_name").value;
+			roomId = root.Q<Button>("input_roomkey").text;
+			var name = root.Q<Button>("input_name").text;
 
 			StartCoroutine(HttpClient.CallMethod("JOINROOM",
 				new Headers().AddHeader("room_id", roomId).AddHeader("name", name),
-				(result) =>
+				(result, worked) =>
 				{
-					playerId = result.GetHeader<string>("pers_id");
+					if (worked)
+					{
+						playerId = result.GetHeader<string>("pers_id");
+						StartCoroutine(ScreenChange(Screen_JoinRoom, Screen_RoomLobby));
+					}
 				}
 			));
-
-			StartCoroutine(ScreenChange(Screen_JoinRoom, Screen_RoomLobby));
 		};
 
 		// Zum Menue
 		root.Q<Button>("back_button").clickable.clicked += () =>
 		{
 			StartCoroutine(ScreenChange(Screen_JoinRoom, Screen_Menu));
-
 		};
 	}
 
@@ -364,34 +443,38 @@ public class UIManager : MonoBehaviour
 		{
 			StartCoroutine(HttpClient.CallMethod("UPDATE",
 				new Headers(),
-				(result) =>
+				(result, worked) =>
 				{
-					startGame = result.GetHeader<int>("gamestate") == 2;
-					if (startGame)
+					if (worked)
 					{
-						StartCoroutine(ScreenChange(Screen_RoomLobby, Screen_GamePuzzle));
-					}
-					else
-					{
-						var fetched = JSONArray.FromJson<Player>(result.GetHeader<string>("participants"));
-						foreach (var player in fetched)
+						startGame = result.GetHeader<int>("gamestate") == 2;
+
+						if (startGame)
 						{
-							if (!playerlist.Exists(p =>
-							{
-								if (p.identifier == player.identifier)
-								{
-									p.name = player.name;
-									p.ready = player.ready;
-									return true;
-								}
-								return false;
-							})
-							)
-							{
-								playerlist.Add(player);
-							}
+							StartCoroutine(ScreenChange(Screen_RoomLobby, Screen_GamePuzzle));
 						}
-						lv.Refresh();
+						else
+						{
+							var fetched = JSONArray.FromJson<Player>(result.GetHeader<string>("participants"));
+							foreach (var player in fetched)
+							{
+								if (!playerlist.Exists(p =>
+								{
+									if (p.identifier == player.identifier)
+									{
+										p.name = player.name;
+										p.ready = player.ready;
+										return true;
+									}
+									return false;
+								})
+								)
+								{
+									playerlist.Add(player);
+								}
+							}
+							lv.Refresh();
+						}
 					}
 				}
 			));
@@ -403,12 +486,15 @@ public class UIManager : MonoBehaviour
 		// Ready setzen
 		ready.Q<Button>("ready-button").clickable.clicked += () =>
 		{
-			notready.style.display = DisplayStyle.Flex;
-			ready.style.display = DisplayStyle.None;
 			StartCoroutine(HttpClient.CallMethod("READY",
 				new Headers().AddHeader("room_id", roomId).AddHeader("pers_id", playerId).AddHeader("ready", true.ToString()),
-				(result) =>
+				(result, worked) =>
 				{
+					if (worked)
+					{
+						notready.style.display = DisplayStyle.Flex;
+						ready.style.display = DisplayStyle.None;
+					}
 				}
 			));
 		};
@@ -416,12 +502,15 @@ public class UIManager : MonoBehaviour
 		// Unready setzen
 		notready.Q<Button>("not-ready-button").clickable.clicked += () =>
 		{
-			notready.style.display = DisplayStyle.None;
-			ready.style.display = DisplayStyle.Flex;
 			StartCoroutine(HttpClient.CallMethod("READY",
 				new Headers().AddHeader("room_id", roomId).AddHeader("pers_id", playerId).AddHeader("ready", false.ToString()),
-				(result) =>
+				(result, worked) =>
 				{
+					if (worked)
+					{
+						notready.style.display = DisplayStyle.None;
+						ready.style.display = DisplayStyle.Flex;
+					}
 				}
 			));
 		};
@@ -446,8 +535,12 @@ public class UIManager : MonoBehaviour
 		statisticsEmployee.Add(s);
 
 		//in list view anzeigen welches spiel vom manager ausgewählt wurde
-		var listView = root.Q<ListView>("statistic-list");
-		listView.makeItem = () => statistic_employee_item.CloneTree();
+		var listView = root.Q<ListView>("statistic");
+		listView.makeItem = () =>
+		{
+			var newEle = statistic_employee_item.CloneTree();
+			return newEle;
+		};
 		listView.bindItem = (e, i) =>
 		{
 			e.Q<Label>("session-name").text = statisticsEmployee[i].name;
@@ -485,8 +578,12 @@ public class UIManager : MonoBehaviour
 
 		//TODO
 		//list view implementieren mit 
-		var listView = root.Q<ListView>("statistic-list");
-		listView.makeItem = () => statistic_manager_item.CloneTree();
+		var listView = root.Q<ListView>("statistic");
+		listView.makeItem = () =>
+		{
+			var newEle = statistic_manager_item.CloneTree();
+			return newEle;
+		};
 		listView.bindItem = (e, i) =>
 		{
 			var playerColor = Color.blue;
@@ -494,7 +591,7 @@ public class UIManager : MonoBehaviour
 			e.Q("icon").style.unityBackgroundImageTintColor = playerColor;
 			e.Q<Label>("session-name").text = statisticsEmployee[i].name;
 		};
-		listView.itemsSource = statisticsEmployee;
+		listView.itemsSource = statisticsManager;
 		listView.Refresh();
 
 		//set button function create game

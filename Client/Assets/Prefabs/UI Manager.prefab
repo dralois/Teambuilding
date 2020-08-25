@@ -44,15 +44,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Screen_Start: {fileID: 0}
-  Screen_JoinSession: {fileID: 0}
   Screen_Menu: {fileID: 0}
+  Screen_Settings: {fileID: 0}
+  Screen_JoinRoom: {fileID: 0}
+  Screen_RoomLobby: {fileID: 0}
   Screen_CreateRoom: {fileID: 0}
   Screen_StartGame: {fileID: 0}
-  Screen_GameLobby: {fileID: 0}
-  Screen_Settings: {fileID: 0}
+  Screen_GamePuzzle: {fileID: 0}
   Screen_Statistic_manager: {fileID: 0}
   Screen_Statistic_employee: {fileID: 0}
-  Screen_GamePuzzle: {fileID: 0}
   player_ready_item: {fileID: 9197481963319205126, guid: bb1b7363974e92f4cb8d61c741e0b875,
     type: 3}
   puzzle_piece_item: {fileID: 9197481963319205126, guid: 45c27e9fc92e90a44b1ab787c50723fb,

@@ -6,7 +6,7 @@ public class HttpClient : MonoBehaviour
 {
 	public static string serverAdress = "http://212.83.56.221:8080/";
 
-	public static IEnumerator CallMethod(string method, Headers data, System.Action<Headers> resultCallback)
+	public static IEnumerator CallMethod(string method, Headers data, System.Action<Headers, bool> resultCallback)
 	{
 		string uri = serverAdress + UnityWebRequest.EscapeURL(method);
 		using (var request = UnityWebRequest.Post(uri, ""))
@@ -20,26 +20,27 @@ public class HttpClient : MonoBehaviour
 
 			if (request.isDone)
 			{
-				if(request.responseCode == 200)
+				
+				if(request.responseCode == 200 && !(request.isHttpError || request.isNetworkError))
 				{
 					var headers = request.GetResponseHeaders();
 					if(headers != null)
 					{
-						resultCallback(new Headers(headers));
+						resultCallback(new Headers(headers), true);
 					}
 					else
 					{
-						resultCallback(new Headers());
+						resultCallback(new Headers(), false);
 					}
 				}
 				else
 				{
-					Debug.LogError($"Response error: {request.responseCode}");
+					resultCallback(new Headers(), false);
 				}
 			}
 			else
 			{
-				Debug.LogError($"Request error: {request.error}");
+				resultCallback(new Headers(), false);
 			}
 		}
 	}

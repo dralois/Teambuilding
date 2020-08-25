@@ -8,7 +8,7 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="content_leiste_unten" class="LowerMenu" style="height: 75%; width: 100%; padding-left: 7%; padding-right: 7%; padding-top: 7%; padding-bottom: 7%; justify-content: flex-end;">
-            <ui:ListView focusable="True" name="statistic-list" item-height="200" style="flex-grow: 1;" />
+            <ui:ListView focusable="True" name="statistic" item-height="200" style="flex-grow: 1;" />
             <ui:VisualElement name="button" class="MenuButton">
                 <ui:Button text="statistic" name="statistic_button" class="MenuButtonClickable">
                     <ui:VisualElement name="logo_button" class="MenuButtonClickableIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/Statistic.png&apos;);" />

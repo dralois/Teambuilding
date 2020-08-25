@@ -14,12 +14,10 @@
                 </ui:Button>
             </ui:VisualElement>
             <ui:VisualElement name="input" style="justify-content: center; flex-grow: 1;">
-                <ui:VisualElement class="MenuTextInput">
-                    <ui:Label name="input_name" class="MenuTextInputField" />
-                </ui:VisualElement>
+                <ui:Button name="input_name" class="MenuTextInputField" style="height: 20%;" />
                 <ui:VisualElement name="button" class="MenuButton" style="height: 20%; max-height: 30%; min-height: 20%;">
                     <ui:Button text="change name" name="changename_button" class="MenuButtonClickable">
-                        <ui:VisualElement name="icon" class="MenuButtonClickableIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/Settings (2).png&apos;);" />
+                        <ui:VisualElement name="icon" class="MenuButtonClickableIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/User.png&apos;);" />
                     </ui:Button>
                 </ui:VisualElement>
             </ui:VisualElement>

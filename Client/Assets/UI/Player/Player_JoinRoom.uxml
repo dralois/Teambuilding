@@ -10,11 +10,11 @@
         <ui:VisualElement name="content_leiste_unten" class="LowerMenu">
             <ui:VisualElement name="VisualElement" style="background-color: rgb(209, 209, 209); border-top-left-radius: 7%; border-bottom-left-radius: 7%; border-top-right-radius: 7%; border-bottom-right-radius: 7%; justify-content: space-around; flex-grow: 1; align-items: stretch;">
                 <ui:VisualElement name="room-key" class="MenuTextInput">
-                    <ui:Label text="&#10;" name="input_roomkey" class="MenuTextInputField" />
+                    <ui:Button name="input_roomkey" class="MenuTextInputField" />
                     <ui:Label text="room key" name="label_input" class="MenuTextInputLabel" />
                 </ui:VisualElement>
                 <ui:VisualElement name="name" class="MenuTextInput">
-                    <ui:Label text="&#10;" name="input_name" class="MenuTextInputField" />
+                    <ui:Button name="input_name" class="MenuTextInputField" />
                     <ui:Label text="name" name="label_input" class="MenuTextInputLabel" />
                 </ui:VisualElement>
             </ui:VisualElement>
