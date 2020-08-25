@@ -761,7 +761,7 @@ public class UIManager : MonoBehaviour
 
 		//test
 		StatisticEmployee s = new StatisticEmployee();
-		s.createStatistic("erstens", 1);
+		s.createStatistic("25/08/20", 1);
 		statisticsEmployee.Add(s);
 
 		//in list view anzeigen welches spiel vom manager ausgewählt wurde

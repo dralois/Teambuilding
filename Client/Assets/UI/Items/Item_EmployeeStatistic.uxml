@@ -1,21 +1,21 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <ui:VisualElement name="item" style="background-color: rgb(153, 153, 255); border-top-left-radius: 100px; border-bottom-left-radius: 100px; border-top-right-radius: 100px; border-bottom-right-radius: 100px; max-height: 30%; min-height: 20%; flex-direction: row; height: 100%; width: 100%;">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement style="height: 80%; background-color: rgba(122, 122, 204, 255); border-top-left-radius: 30px; border-bottom-left-radius: 30px; border-top-right-radius: 30px; border-bottom-right-radius: 30px; flex-direction: row; align-items: flex-start; justify-content: flex-start; margin-top: 5%;">
         <Style src="/Assets/UI/Style/MenuStyle.uss" />
         <ui:VisualElement name="game-logo" style="width: 30%; height: 100%; align-items: center; justify-content: center;">
             <ui:VisualElement name="background-logo" style="width: 80%; height: 80%; align-items: center; justify-content: center; background-color: rgb(209, 209, 209); border-top-left-radius: 20%; border-bottom-left-radius: 20%; border-top-right-radius: 20%; border-bottom-right-radius: 20%; margin-left: 5%; margin-right: 5%; margin-top: 5%; margin-bottom: 5%; left: 5%;">
                 <ui:VisualElement name="icon" style="height: 90%; width: 80%; background-color: rgba(183, 97, 97, 0); background-image: url(&apos;/Assets/Art/Sprites/Objects/Statistic.png&apos;); -unity-background-scale-mode: scale-to-fit; padding-left: 5%; padding-right: 5%; padding-top: 5%; padding-bottom: 5%;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="text" style="flex-grow: 1;">
+        <ui:VisualElement name="text" style="flex-grow: 1; height: 100%;">
             <ui:VisualElement name="oben" class="MenuTextInputLabel">
-                <ui:Label text="Game1" name="session-name" />
+                <ui:Label text="Session 25/08/20" name="session-name" style="font-size: 50%;" />
             </ui:VisualElement>
             <ui:VisualElement name="unten" class="MenuTextInputLabel" style="height: 100%; width: 100%; margin-top: 3%;">
                 <ui:VisualElement name="statistic-1" style="height: 30%; width: 100%; margin-top: 2%;">
-                    <ui:Label text="value 1" name="value1" />
+                    <ui:Label text="value 1" name="value1" style="font-size: 50%;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="statistic-2" style="height: 30%; width: 100%; margin-top: 2%;">
-                    <ui:Label text="value 2" name="value2" />
+                    <ui:Label text="value 2" name="value2" style="font-size: 50%;" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
