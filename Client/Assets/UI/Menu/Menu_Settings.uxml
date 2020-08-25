@@ -1,10 +1,10 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
     <ui:VisualElement name="background" focusable="true" class="MenuBackground">
         <Style src="/Assets/UI/Style/MenuStyle.uss" />
         <ui:VisualElement name="leiste_oben" class="UpperMenu">
             <ui:VisualElement name="leiste_bunt" class="UpperMenuBar" style="background-color: rgb(255, 0, 143);" />
             <ui:VisualElement name="logo" class="UpperMenuIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/Settings (2).png&apos;);">
-                <ui:Button name="back_button" class="BackButton" />
+                <ui:Button name="back_button" class="BackButton" style="border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0;" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="content_leiste_unten" class="LowerMenu" style="font-size: 30%;">
