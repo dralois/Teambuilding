@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
+using Newtonsoft.Json;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 public class HttpClient : MonoBehaviour
 {
@@ -18,12 +21,17 @@ public class HttpClient : MonoBehaviour
 
 			yield return request.SendWebRequest();
 
-			if (request.isDone)
+			if (request.isDone && request.downloadHandler.isDone)
 			{
 				if(request.responseCode == 200 && !(request.isHttpError || request.isNetworkError))
 				{
 					var headers = request.GetResponseHeaders();
-					if(headers != null)
+					var response = "[" + Regex.Unescape(request.downloadHandler.text) + "]";
+
+					Debug.Log(response);
+					dynamic values = JsonConvert.DeserializeObject(response);
+
+					if (headers != null)
 					{
 						resultCallback(new Headers(headers), true);
 					}

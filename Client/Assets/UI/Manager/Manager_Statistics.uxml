@@ -1,4 +1,4 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:VisualElement name="background" focusable="true" class="MenuBackground">
         <Style src="/Assets/UI/Style/MenuStyle.uss" />
         <ui:VisualElement name="leiste_oben" class="UpperMenu">
@@ -8,7 +8,7 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="content_leiste_unten" class="LowerMenu">
-            <ui:ListView focusable="True" name="statistic" item-height="200" style="flex-grow: 1;" />
+            <ui:ListView focusable="True" name="statistic" item-height="300" style="flex-grow: 1;" />
             <ui:VisualElement name="button" class="MenuButton">
                 <ui:Button text="employee" name="change_statistic_button" class="MenuButtonClickable">
                     <ui:VisualElement name="logo_button" class="MenuButtonClickableIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/User.png&apos;);" />
