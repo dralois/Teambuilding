@@ -12,13 +12,15 @@ public class UIManager : MonoBehaviour
 	public InputField Input_TextInput;
 	[Space]
 	public UIDocument Screen_Start;
+	public UIDocument Screen_End;
 	public UIDocument Screen_Menu;
 	public UIDocument Screen_Settings;
 	public UIDocument Screen_JoinRoom;
 	public UIDocument Screen_RoomLobby;
 	public UIDocument Screen_CreateRoom;
 	public UIDocument Screen_StartGame;
-	public UIDocument Screen_GamePuzzle;
+	public UIDocument Screen_GamePlayer;
+	public UIDocument Screen_GameManager;
 	public UIDocument Screen_Statistic_manager;
 	public UIDocument Screen_Statistic_employee;
 	[Space]
@@ -35,24 +37,38 @@ public class UIManager : MonoBehaviour
 
 	// Logic
 	private const int updateInterval = 2000;
+	private System.Action<string> onText = null;
+
 	private string playerId;
 	private string roomId;
+	private int pictureId;
 	private bool isManager;
+	private int myPiece;
 
-	private System.Action<string> onText = null;
+	private List<Piece> puzzlePieces = new List<Piece>();
+
+	private int[] selected = { };
+	private int[] places = { };
+	private int[] range = { };
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+	// Unity Callbacks
+	///////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void OnEnable()
 	{
 		//Bind Screens
 		BindTextInput();
 		BindStartScreen();
+		BindEndScreen();
 		BindMenuScreen();
 		BindSettingsScreen();
 		BindJoinRoomScreen();
 		BindRoomLobbyScreen();
 		BindCreateRoomScreen();
 		BindStartGameScreen();
-		BindGamePuzzleScreen();
+		BindGamePlayerScreen();
+		BindGameManagerScreen();
 		BindEmployeeStatisticScreen();
 		BindManagerStatisticScreen();
 	}
@@ -64,7 +80,6 @@ public class UIManager : MonoBehaviour
 				if (Screen.fullScreen)
 						Screen.fullScreen = false;
 #endif
-		//open LogIn as start menu
 		GoToStartScreen();
 	}
 
@@ -116,13 +131,15 @@ public class UIManager : MonoBehaviour
 	private void GoToStartScreen()
 	{
 		SetScreenEnableState(Screen_Start, true);
+		SetScreenEnableState(Screen_End, false);
 		SetScreenEnableState(Screen_Menu, false);
 		SetScreenEnableState(Screen_JoinRoom, false);
 		SetScreenEnableState(Screen_CreateRoom, false);
 		SetScreenEnableState(Screen_Settings, false);
 		SetScreenEnableState(Screen_RoomLobby, false);
 		SetScreenEnableState(Screen_StartGame, false);
-		SetScreenEnableState(Screen_GamePuzzle, false);
+		SetScreenEnableState(Screen_GamePlayer, false);
+		SetScreenEnableState(Screen_GameManager, false);
 		SetScreenEnableState(Screen_Statistic_employee, false);
 		SetScreenEnableState(Screen_Statistic_manager, false);
 	}
@@ -165,6 +182,26 @@ public class UIManager : MonoBehaviour
 		{
 			StartCoroutine(ScreenChange(Screen_Start, Screen_Menu));
 		};
+	}
+
+	private void BindEndScreen()
+	{
+		var root = Screen_End.rootVisualElement;
+
+		var result = root.Q<Label>("result");
+
+		bool playersWon = true;
+		for(int i = 0; i < places.Length; i++)
+		{
+			playersWon = selected[i] == places[i] ? playersWon : false;
+		}
+
+		result.text = playersWon ? "solved!" : "oof";
+
+		result.schedule.Execute(() =>
+		{
+			ScreenChange(Screen_End, Screen_Menu);
+		}).ExecuteLater(5000);
 	}
 
 	private void BindMenuScreen()
@@ -264,9 +301,10 @@ public class UIManager : MonoBehaviour
 		{
 			// Room Code
 			roomId = root.Q<Button>("input_roomid").text;
+			pictureId = lv.selectedIndex + 1;
 			// Sende Befehl
 			StartCoroutine(HttpClient.CallMethod("CREATEROOM",
-				new Headers().AddHeader("picture", (lv.selectedIndex + 1).ToString()).AddHeader("room_id", roomId),
+				new Headers().AddHeader("picture", pictureId.ToString()).AddHeader("room_id", roomId),
 				(result, worked) =>
 				{
 					if (worked)
@@ -301,11 +339,13 @@ public class UIManager : MonoBehaviour
 		var lv = root.Q<ListView>("player-list");
 		lv.selectionType = SelectionType.None;
 		lv.itemsSource = playerlist;
+
 		lv.makeItem = () =>
 		{
 			var newEle = player_ready_item.CloneTree();
 			return newEle;
 		};
+
 		lv.bindItem = (e, i) =>
 		{
 			e.Q<Toggle>().label = playerlist[i].name;
@@ -355,8 +395,25 @@ public class UIManager : MonoBehaviour
 				new Headers().AddHeader("pers_id", playerId).AddHeader("room_id", roomId),
 				(result, worked) =>
 				{
-					startGame = true;
-					StartCoroutine(ScreenChange(Screen_StartGame, Screen_GamePuzzle));
+					if (worked)
+					{
+						if (result.GetHeader<bool>("success"))
+						{
+							startGame = true;
+
+							places = JSONArray.FromJson<int>(result.GetHeader<string>("places"));
+							range = JSONArray.FromJson<int>(result.GetHeader<string>("range"));
+
+							// Pre generate pieces
+							List<Piece> puzzlePieces = new List<Piece>(range[1] - range[0]);
+							for (int i = range[0]; i < range[1]; ++i)
+							{
+								puzzlePieces.Add(new Piece());
+							}
+
+							StartCoroutine(ScreenChange(Screen_StartGame, Screen_GameManager));
+						}
+					}
 				}));
 			}
 		};
@@ -427,11 +484,13 @@ public class UIManager : MonoBehaviour
 		var lv = root.Q<ListView>("player-list");
 		lv.selectionType = SelectionType.None;
 		lv.itemsSource = playerlist;
+
 		lv.makeItem = () =>
 		{
 			var newEle = player_ready_item.CloneTree();
 			return newEle;
 		};
+
 		lv.bindItem = (e, i) =>
 		{
 			e.Q<Toggle>().label = playerlist[i].name;
@@ -451,7 +510,32 @@ public class UIManager : MonoBehaviour
 
 						if (startGame)
 						{
-							StartCoroutine(ScreenChange(Screen_RoomLobby, Screen_GamePuzzle));
+							StartCoroutine(HttpClient.CallMethod("GETSTARTINFO",
+								new Headers().AddHeader("pers_id", playerId).AddHeader("room_id", roomId),
+								(startinfo, gotinfo) =>
+								{
+									if (gotinfo)
+									{
+										pictureId = startinfo.GetHeader<int>("picture") - 1;
+										places = JSONArray.FromJson<int>(startinfo.GetHeader<string>("places"));
+										range = JSONArray.FromJson<int>(startinfo.GetHeader<string>("range"));
+
+										// Pre generate pieces
+										puzzlePieces = new List<Piece>();
+										for (int i = range[0]; i < range[1]; ++i)
+										{
+											puzzlePieces.Add(new Piece());
+										}
+
+										// Set correct picture
+										myPiece = places.First(p => p == int.Parse(playerId));
+										Screen_GamePlayer.rootVisualElement.Q<VisualElement>("puzzle-piece").style.backgroundImage =
+											Background.FromTexture2D(puzzles[pictureId].allPics[range[0] + myPiece].texture);
+
+										StartCoroutine(ScreenChange(Screen_RoomLobby, Screen_GamePlayer));
+									}
+								}
+							));
 						}
 						else
 						{
@@ -516,9 +600,155 @@ public class UIManager : MonoBehaviour
 		};
 	}
 
-	private void BindGamePuzzleScreen()
+	private void BindGamePlayerScreen()
 	{
-		// TODO
+		var root = Screen_GamePlayer.rootVisualElement;
+
+		bool endGame = false;
+
+		// Setup pieces list view
+		var lv = root.Q<ListView>("puzzle-overview");
+		lv.horizontalScrollingEnabled = true;
+		lv.itemsSource = puzzlePieces;
+
+		lv.makeItem = () =>
+		{
+			var newEle = puzzle_piece_item.CloneTree();
+			return newEle;
+		};
+
+		lv.bindItem = (e, i) =>
+		{
+			var visual = e.Q<VisualElement>("select-visual");
+			var btn = e.Q<Button>("select-button");
+
+			btn.style.backgroundImage = puzzlePieces[i].isOwn ?
+				Background.FromTexture2D(puzzles[pictureId].allPics[range[0] + myPiece].texture) :
+				new StyleBackground();
+
+			btn.clickable.clicked += () =>
+			{
+				var place = puzzlePieces[i].isOwn ? "-1" : i.ToString();
+				StartCoroutine(HttpClient.CallMethod("SUBMITPLACE",
+				new Headers().AddHeader("room_id", roomId).AddHeader("pers_id", playerId).AddHeader("place", place),
+				(result, worked) =>
+				{
+					if (worked)
+					{
+						var selectionPositive = result.GetHeader<bool>("success");
+
+						btn.style.backgroundImage = puzzlePieces[i].isOwn ?
+							Background.FromTexture2D(puzzles[pictureId].allPics[range[0] + myPiece].texture) :
+							new StyleBackground();
+
+						visual.style.backgroundColor = selectionPositive ? new StyleColor(Color.green) : new StyleColor(Color.red);
+
+						visual.schedule.Execute(() =>
+						{
+							visual.style.backgroundColor = new StyleColor(Color.clear);
+						}).ExecuteLater(1000);
+					}
+				}
+			));
+			};
+		};
+
+		// Server update loop
+		lv.schedule.Execute(() =>
+		{
+			lv.Refresh();
+			StartCoroutine(HttpClient.CallMethod("UPDATE",
+				new Headers(),
+				(result, worked) =>
+				{
+					if (worked)
+					{
+						var gamestate = result.GetHeader<int>("gamestate");
+						endGame = gamestate == 3;
+
+						places = JSONArray.FromJson<int>(result.GetHeader<string>("places"));
+						selected = JSONArray.FromJson<int>(result.GetHeader<string>("selected"));
+
+						if (endGame)
+						{
+							ScreenChange(Screen_GamePlayer, Screen_End);
+						}
+					}
+				}
+			));
+		}).Every(updateInterval).Until(() => endGame);
+	}
+
+	private void BindGameManagerScreen()
+	{
+		var root = Screen_GameManager.rootVisualElement;
+
+		bool endGame = false;
+
+		// Setup pieces list view
+		var lv = root.Q<ListView>("puzzle-overview");
+		lv.horizontalScrollingEnabled = true;
+		lv.itemsSource = puzzlePieces;
+
+		lv.makeItem = () =>
+		{
+			var newEle = puzzle_piece_item.CloneTree();
+			return newEle;
+		};
+
+		lv.bindItem = (e, i) =>
+		{
+			var visual = e.Q<VisualElement>("select-visual");
+			var btn = e.Q<Button>("select-button");
+
+			var isSelected = selected[i] != -1;
+
+			var picIndex = places.First(p => p == selected[i]);
+
+			btn.style.backgroundImage = isSelected ?
+				Background.FromTexture2D(puzzles[pictureId].allPics[range[0] + picIndex].texture) :
+				new StyleBackground();
+		};
+
+		// Server update loop
+		lv.schedule.Execute(() =>
+		{
+			lv.Refresh();
+			StartCoroutine(HttpClient.CallMethod("UPDATE",
+				new Headers(),
+				(result, worked) =>
+				{
+					if (worked)
+					{
+						places = JSONArray.FromJson<int>(result.GetHeader<string>("places"));
+						selected = JSONArray.FromJson<int>(result.GetHeader<string>("selected"));
+					}
+				}
+			));
+		}).Every(updateInterval).Until(() => endGame);
+
+		// End game
+		root.Q<Button>("end-button").clickable.clicked += () =>
+		{
+			StartCoroutine(HttpClient.CallMethod("END",
+				new Headers().AddHeader("pers_id", playerId).AddHeader("room_id", roomId),
+				(result, worked) =>
+				{
+					if (worked)
+					{
+						if (result.GetHeader<bool>("success"))
+						{
+							endGame = true;
+
+							places = JSONArray.FromJson<int>(result.GetHeader<string>("places"));
+							selected = JSONArray.FromJson<int>(result.GetHeader<string>("selected"));
+
+							ScreenChange(Screen_GameManager, Screen_End);
+						}
+					}
+				}
+			));
+		};
 	}
 
 	private void BindEmployeeStatisticScreen()

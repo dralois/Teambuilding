@@ -6,7 +6,7 @@
             <ui:VisualElement name="icon" class="UpperMenuIcon" style="background-image: url(&apos;/Assets/Art/Sprites/Objects/Game1.png&apos;);" />
         </ui:VisualElement>
         <ui:VisualElement name="content_leiste_unten" class="LowerMenu">
-            <ui:VisualElement name="puzzle_piece" style="flex-grow: 1;" />
+            <ui:VisualElement name="puzzle-piece" style="flex-grow: 1;" />
             <ui:ListView name="puzzle-overview" item-height="150" horizontal-scrolling="true" style="width: 100%; height: 30%; flex-direction: row; justify-content: center;" />
         </ui:VisualElement>
     </ui:VisualElement>
